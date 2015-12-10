@@ -1,0 +1,80 @@
+=============================================================================
+    UUP-SITE - OOP site 
+=============================================================================
+
+This library takes a object oriented approach at building web sites by separating 
+page layout from content.
+
+** Site Layout:
+
+    Proposed site layout. All directory location are configurable in config/defaults.site
+    that is used to initialize a page class instance.
+
+    site/
+      +-- htdocs/           // Document root
+      |     +-- css/
+      |     +-- js/
+      |     +-- img/
+      +-- template/         // Page rendering templates (themes)
+      +-- locale/           // Support for locale (gettext)
+      +-- vendor/           // Composer packages, including uup-site
+      +-- composer.json
+      +-- Makefile          // Compile locales (PO-files).
+
+** Setup:
+
+    Add repository URL http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site to 
+    composer.json. Install uup-site pages using composer:
+
+        bash$> cd /var/www/www.example.com
+        bash$> composer update
+
+    Make config protected copy of config/defaults.site:
+
+        bash$> cd vendor/bmc/uup-site/config
+        bash$> cp config/defaults.site.in config/defaults.site
+
+    Open config/defaults.site and set default options.
+
+** Themes:
+
+    Download and install themes from http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site.
+
+** Example:
+
+    // 
+    // Assume virtual host defines include path to root directory:
+    // 
+    require_once('vendor/autoload.php');
+
+    class IndexPage extends Page
+    {
+        // Define the printContent() member function at least.
+    };
+
+    $page = new IndexPage();
+    $page->render();
+
+** Infrastructure:
+
+    Menus and publish information can either be defined by having custom files in
+    the page directory or programmatically by overriding the parent class member 
+    methods.
+
+    o)  Menus:
+
+        These are gathered from standard.menu, topbar.menu, sidebar.menu and 
+        content.spec files found in same directory as the page and its parent directory.
+
+    o)  Publish info:
+
+        Information for output is taken from the publish.inc file in the current 
+        directory if present. A common use of publish info feature is to either
+        create a common file and symlink it in all directories, or override the
+        parent class method that outputs this info.
+
+    To disable e.g. page menus, override unwanted parent class menu methods to 
+    provide no output. Another option could be to define a common base class for
+    all pages in a subdirectory.
+        
+// Anders Lövgren, 2015-12-07
