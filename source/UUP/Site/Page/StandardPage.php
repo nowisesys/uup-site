@@ -23,6 +23,8 @@ use UUP\Site\Utility\Config;
 /**
  * Standard page for this site.
  * 
+ * @property-read Config $config The site configuration.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
@@ -44,7 +46,7 @@ abstract class StandardPage implements TemplatePage
          * The site configuration object.
          * @var Config 
          */
-        protected $config;
+        public $config;
 
         /**
          * Constructor.
@@ -54,11 +56,15 @@ abstract class StandardPage implements TemplatePage
          */
         public function __construct($title, $template = "standard", $config = null)
         {
+                set_exception_handler(array($this, 'exception'));
+                
+                if (ob_get_level() == 0) {
+                        ob_start();
+                }
+
                 $this->title = $title;
                 $this->template = $template;
                 $this->config = new Config($config);
-
-                ob_start();
         }
 
         /**
@@ -70,6 +76,16 @@ abstract class StandardPage implements TemplatePage
         final public function render()
         {
                 include(sprintf("%s/%s/%s.ui", $this->config->template, $this->config->theme, $this->template));
+        }
+
+        /**
+         * The exception handler.
+         * @param \Exception $exception The exception to report.
+         */
+        public function exception($exception)
+        {
+                $page = new ErrorPage($exception);
+                $page->render();
         }
 
         public function getConfig()

@@ -58,7 +58,7 @@ class Config
          * @var string 
          */
         private $prjdir;
-
+        
         /**
          * Constructor.
          * @param array|string $config Configuration options array or path to file.
@@ -74,13 +74,13 @@ class Config
                 if (is_array($config)) {
                         // ignore
                 } elseif (is_string($config)) {
-                        $config = require_once($config);
+                        $config = require($config);
                 } elseif (defined('UUP_SITE_DEFAULTS')) {
-                        $config = require_once('UUP_SITE_DEFAULTS');
+                        $config = require('UUP_SITE_DEFAULTS');
                 } elseif (filter_input(INPUT_ENV, 'UUP_SITE_DEFAULTS')) {
-                        $config = require_once(filter_input(INPUT_ENV, 'UUP_SITE_DEFAULTS'));
+                        $config = require(filter_input(INPUT_ENV, 'UUP_SITE_DEFAULTS'));
                 } elseif (($config = $this->locate("config/defaults.site"))) {
-                        $config = require_once($config);
+                        $config = require($config);
                 } else {
                         throw new \Exception("Failed locate default.site");
                 }
