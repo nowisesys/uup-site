@@ -142,17 +142,17 @@ return array(
 //         * Publisher information. Can be overridden by publish.inc in page directory or
 //         * template/publish.inc defined for all pages.
 //         */
-//        'published' => array(
-//                "contact"   => array(
+//        'publish' => array(
+//                "contact" => array(
 //                        "href" => "http://directory.example.com/info/?id=4775",
 //                        "name" => "Page Responsible"
 //                ),
-//                "editor"    => array(
+//                "editor"  => array(
 //                        "href" => "http://www.example.com/webmaster",
 //                        "name" => "Webmaster"
 //                ),
-//                "published" => "2015",
-//                "modified"  => getlastmod()
+//                "created" => "2015",
+//                "updated" => getlastmod()
 //        )
 
 );

@@ -18,10 +18,19 @@
 
 namespace UUP\Site\Page;
 
+use UUP\Site\Page\Context\NavMenu;
+use UUP\Site\Page\Context\PublishInfo;
+use UUP\Site\Page\Context\SideMenu;
+use UUP\Site\Page\Context\TopMenu;
 use UUP\Site\Utility\Config;
 
 /**
  * Standard page for this site.
+ * 
+ * @property-read NavMenu $navmenu The navigation menu.
+ * @property-read TopMenu $topmenu The top menu
+ * @property-read SideMenu $sidemenu The sidebar menu.
+ * @property-read PublishInfo $publish The publish information.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -55,7 +64,7 @@ abstract class StandardPage implements TemplatePage
         public function __construct($title, $template = "standard", $config = null)
         {
                 set_exception_handler(array($this, 'exception'));
-                
+
                 if (ob_get_level() == 0) {
                         ob_start();
                 }
@@ -63,6 +72,24 @@ abstract class StandardPage implements TemplatePage
                 $this->title = $title;
                 $this->template = $template;
                 $this->config = new Config($config);
+        }
+
+        public function __get($name)
+        {
+                switch ($name) {
+                        case 'navmenu':
+                                $this->navmenu = $this->getNavMenu();
+                                return $this->navmenu;
+                        case 'topmenu':
+                                $this->topmenu = $this->getTopMenu();
+                                return $this->topmenu;
+                        case 'sidemenu':
+                                $this->sidemenu = $this->getSideMenu();
+                                return $this->sidemenu;
+                        case 'publish':
+                                $this->publish = $this->getPublishInfo();
+                                return $this->publish;
+                }
         }
 
         /**
@@ -95,29 +122,11 @@ abstract class StandardPage implements TemplatePage
          * Get navigation menu.
          * 
          * Return content of menu files (standard.menu) in current directory and two levels up. 
-         * Returns false if no menu files exist.
-         * 
-         * @return array|boolean
+         * @return NavMenu
          */
         public function getNavMenu()
         {
-                $menus = array();
-
-                if (file_exists("standard.menu")) {
-                        $menus[] = include("standard.menu");
-                }
-                if (file_exists("../standard.menu")) {
-                        $menus[] = include("../standard.menu");
-                }
-                if (file_exists("../../standard.menu")) {
-                        $menus[] = include("../../standard.menu");
-                }
-
-                if (count($menus) != 0) {
-                        return $menus;
-                } else {
-                        return false;
-                }
+                return new NavMenu();
         }
 
         /**
@@ -126,17 +135,11 @@ abstract class StandardPage implements TemplatePage
          * The sidebar is typical a menu used to decorate the current page with links
          * to related pages, e.g. related projects. Sidebar menu files are named sidebar.menu.
          * 
-         * Returns false if no sidebar exists in current page directory.
-         * 
-         * @return array|boolean
+         * @return SideMenu
          */
         public function getSideMenu()
         {
-                if (file_exists("sidebar.menu")) {
-                        return include("sidebar.menu");
-                } else {
-                        return false;
-                }
+                return new SideMenu();
         }
 
         /**
@@ -144,20 +147,13 @@ abstract class StandardPage implements TemplatePage
          * 
          * The topbar menu is usually output at top of page and contains context 
          * independent links. Returns content from site config if defined, otherwise
-         * from a topmenu.menu in current directory. Returns false if topbar menu
-         * is undefined.
+         * from a topmenu.menu in current directory.
          * 
-         * @return array|boolean
+         * @return TopMenu
          */
         public function getTopMenu()
         {
-                if ($this->config->topmenu) {
-                        return $this->config->topmenu;
-                } elseif (file_exists("topmenu.menu")) {
-                        return include("topmenu.menu");
-                } else {
-                        return false;
-                }
+                return new TopMenu($this->config->topmenu);
         }
 
         /**
@@ -167,17 +163,11 @@ abstract class StandardPage implements TemplatePage
          * info from template/publish.inc. If no publisher file was found, then the content
          * from the site config is returned.
          * 
-         * @return array
+         * @return PublishInfo
          */
         public function getPublishInfo()
         {
-                if (file_exists("publish.inc")) {
-                        return include("publish.inc");
-                } elseif (file_exists(sprintf("%s/publish.inc", $this->config->template))) {
-                        return include(sprintf("%s/publish.inc", $this->config->template));
-                } else {
-                        return $this->config->publisher;
-                }
+                return new PublishInfo($this->config->template, $this->config->publish);
         }
 
         /**

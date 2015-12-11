@@ -1,0 +1,20 @@
+<?php
+
+return array(
+    'related' => array(
+        'name' => 'Related',
+        'data' => array(
+            'link1' => 'Link 1',
+            'link2' => 'Link 2'
+        )
+    ),
+    'news' => array(
+        'name' => 'Name',
+        'data' => array(
+            'news1' => 'News 1',
+            'news2' => 'News 2'
+        )
+    )
+);
+
+?>

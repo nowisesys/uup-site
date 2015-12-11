@@ -1,0 +1,6 @@
+<?php
+
+return array(
+    'page5' => 'Page 5',
+    'page6' => 'Page 6'
+);

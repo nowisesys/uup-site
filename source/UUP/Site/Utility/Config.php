@@ -33,8 +33,8 @@ namespace UUP\Site\Utility;
  * @property array $locale Options for locale and gettext.
  * @property string $theme The default theme.
  * 
- * @property array $topmenu Optional top menu.
- * @property array $publisher Optional page publisher information.
+ * @property array $topmenu Optional top bar menu.
+ * @property array $publish Optional publisher information.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -58,7 +58,7 @@ class Config
          * @var string 
          */
         private $prjdir;
-        
+
         /**
          * Constructor.
          * @param array|string $config Configuration options array or path to file.
@@ -127,6 +127,12 @@ class Config
                         }
                         if ($config[$asset][1] == '/') {
                                 $config[$asset] = str_replace('//', '/', $config[$asset]);
+                        }
+                }
+
+                foreach (array('topmenu', 'publish') as $key) {
+                        if (!isset($config[$key])) {
+                                $config[$key] = false;
                         }
                 }
 
