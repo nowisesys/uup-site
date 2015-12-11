@@ -150,10 +150,10 @@ class Config
                 return array_key_exists($name, $this->config);
         }
 
-        private function locate($dir)
+        private function locate($path)
         {
                 foreach (array($this->topdir, $this->prjdir, __DIR__) as $test) {
-                        if (($dest = realpath(sprintf("%s/%s", $test, $dir)))) {
+                        if (($dest = realpath(sprintf("%s/%s", $test, $path)))) {
                                 return $dest;
                         }
                 }
