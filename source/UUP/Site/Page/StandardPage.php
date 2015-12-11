@@ -23,8 +23,6 @@ use UUP\Site\Utility\Config;
 /**
  * Standard page for this site.
  * 
- * @property-read Config $config The site configuration.
- * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
