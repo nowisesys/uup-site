@@ -48,7 +48,20 @@ namespace UUP\Site\Page;
  * 
  * The directory index options in the web server configuration might cause the view
  * to be called direct, bypassing the routing. This is a common problem if the view
- * page is named index.php
+ * page is named index.php and can be solved by changing the default filename extension
+ * in the router:
+ * 
+ * <code>
+ * $router->setExtension("phtml");
+ * </code>
+ * 
+ * Other options of interest might be changing namespace from global or the class
+ * name suffix:
+ * 
+ * <code>
+ * $router->setNamespace("Application\\Views\\");
+ * $router->setSuffix("View");
+ * </code>
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -67,6 +80,21 @@ class RouterPage extends StandardPage
          * @var string 
          */
         private $name;
+        /**
+         * The class name suffix.
+         * @var string 
+         */
+        private $suffix = "Page";
+        /**
+         * The filename extension.
+         * @var string 
+         */
+        private $ext = "php";
+        /**
+         * The class namespace.
+         * @var string 
+         */
+        private $ns = "\\";
 
         /**
          * Constructor.
@@ -78,8 +106,11 @@ class RouterPage extends StandardPage
                 $this->config->uri = filter_input(INPUT_GET, 'uri');
                 $this->page = $this->getPage();
                 $this->name = $this->getName();
+        }
+
+        public function printContent()
+        {
                 
-                error_log(print_r($this, true));
         }
 
         /**
@@ -102,9 +133,34 @@ class RouterPage extends StandardPage
                 }
         }
 
-        public function printContent()
+        /**
+         * Set class name suffix.
+         * @param string $suffix The class name suffix.
+         */
+        public function setSuffix($suffix)
         {
-                
+                $this->suffix = $suffix;
+                $this->name = $this->getName();
+        }
+
+        /**
+         * Set filename extension.
+         * @param string $ext The filename extension.
+         */
+        public function setExtension($ext)
+        {
+                $this->ext = $ext;
+                $this->page = $this->getPage();
+        }
+
+        /**
+         * Set class namespace.
+         * @param string $ns The namespace.
+         */
+        public function setNamespace($ns)
+        {
+                $this->ns = $ns;
+                $this->name = $this->getName();
         }
 
         /**
@@ -115,7 +171,7 @@ class RouterPage extends StandardPage
         {
                 $parts = explode('-', basename($this->config->uri));
                 $parts = array_map('ucfirst', $parts);
-                return sprintf("%sPage", implode('', $parts));
+                return sprintf("%s%s%s", $this->ns, implode('', $parts), $this->suffix);
         }
 
         /**
@@ -124,7 +180,7 @@ class RouterPage extends StandardPage
          */
         private function getPage()
         {
-                return sprintf("%s.php", $this->config->uri);
+                return sprintf("%s.%s", $this->config->uri, $this->ext);
         }
 
 }
