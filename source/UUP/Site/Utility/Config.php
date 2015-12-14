@@ -29,6 +29,7 @@ namespace UUP\Site\Utility;
  * @property string $css The CSS location.
  * @property string $js The JS location.
  * @property string $img The image location.
+ * @property string $font The font location.
  * 
  * @property array $locale Options for locale and gettext.
  * @property string $theme The default theme.
@@ -163,6 +164,57 @@ class Config
                                 return $dest;
                         }
                 }
+        }
+
+        /**
+         * Get asset (e.g. CSS).
+         * @param string $type The asset type.
+         * @param string $name The file name.
+         * @return string
+         */
+        public function getAsset($type, $name)
+        {
+                return sprintf("%s/%s", $this->$type, $name);
+        }
+
+        /**
+         * Get CSS file.
+         * @param string $name The file name.
+         * @return string
+         */
+        public function getCss($name)
+        {
+                return sprintf("%s/%s", $this->css, $name);
+        }
+
+        /**
+         * Get Javascript file.
+         * @param string $name The file name.
+         * @return string
+         */
+        public function getJs($name)
+        {
+                return sprintf("%s/%s", $this->js, $name);
+        }
+
+        /**
+         * Get image file.
+         * @param string $name The file name.
+         * @return string
+         */
+        public function getImage($name)
+        {
+                return sprintf("%s/%s", $this->img, $name);
+        }
+
+        /**
+         * Get font file.
+         * @param string $name The file name.
+         * @return string
+         */
+        public function getFont($name)
+        {
+                return sprintf("%s/%s", $this->font, $name);
         }
 
 }
