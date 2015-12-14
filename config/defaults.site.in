@@ -50,6 +50,7 @@
  *         [css]      => /css/default
  *         [js]       => /js/default
  *         [img]      => /img/default
+ *         [fonts]    => /fonts/default
  * )
  */
 
@@ -86,6 +87,10 @@ return array(
 //         * The images location or sub directory name.
 //         */
 //        'img' => 'img',
+//        /**
+//         * The fonts location or sub directory name.
+//         */
+//        'fonts' => 'fonts',
 //        /**
 //         * Locale support (gettext). Comment to disable locale support.
 //         */

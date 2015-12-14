@@ -18,7 +18,7 @@
 
 namespace UUP\Site\Page;
 
-use UUP\Site\Page\Context\NavMenu;
+use UUP\Site\Page\Context\StandardMenu;
 use UUP\Site\Page\Context\PublishInfo;
 use UUP\Site\Page\Context\SideMenu;
 use UUP\Site\Page\Context\TopMenu;
@@ -27,7 +27,7 @@ use UUP\Site\Utility\Config;
 /**
  * Standard page for this site.
  * 
- * @property-read NavMenu $navmenu The navigation menu.
+ * @property-read StandardMenu $navmenu The navigation menu.
  * @property-read TopMenu $topmenu The top menu
  * @property-read SideMenu $sidemenu The sidebar menu.
  * @property-read PublishInfo $publish The publish information.
@@ -122,11 +122,11 @@ abstract class StandardPage implements TemplatePage
          * Get navigation menu.
          * 
          * Return content of menu files (standard.menu) in current directory and two levels up. 
-         * @return NavMenu
+         * @return StandardMenu
          */
         public function getNavMenu()
         {
-                return new NavMenu();
+                return new StandardMenu();
         }
 
         /**

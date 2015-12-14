@@ -62,7 +62,7 @@ interface TemplatePage
          * Get publish info.
          */
         function getPublishInfo();
-        
+
         /**
          * Get site configuration.
          */
