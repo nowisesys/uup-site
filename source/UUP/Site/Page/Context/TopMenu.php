@@ -36,8 +36,8 @@ class TopMenu extends \ArrayObject
         {
                 if ($topmeny) {
                         parent::__construct($topmeny);
-                } elseif (file_exists("topmenu.menu")) {
-                        parent::__construct(include("topmenu.menu"));
+                } elseif (file_exists("topbar.menu")) {
+                        parent::__construct(include("topbar.menu"));
                 }
         }
 

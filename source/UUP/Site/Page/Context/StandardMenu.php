@@ -25,7 +25,7 @@ namespace UUP\Site\Page\Context;
  * @package UUP
  * @subpackage Site
  */
-class NavMenu extends \ArrayObject
+class StandardMenu extends \ArrayObject
 {
 
         /**
