@@ -1,7 +1,7 @@
 {
     "name": "bmc/uup-site",
     "version": "0.9.0",
-    "description": "Web site Template rendered site.",
+    "description": "Template/theme rendered web site.",
     "type": "library",
     "keywords": ["template", "site", "uup", "bmc"],
     "homepage": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site",
@@ -13,7 +13,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "twitter/bootstrap": "^3.3"
     },
     "suggest": {
         "bmc/uup-html": ">=1.0.5",
@@ -23,5 +24,22 @@
         "psr-0": {
             "UUP\\": "source"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "mkdir -p public/bootstrap",
+            "cp -a vendor/twitter/bootstrap/dist/* public/bootstrap",
+            "mkdir -p public/css",
+            "mkdir -p public/fonts",
+            "mkdir -p public/js",
+            "mkdir -p public/img"
+        ],
+        "post-update-cmd": [
+            "mkdir -p public/bootstrap",
+            "cp -a vendor/twitter/bootstrap/dist/* public/bootstrap"
+        ],
+        "setup-themes": [
+            "for t in template/*; do sh $t/setup.sh $destdir; done"
+        ]
     }
 }
