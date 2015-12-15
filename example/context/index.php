@@ -33,10 +33,11 @@ class IndexPage extends StandardPage
                 echo "<h1>Context test</h1>\n";
                 echo "<p>This is a test of menus and publish info gathered from files included in this directory and parent directories.</p>\n";
 
+                print_r($this->menus);
                 print_r($this->navmenu);
                 print_r($this->topmenu);
                 print_r($this->sidemenu);
-                print_r($this->publish);
+                print_r($this->publisher);
         }
 
 }

@@ -1,8 +1,6 @@
 <?php
 
 return array(
-    'page3' => 'Page 3',
-    'page4' => 'Page 4'
+    _('Page 3') => 'page3',
+    _('Page 4') => 'page4'
 );
-
-?>

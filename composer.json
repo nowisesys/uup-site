@@ -14,7 +14,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "twitter/bootstrap": "^3.3"
+        "twitter/bootstrap": "^3.3",
+        "frameworks/jquery": "^2.1"
     },
     "suggest": {
         "bmc/uup-html": ">=1.0.5",
@@ -32,7 +33,8 @@
             "mkdir -p public/css",
             "mkdir -p public/fonts",
             "mkdir -p public/js",
-            "mkdir -p public/img"
+            "mkdir -p public/img",
+            "cp -a vendor/frameworks/jquery/jquery.min.js public/js"
         ],
         "post-update-cmd": [
             "mkdir -p public/bootstrap",

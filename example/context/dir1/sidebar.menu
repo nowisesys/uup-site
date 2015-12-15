@@ -1,20 +1,12 @@
 <?php
 
 return array(
-    'related' => array(
-        'name' => 'Related',
-        'data' => array(
-            'link1' => 'Link 1',
-            'link2' => 'Link 2'
-        )
+    _('Related') => array(
+            _('Link 1') => 'link1',
+            _('Link 2') => 'link2'
     ),
-    'news' => array(
-        'name' => 'Name',
-        'data' => array(
-            'news1' => 'News 1',
-            'news2' => 'News 2'
+    _('News') => array(
+            _('News 1') => 'news1',
+            _('News 2') => 'news2'
         )
-    )
 );
-
-?>

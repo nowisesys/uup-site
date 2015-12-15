@@ -122,9 +122,9 @@ class Config
 
                 foreach (array('css', 'js', 'img') as $asset) {
                         if (!isset($config[$asset])) {
-                                $config[$asset] = sprintf("%s/%s/%s", $config['location'], $asset, $config['theme']);
+                                $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $asset);
                         } elseif ($config[$asset][0] != '/') {
-                                $config[$asset] = sprintf("%s/%s/%s", $config['location'], $config[$asset], $config['theme']);
+                                $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $config[$asset]);
                         }
                         if ($config[$asset][1] == '/') {
                                 $config[$asset] = str_replace('//', '/', $config[$asset]);

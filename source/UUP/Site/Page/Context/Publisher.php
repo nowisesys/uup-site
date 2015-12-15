@@ -30,7 +30,7 @@ namespace UUP\Site\Page\Context;
  * @package UUP
  * @subpackage Site
  */
-class PublishInfo extends \ArrayObject
+class Publisher extends \ArrayObject
 {
 
         /**
@@ -45,7 +45,7 @@ class PublishInfo extends \ArrayObject
                         parent::__construct(include("publish.inc"));
                 } elseif (file_exists(sprintf("%s/publish.inc", $template))) {
                         parent::__construct(include(sprintf("%s/publish.inc", $template)));
-                } else {
+                } elseif ($publish) {
                         parent::__construct($publish);
                 }
         }

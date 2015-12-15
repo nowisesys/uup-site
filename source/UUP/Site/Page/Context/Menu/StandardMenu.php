@@ -16,16 +16,16 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page\Context;
+namespace UUP\Site\Page\Context\Menu;
 
 /**
- * Sidebar menu support class.
+ * Navigation menu support class.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
  */
-class SideMenu extends \ArrayObject
+class StandardMenu extends \ArrayObject
 {
 
         /**
@@ -33,9 +33,19 @@ class SideMenu extends \ArrayObject
          */
         public function __construct()
         {
-                if (file_exists("sidebar.menu")) {
-                        parent::__construct(include("sidebar.menu"));
+                $menus = array();
+
+                if (file_exists("standard.menu")) {
+                        $menus[] = include("standard.menu");
                 }
+                if (file_exists("../standard.menu")) {
+                        $menus[] = include("../standard.menu");
+                }
+                if (file_exists("../../standard.menu")) {
+                        $menus[] = include("../../standard.menu");
+                }
+
+                parent::__construct($menus);
         }
 
 }

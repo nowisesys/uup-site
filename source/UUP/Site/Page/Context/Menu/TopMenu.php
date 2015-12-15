@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page\Context;
+namespace UUP\Site\Page\Context\Menu;
 
 /**
  * Top menu support class.

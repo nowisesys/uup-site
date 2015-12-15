@@ -42,26 +42,16 @@ interface TemplatePage
          * Get page title.
          */
         function getTitle();
-
+        
         /**
-         * Get sidebar menu.
+         * Get page menus.
          */
-        function getSideMenu();
-
-        /**
-         * Get topbar menu.
-         */
-        function getTopMenu();
-
-        /**
-         * Get navigation bar menu (usually left side menu).
-         */
-        function getNavMenu();
+        function getMenus();
 
         /**
          * Get publish info.
          */
-        function getPublishInfo();
+        function getPublisher();
 
         /**
          * Get site configuration.

@@ -18,19 +18,22 @@
 
 namespace UUP\Site\Page;
 
-use UUP\Site\Page\Context\StandardMenu;
-use UUP\Site\Page\Context\PublishInfo;
-use UUP\Site\Page\Context\SideMenu;
-use UUP\Site\Page\Context\TopMenu;
+use UUP\Site\Page\Context\Menu\SideMenu;
+use UUP\Site\Page\Context\Menu\StandardMenu;
+use UUP\Site\Page\Context\Menu\TopMenu;
+use UUP\Site\Page\Context\Menus;
+use UUP\Site\Page\Context\Publisher;
 use UUP\Site\Utility\Config;
 
 /**
  * Standard page for this site.
  * 
- * @property-read StandardMenu $navmenu The navigation menu.
- * @property-read TopMenu $topmenu The top menu
+ * @property-read Publisher $publisher Page publisher information.
+ * @property-read Menus $menus Page menus.
+ * 
+ * @property-read TopMenu $topmenu The top menu.
+ * @property-read StandardMenu $navmenu The navigation (standard) menu.
  * @property-read SideMenu $sidemenu The sidebar menu.
- * @property-read PublishInfo $publish The publish information.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -77,18 +80,18 @@ abstract class StandardPage implements TemplatePage
         public function __get($name)
         {
                 switch ($name) {
-                        case 'navmenu':
-                                $this->navmenu = $this->getNavMenu();
-                                return $this->navmenu;
+                        case 'publisher':
+                                $this->publisher = $this->getPublisher();
+                                return $this->publisher;
+                        case 'menus':
+                                $this->menus = $this->getMenus();
+                                return $this->menus;
                         case 'topmenu':
-                                $this->topmenu = $this->getTopMenu();
-                                return $this->topmenu;
+                                return $this->menus->top;
+                        case 'navmenu':
+                                return $this->menus->nav;
                         case 'sidemenu':
-                                $this->sidemenu = $this->getSideMenu();
-                                return $this->sidemenu;
-                        case 'publish':
-                                $this->publish = $this->getPublishInfo();
-                                return $this->publish;
+                                return $this->menus->side;
                 }
         }
 
@@ -119,41 +122,12 @@ abstract class StandardPage implements TemplatePage
         }
 
         /**
-         * Get navigation menu.
-         * 
-         * Return content of menu files (standard.menu) in current directory and two levels up. 
-         * @return StandardMenu
+         * Get page menus.
+         * @return Menus
          */
-        public function getNavMenu()
+        public function getMenus()
         {
-                return new StandardMenu();
-        }
-
-        /**
-         * Get sidebar menu.
-         * 
-         * The sidebar is typical a menu used to decorate the current page with links
-         * to related pages, e.g. related projects. Sidebar menu files are named sidebar.menu.
-         * 
-         * @return SideMenu
-         */
-        public function getSideMenu()
-        {
-                return new SideMenu();
-        }
-
-        /**
-         * Get topbar menu.
-         * 
-         * The topbar menu is usually output at top of page and contains context 
-         * independent links. Returns content from site config if defined, otherwise
-         * from a topmenu.menu in current directory.
-         * 
-         * @return TopMenu
-         */
-        public function getTopMenu()
-        {
-                return new TopMenu($this->config->topmenu);
+                return new Menus($this->config->topmenu);
         }
 
         /**
@@ -163,11 +137,11 @@ abstract class StandardPage implements TemplatePage
          * info from template/publish.inc. If no publisher file was found, then the content
          * from the site config is returned.
          * 
-         * @return PublishInfo
+         * @return Publisher
          */
-        public function getPublishInfo()
+        public function getPublisher()
         {
-                return new PublishInfo($this->config->template, $this->config->publish);
+                return new Publisher($this->config->template, $this->config->publish);
         }
 
         /**

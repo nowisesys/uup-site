@@ -1,0 +1,49 @@
+.sidenav {
+    padding-top: 20px;
+    background-color: #f1f1f1;
+    height: 100%;
+    background: #0a0;
+    box-shadow: 2px 0px 5px #999999;
+    transition: all 0.5s ease;
+}
+
+.sidenav a {
+    display: block;
+    text-decoration: none;
+    color: #0d0;
+}
+
+.sidenav a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 2px 2px 1px #eee;
+}
+
+.sidenav li {
+    list-style: none;
+}
+
+.row.content {
+    height: 450px
+}
+
+footer {
+    background-color: #eee;
+    color: #aaa;
+    padding: 15px;
+}
+
+@media screen and (max-width: 767px) {
+    .sidenav {
+        height: auto;
+        padding: 0px;
+    }
+    .row.content {height:auto;} 
+}
