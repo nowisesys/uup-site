@@ -1,6 +1,6 @@
 <?php
 
-/*
+/* 
  * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,25 +16,9 @@
  * limitations under the License.
  */
 
-use UUP\Site\Page\StandardPage;
+require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
-class IndexPage extends StandardPage
-{
+use UUP\Site\Page\RouterPage;
 
-        public function __construct()
-        {
-                parent::__construct("Index");
-        }
-
-        public function printContent()
-        {
-                echo "<h1>Index view for router test</h1>\n";
-                
-                echo "<ul>Some example links:\n";
-                echo "<li><a href=\"about\">about</a></li>\n";
-                echo "<li><a href=\"test/\">index</a></li>\n";
-                echo "<li><a href=\"test/getting-started\">getting-started</a></li>\n";
-                echo "</ul>\n";
-        }
-
-}
+$router = new RouterPage();
+$router->handle();
