@@ -34,10 +34,12 @@ class TopMenu extends \ArrayObject
          */
         public function __construct($topmeny = false)
         {
-                if ($topmeny) {
-                        parent::__construct($topmeny);
-                } elseif (file_exists("topbar.menu")) {
-                        parent::__construct(include("topbar.menu"));
+                if ($topmeny != false) {
+                        if (file_exists("topbar.menu")) {
+                                parent::__construct(include("topbar.menu"));
+                        } elseif (is_array ($topmeny)) {
+                                parent::__construct($topmeny);
+                        }
                 }
         }
 

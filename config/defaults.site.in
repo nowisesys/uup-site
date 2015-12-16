@@ -140,7 +140,8 @@ return array(
 //                )
 //        ),
 //        /**
-//         * Static defined top menu or false to dynamic build from topmenu.menu files.
+//         * Static defined top menu (array) or dynamic build from topmenu.menu files. 
+//         * Use false to completely disable top menus.
 //         */
 //        'topmenu'   => false,
 //        /**
@@ -156,7 +157,7 @@ return array(
 //                        "href" => "http://www.example.com/webmaster",
 //                        "name" => "Webmaster"
 //                ),
-//                "created" => "2015",
+//                "copying" => "2015",
 //                "updated" => getlastmod()
 //        )
 
