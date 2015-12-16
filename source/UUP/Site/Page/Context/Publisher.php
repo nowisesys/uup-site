@@ -23,8 +23,8 @@ namespace UUP\Site\Page\Context;
  * 
  * @property-read array $contact The contact info for page responsible (href/name).
  * @property-read array $editor  The webmaster/editor info (href/name).
- * @property-read string $created The creation/copyright year.
- * @property-read string $uodated The last modification time.
+ * @property-read string $copying The creation/copyright year.
+ * @property-read string $updated The last modification time.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -47,6 +47,13 @@ class Publisher extends \ArrayObject
                         parent::__construct(include(sprintf("%s/publish.inc", $template)));
                 } elseif ($publish) {
                         parent::__construct($publish);
+                }
+        }
+
+        public function __get($name)
+        {
+                if (isset($this[$name])) {
+                        return $this[$name];
                 }
         }
 
