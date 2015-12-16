@@ -1,3 +1,8 @@
+<?php
+include('format.inc');
+$output = new format($this);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,6 +18,21 @@
 
         <script src="<?= $this->config->getJs('jquery.min.js') ?>"></script>
         <script src="<?= $this->config->getJs('bootstrap.min.js') ?>"></script>
+
+        <script>
+            // 
+            // Keep track of selected topmenu item:
+            // 
+            $(document).ready(function () {
+                $("#" + localStorage.getItem('menu')).addClass("active");
+
+                $(".topmenu").on('click', function () {
+                    $("#" + localStorage.getItem('menu')).removeClass("active");
+                    $(this).addClass("active");
+                    localStorage.setItem('menu', $(this).attr("id"));
+                })
+            });
+        </script>
     </head>
     <body>
 
@@ -24,14 +44,11 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>                        
                     </button>
-                    <a class="navbar-brand" href="#">Logo</a>
+                    <a class="navbar-brand" href="#">The Company</a>
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <?php foreach($this->topmenu as $name => $link) { ?>
-                        <li><a href="<?= $link ?>"><?= $name ?></a></li>
-                        <?php } ?>
+                        <?php $output->topmenu(); ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -44,32 +61,19 @@
         <div class="container-fluid text-center">    
             <div class="row content">
                 <div class="col-sm-2 sidenav">
-                    <?php foreach($this->navmenu as $menu) { ?>
-                    <?php foreach($menu as $name => $link) { ?> 
-                    <li><a href="<?= $link ?>"><?= $name ?></a></li>
-                    <?php } ?>
-                    <br/>
-                    <?php } ?>
+                    <?php $output->navmenu(); ?>
                 </div>
                 <div class="col-sm-8 text-left"> 
                     <?php $this->printContent(); ?>                            
                 </div>
                 <div class="col-sm-2 sidenav">
-                    <?php foreach($this->sidemenu as $hval => $menu) { ?>
-                    <div class="well">
-                        <?php foreach($menu as $name => $link) { ?>
-                        <li><a href="<?= $link ?>"><?= $name ?></a></li>
-                        <?php } ?>
-                    </div>
-                    <?php } ?>
+                    <?php $output->sidemenu(); ?>
                 </div>
             </div>
         </div>
 
         <footer class="container-fluid text-center">
-            <?php if($this->publisher->count()) { ?>
-            <div class="updated"><small>Modified: <?= strftime("%x %X", $this->publisher['updated']) ?></small></div>
-            <?php } ?>
+            <?php $output->footer(); ?>
         </footer>
 
     </body>
