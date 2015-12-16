@@ -46,7 +46,7 @@ using a dispatcher (routing) script.
 
     Download and install themes from http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site. 
 
-** Example (direct rendering):
+** Example (different ways of rendering a page class):
 
     o) Using direct rendering:
 
