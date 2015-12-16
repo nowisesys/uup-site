@@ -1,7 +1,7 @@
 {
     "name": "bmc/uup-site",
     "version": "0.9.0",
-    "description": "Template/theme rendered web site.",
+    "description": "OOP theme/template based page rendering with routing capabilities.",
     "type": "library",
     "keywords": ["template", "site", "uup", "bmc"],
     "homepage": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site",

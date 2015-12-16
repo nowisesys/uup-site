@@ -47,3 +47,61 @@ footer {
     }
     .row.content {height:auto;} 
 }
+
+.jumbotron {
+    background-color: #0a0;
+    color: white;
+    padding-bottom: 80px;
+}
+
+.start {
+    float: left;
+    margin-top: 0;
+    margin-left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(0, 25, 0, .25);
+}
+
+.container .buttons {
+    position: relative;
+    top: 30%;
+    margin: 0 auto;
+    width: 200px;
+}
+
+.buttons .button_1 {
+    float: left;
+}
+
+.buttons .button_2 {
+    float: left;
+    margin-left: 10px;
+}
+
+.section {
+    padding-bottom: 10px;
+    border-left: 5px solid #dcfaa0;
+    min-height: 350px;
+}
+
+.secthead {
+    background-color: #ddd;
+}
+
+.secttext {
+    border: 1px solid #eee;
+    height: 30%;
+}
+
+.section img {
+    margin: 10px;
+    max-width: 350px;
+    max-height: 200px;
+}
+
+.secttext button {
+    display: block;
+    float: bottom;
+    margin: 10px;
+}

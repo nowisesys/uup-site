@@ -1,0 +1,89 @@
+<?php
+include('format.inc');
+$output = new format($this);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><?= $this->getTitle() ?></title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <link href="<?= $this->config->getCss('bootstrap.min.css')  ?>" rel="stylesheet">
+        <link href="<?= $this->config->getCss('custom.css') ?>" rel="stylesheet">        
+
+        <script src="<?= $this->config->getJs('jquery.min.js') ?>"></script>
+        <script src="<?= $this->config->getJs('bootstrap.min.js') ?>"></script>
+
+        <script>
+                    // 
+                    // Keep track of selected topmenu item:
+                    // 
+                    $(document).ready(function () {
+                $("#" + localStorage.getItem('menu')).addClass("active");
+
+                $(".topmenu").on('click', function () {
+                    $("#" + localStorage.getItem('menu')).removeClass("active");
+                    $(this).addClass("active");
+                    localStorage.setItem('menu', $(this).attr("id"));
+                })
+            });
+        </script>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href="#">The Company</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <?php $output->topmenu(); ?>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="jumbotron">
+            <div class="container text">
+                <h1>Bootstrap Tutorial</h1>
+                <p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile-first projects on the web.</p>
+            </div>
+            <div class="container start">    
+                <div class="buttons">
+                    <button type="button" class="btn btn-success button_1" onclick="location.href = 'page1.php'">Page 1</button>
+                    <button type="button" class="btn btn-success button_2" onclick="location.href = 'page2.php'">Page 2</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid text-center">    
+            <div class="row content">
+                <?php $this->printContent(); ?>                            
+            </div>
+            <div class="row">
+                <?php $output->sections(); ?>
+            </div>
+        </div>
+
+
+        <footer class="container-fluid text-center">
+            <?php $output->footer(); ?>
+        </footer>
+
+    </body>
+</html>

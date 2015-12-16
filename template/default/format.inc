@@ -76,6 +76,18 @@ class format
                 }
         }
 
+        public function sections()
+        {
+                foreach ($this->page->sections as $head => $cont) {
+                        printf("<div class=\"col-sm-4 section\">\n");
+                        printf("<div class=\"secthead\">%s</div>\n", $head);
+                        printf("<img src=\"%s\"/><br/>\n", $cont['image']);
+                        printf("<div class=\"secttext\">%s", $cont['text']);
+                        printf("<button type=\"button\" class=\"btn btn-default\" onclick=\"location.href = '%s'\">More</button>\n", $cont['link']);
+                        printf("</div>\n</div>\n");
+                }
+        }
+
         public function footer()
         {
                 $publisher = $this->page->publisher;
