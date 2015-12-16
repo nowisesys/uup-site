@@ -3,7 +3,8 @@
 =============================================================================
 
 This library takes a object oriented approach at building web sites by separating 
-page layout from content.
+page layout from content. It supports multiple theme, rendering page direct or
+using a dispatcher (routing) script.
 
 ** Site Layout:
 
@@ -11,15 +12,16 @@ page layout from content.
     that is used to initialize a page class instance.
 
     site/
-      +-- htdocs/           // Document root
-      |     +-- css/
-      |     +-- js/
-      |     +-- img/
-      +-- template/         // Page rendering templates (themes)
-      +-- locale/           // Support for locale (gettext)
-      +-- vendor/           // Composer packages, including uup-site
-      +-- composer.json
-      +-- Makefile          // Compile locales (PO-files).
+      +-- htdocs/                       // Document root
+      |     +-- theme/xyz/assets        // Theme support files
+      |                     +-- css/
+      |                     +-- js/
+      |                     +-- img/
+      +-- template/                     // Page rendering templates (themes)
+      +-- locale/                       // Support for locale (gettext)
+      +-- vendor/                       // Composer packages, including uup-site
+      +-- composer.json                 // Site project composer file
+      +-- Makefile                      // Compile locales (PO-files).
 
 ** Setup:
 
@@ -38,43 +40,53 @@ page layout from content.
 
 ** Themes:
 
-    Download and install themes from http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site.
+    All themes should at least provide the standard.ui template, but it's up to user 
+    to define any number of *.ui files as needed. See template/default for example on
+    theme construction.
 
-** Example:
+    Download and install themes from http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site. 
 
-    // 
-    // Assume virtual host defines include path to root directory:
-    // 
-    require_once('vendor/autoload.php');
+** Example (direct rendering):
 
-    class IndexPage extends Page
-    {
-        // Define the printContent() member function at least.
-    };
+    o) Using direct rendering:
 
-    $page = new IndexPage();
-    $page->render();
+        // 
+        // Assume virtual host defines include path to root directory:
+        // 
+        require_once('vendor/autoload.php');
+
+        use UUP\Site\Page\StandardPage;
+
+        class IndexPage extends StandardPage
+        {
+            // Define the printContent() member function at least.
+        };
+
+        $page = new IndexPage();
+        $page->render();
+
+    o) Using page routing (pretty URL's):
+
+        // 
+        // The dispatcher.php (router) has already setup autoloading, no need
+        // to explicit call render() either.
+        // 
+        class IndexPage extends StandardPage
+        {
+            // Define the printContent() member function at least.
+        };
+
+    More examples is included in example directory in the source package.
 
 ** Infrastructure:
 
     Menus and publish information can either be defined by having custom files in
-    the page directory or programmatically by overriding the parent class member 
-    methods.
+    the page directory or programmatically by redefining menu content in the page 
+    constructor.
 
-    o)  Menus:
+    See example/context for infrastructure example. See example/multi for example
+    on programmatically defined menus.
 
-        These are gathered from standard.menu, topbar.menu, sidebar.menu and 
-        content.spec files found in same directory as the page and its parent directory.
-
-    o)  Publish info:
-
-        Information for output is taken from the publish.inc file in the current 
-        directory if present. A common use of publish info feature is to either
-        create a common file and symlink it in all directories, or override the
-        parent class method that outputs this info.
-
-    To disable e.g. page menus, override unwanted parent class menu methods to 
-    provide no output. Another option could be to define a common base class for
-    all pages in a subdirectory.
+    The site config file has some influence on menu handling also.
         
 // Anders Lövgren, 2015-12-07
