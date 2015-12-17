@@ -26,22 +26,7 @@
             "UUP\\": "source"
         }
     },
-    "scripts": {
-        "post-install-cmd": [
-            "mkdir -p public/bootstrap",
-            "cp -a vendor/twitter/bootstrap/dist/* public/bootstrap",
-            "mkdir -p public/css",
-            "mkdir -p public/fonts",
-            "mkdir -p public/js",
-            "mkdir -p public/img",
-            "cp -a vendor/frameworks/jquery/jquery.min.js public/js"
-        ],
-        "post-update-cmd": [
-            "mkdir -p public/bootstrap",
-            "cp -a vendor/twitter/bootstrap/dist/* public/bootstrap"
-        ],
-        "setup-themes": [
-            "for t in template/*; do sh $t/setup.sh $destdir; done"
-        ]
-    }
+    "bin": [
+        "uup-site.sh"
+    ]
 }

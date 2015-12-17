@@ -6,6 +6,10 @@ This library takes a object oriented approach at building web sites by separatin
 page layout from content. It supports multiple theme, rendering page direct or
 using a dispatcher (routing) script.
 
+Despite its name, this package can be used as the rendering engine in any web
+application. In the following though, we will outline the process for using it
+to render an ordinary web site.
+
 ** Site Layout:
 
     Proposed site layout. All directory location are configurable in config/defaults.site
@@ -13,7 +17,7 @@ using a dispatcher (routing) script.
 
     site/
       +-- htdocs/                       // Document root
-      |     +-- theme/xyz/assets        // Theme support files
+      |     +-- theme/xyz/assets/       // Theme support files
       |                     +-- css/
       |                     +-- js/
       |                     +-- img/
@@ -23,20 +27,69 @@ using a dispatcher (routing) script.
       +-- composer.json                 // Site project composer file
       +-- Makefile                      // Compile locales (PO-files).
 
+** Site config:
+
+    The config/defaults.site file is looked for in the package directory (vendor/bmc/uup-site)
+    or in the site directory (the virtual host directory). 
+
 ** Setup:
 
-    Add repository URL http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site to 
-    composer.json. Install uup-site pages using composer:
+    Composer is the de-factor standard for installing PHP packages. There are two ways to
+    use this package: Either as a package or stand-alone.
 
-        bash$> cd /var/www/www.example.com
-        bash$> composer update
+    o) Use as package:
 
-    Make config protected copy of config/defaults.site:
+        Start by initialize the composer.json file:
 
-        bash$> cd vendor/bmc/uup-site/config
-        bash$> cp config/defaults.site.in config/defaults.site
+            bash$> cd /var/www/<virtual-host-root>
+            bash$> composer init
 
-    Open config/defaults.site and set default options.
+        Add the repository to composer.json:
+
+            "repositories": [
+                {
+                    "type": "composer",
+                    "url": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/"
+                }
+            ],
+            "require": {
+                "bmc/uup-site": ">=0.9.0"
+            }
+
+        Require the package to have it installed:
+
+            bash$> composer require bmc/uup-site
+
+        Run the uup-site.php script to finish setup:
+
+            bash$> ./vendor/bin/uup-site.sh
+
+    o) Use in standalone mode:
+
+        This mode is suitable for small sites or web applications. Begin by downloading
+        the package:
+
+            bash$> cd /var/www/<virtual-host-root>
+            bash$> wget http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/stable/latest.tar.gz
+
+        Unpack the source:
+
+            bash$> tar xfvp latest.tar.gz
+
+        You should now have an almost functional directory structure. Start by generating
+        the composer autoloader:
+
+            bash$> composer dump-autoload
+
+        Run uup-site.php to initialize the site or application:
+
+            bash$> ./uup-site.sh
+
+        Open config/defaults.site to tweak options. The default options (none) should be
+        fine in most cases.
+
+    After running uup-site.php, review content of public and config. Decide upon if page
+    routing (mod_rewrite) should be used or not.
 
 ** Themes:
 
@@ -85,8 +138,7 @@ using a dispatcher (routing) script.
     constructor.
 
     See example/context for infrastructure example. See example/multi for example
-    on programmatically defined menus.
-
-    The site config file has some influence on menu handling also.
+    on programmatically defined menus. The site config file has some influence on menu 
+    handling too.
         
 // Anders Lövgren, 2015-12-07
