@@ -49,7 +49,7 @@ function setup_standalone()
     echo "Setup in standalone mode"
     setup_config .
     setup_templates
-    setup_dispatcher vendor/bmc/uup-site
+    setup_dispatcher .
 }
 
 if [ -d vendor/bmc/uup-site ]; then
