@@ -63,6 +63,18 @@ namespace UUP\Site\Page;
  * $router->setSuffix("View");
  * </code>
  * 
+ * Config file:
+ * -----------
+ * 
+ * If site configuration is in a non-standard location, then pass the path when creating
+ * the router page object:
+ * 
+ * <code>
+ * $config = "/etc/apache2/conf.d/localhost.uup-site.def";
+ * $router = new RouterPage($config);
+ * </code>
+ * 
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
@@ -98,10 +110,11 @@ class RouterPage extends StandardPage
 
         /**
          * Constructor.
+         * @param string $config Path to site config file.
          */
-        public function __construct()
+        public function __construct($config = null)
         {
-                parent::__construct("Router");
+                parent::__construct("Router", null, $config);
 
                 $this->config->uri = filter_input(INPUT_GET, 'uri');
                 $this->page = $this->getPage();

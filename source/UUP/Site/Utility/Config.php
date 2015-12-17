@@ -59,6 +59,11 @@ class Config
          * @var string 
          */
         private $prjdir;
+        /**
+         * Cached configuration options.
+         * @var array 
+         */
+        private static $cached = null;
 
         /**
          * Constructor.
@@ -69,75 +74,80 @@ class Config
                 $this->topdir = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
                 $this->prjdir = realpath(__DIR__ . "/../../../..");
 
-                // 
-                // Get config settings:
-                // 
-                if (is_array($config)) {
-                        // ignore
-                } elseif (is_string($config)) {
-                        $config = require($config);
-                } elseif (defined('UUP_SITE_DEFAULTS')) {
-                        $config = require('UUP_SITE_DEFAULTS');
-                } elseif (filter_input(INPUT_ENV, 'UUP_SITE_DEFAULTS')) {
-                        $config = require(filter_input(INPUT_ENV, 'UUP_SITE_DEFAULTS'));
-                } elseif (($config = $this->locate("config/defaults.site"))) {
-                        $config = require($config);
-                } else {
-                        throw new \Exception("Failed locate default.site");
-                }
+                if (!isset(self::$cached) || isset($config)) {
 
-                if (filter_input(INPUT_COOKIE, 'theme')) {
-                        $config['theme'] = filter_input(INPUT_COOKIE, 'theme');
-                }
-                if (filter_input(INPUT_GET, 'theme')) {
-                        $config['theme'] = filter_input(INPUT_GET, 'theme');
-                        setcookie("theme", $config['theme']);
-                }
-                if (!isset($config['theme'])) {
-                        $config['theme'] = 'default';
-                }
-
-                if (!isset($config['root'])) {
-                        $config['root'] = $this->topdir;
-                }
-
-                if (!isset($config['docs'])) {
-                        $config['docs'] = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT');
-                } elseif ($config['docs'][0] != '/') {
-                        $config['docs'] = $this->locate($config['docs']);
-                }
-
-                if (!isset($config['template'])) {
-                        $config['template'] = $this->locate("template");
-                } elseif ($config['template'][0] != '/') {
-                        $config['template'] = $this->locate($config['template']);
-                }
-                if (!isset($config['template'])) {
-                        throw new \Exception("The template directory is missing");
-                }
-
-                if (!isset($config['location'])) {
-                        $config['location'] = "/";
-                }
-
-                foreach (array('css', 'js', 'img') as $asset) {
-                        if (!isset($config[$asset])) {
-                                $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $asset);
-                        } elseif ($config[$asset][0] != '/') {
-                                $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $config[$asset]);
+                        // 
+                        // Get config settings:
+                        // 
+                        if (is_array($config)) {
+                                // ignore
+                        } elseif (is_string($config)) {
+                                $config = require($config);
+                        } elseif (defined('UUP_SITE_DEFAULTS')) {
+                                $config = require('UUP_SITE_DEFAULTS');
+                        } elseif (filter_input(INPUT_ENV, 'UUP_SITE_DEFAULTS')) {
+                                $config = require(filter_input(INPUT_ENV, 'UUP_SITE_DEFAULTS'));
+                        } elseif (($config = $this->locate("config/defaults.site"))) {
+                                $config = require($config);
+                        } else {
+                                throw new \Exception("Failed locate default.site");
                         }
-                        if ($config[$asset][1] == '/') {
-                                $config[$asset] = str_replace('//', '/', $config[$asset]);
-                        }
-                }
 
-                foreach (array('topmenu', 'publish') as $key) {
-                        if (!isset($config[$key])) {
-                                $config[$key] = true;
+                        if (filter_input(INPUT_COOKIE, 'theme')) {
+                                $config['theme'] = filter_input(INPUT_COOKIE, 'theme');
                         }
-                }
+                        if (filter_input(INPUT_GET, 'theme')) {
+                                $config['theme'] = filter_input(INPUT_GET, 'theme');
+                                setcookie("theme", $config['theme']);
+                        }
+                        if (!isset($config['theme'])) {
+                                $config['theme'] = 'default';
+                        }
 
-                $this->config = $config;
+                        if (!isset($config['root'])) {
+                                $config['root'] = $this->topdir;
+                        }
+
+                        if (!isset($config['docs'])) {
+                                $config['docs'] = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT');
+                        } elseif ($config['docs'][0] != '/') {
+                                $config['docs'] = $this->locate($config['docs']);
+                        }
+
+                        if (!isset($config['template'])) {
+                                $config['template'] = $this->locate("template");
+                        } elseif ($config['template'][0] != '/') {
+                                $config['template'] = $this->locate($config['template']);
+                        }
+                        if (!isset($config['template'])) {
+                                throw new \Exception("The template directory is missing");
+                        }
+
+                        if (!isset($config['location'])) {
+                                $config['location'] = "/";
+                        }
+
+                        foreach (array('css', 'js', 'img') as $asset) {
+                                if (!isset($config[$asset])) {
+                                        $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $asset);
+                                } elseif ($config[$asset][0] != '/') {
+                                        $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $config[$asset]);
+                                }
+                                if ($config[$asset][1] == '/') {
+                                        $config[$asset] = str_replace('//', '/', $config[$asset]);
+                                }
+                        }
+
+                        foreach (array('topmenu', 'publish') as $key) {
+                                if (!isset($config[$key])) {
+                                        $config[$key] = true;
+                                }
+                        }
+                        
+                        self::$cached = $config;
+                }
+ 
+                $this->config = self::$cached;
         }
 
         public function __get($name)
