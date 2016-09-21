@@ -140,7 +140,7 @@ class Config
 
                         foreach (array('topmenu', 'publish') as $key) {
                                 if (!isset($config[$key])) {
-                                        $config[$key] = true;
+                                        $config[$key] = false;
                                 }
                         }
                         
