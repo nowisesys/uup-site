@@ -86,27 +86,27 @@ class RouterPage extends StandardPage
          * The requested page.
          * @var string 
          */
-        private $page;
+        private $_page;
         /**
          * The class name.
          * @var string 
          */
-        private $name;
+        private $_name;
         /**
          * The class name suffix.
          * @var string 
          */
-        private $suffix = "Page";
+        private $_suffix = "Page";
         /**
          * The filename extension.
          * @var string 
          */
-        private $ext = "php";
+        private $_ext = "php";
         /**
          * The class namespace.
          * @var string 
          */
-        private $ns = "\\";
+        private $_ns = "\\";
 
         /**
          * Constructor.
@@ -117,8 +117,8 @@ class RouterPage extends StandardPage
                 parent::__construct("Router", null, $config);
 
                 $this->config->uri = filter_input(INPUT_GET, 'uri');
-                $this->page = $this->getPage();
-                $this->name = $this->getName();
+                $this->_page = $this->getPage();
+                $this->_name = $this->getName();
         }
 
         public function printContent()
@@ -132,16 +132,16 @@ class RouterPage extends StandardPage
          */
         public function handle()
         {
-                if (!file_exists($this->page)) {
+                if (!file_exists($this->_page)) {
                         throw new \Exception("Requested page don't exist");
                 } else {
-                        require($this->page);
+                        require($this->_page);
                 }
 
-                if (!class_exists($this->name)) {
+                if (!class_exists($this->_name)) {
                         throw new \Exception("The requested class what not found");
                 } else {
-                        $page = new $this->name();
+                        $page = new $this->_name();
                         $page->render();
                 }
         }
@@ -152,8 +152,8 @@ class RouterPage extends StandardPage
          */
         public function setSuffix($suffix)
         {
-                $this->suffix = $suffix;
-                $this->name = $this->getName();
+                $this->_suffix = $suffix;
+                $this->_name = $this->getName();
         }
 
         /**
@@ -162,8 +162,8 @@ class RouterPage extends StandardPage
          */
         public function setExtension($ext)
         {
-                $this->ext = $ext;
-                $this->page = $this->getPage();
+                $this->_ext = $ext;
+                $this->_page = $this->getPage();
         }
 
         /**
@@ -172,8 +172,8 @@ class RouterPage extends StandardPage
          */
         public function setNamespace($ns)
         {
-                $this->ns = $ns;
-                $this->name = $this->getName();
+                $this->_ns = $ns;
+                $this->_name = $this->getName();
         }
 
         /**
@@ -184,7 +184,7 @@ class RouterPage extends StandardPage
         {
                 $parts = explode('-', basename($this->config->uri));
                 $parts = array_map('ucfirst', $parts);
-                return sprintf("%s%s%s", $this->ns, implode('', $parts), $this->suffix);
+                return sprintf("%s%s%s", $this->_ns, implode('', $parts), $this->_suffix);
         }
 
         /**
@@ -193,7 +193,7 @@ class RouterPage extends StandardPage
          */
         private function getPage()
         {
-                return sprintf("%s.%s", $this->config->uri, $this->ext);
+                return sprintf("%s.%s", $this->config->uri, $this->_ext);
         }
 
 }

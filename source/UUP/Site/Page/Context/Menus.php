@@ -39,7 +39,7 @@ class Menus
         /**
          * @var array|boolean $topmeny The top menu. 
          */
-        private $topmenu;
+        private $_topmenu;
 
         /**
          * Constructor.
@@ -47,7 +47,7 @@ class Menus
          */
         public function __construct($topmenu)
         {
-                $this->topmenu = $topmenu;
+                $this->_topmenu = $topmenu;
         }
 
         public function __get($name)
@@ -100,7 +100,7 @@ class Menus
          */
         public function getTopMenu()
         {
-                return new TopMenu($this->topmenu);
+                return new TopMenu($this->_topmenu);
         }
 
 }

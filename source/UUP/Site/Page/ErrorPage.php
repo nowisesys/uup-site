@@ -32,19 +32,19 @@ class ErrorPage extends StandardPage
          * The trapped exception.
          * @var \Exception 
          */
-        private $exception;
+        private $_exception;
 
         public function __construct($exception)
         {
                 parent::__construct("Error");
-                $this->exception = $exception;
+                $this->_exception = $exception;
                 ob_clean();
         }
 
         public function printContent()
         {
                 printf("<h1>Error</h1>\n");
-                print_r($this->exception);
+                print_r($this->_exception);
         }
 
 }

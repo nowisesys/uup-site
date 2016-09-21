@@ -48,22 +48,22 @@ class Config
          * Configuration options.
          * @var array 
          */
-        private $config;
+        private $_config;
         /**
          * The top directory.
          * @var string 
          */
-        private $topdir;
+        private $_topdir;
         /**
          * The project directory.
          * @var string 
          */
-        private $prjdir;
+        private $_prjdir;
         /**
          * Cached configuration options.
          * @var array 
          */
-        private static $cached = null;
+        private static $_cached = null;
 
         /**
          * Constructor.
@@ -71,10 +71,10 @@ class Config
          */
         public function __construct($config = null)
         {
-                $this->topdir = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
-                $this->prjdir = realpath(__DIR__ . "/../../../..");
+                $this->_topdir = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
+                $this->_prjdir = realpath(__DIR__ . "/../../../..");
 
-                if (!isset(self::$cached) || isset($config)) {
+                if (!isset(self::$_cached) || isset($config)) {
 
                         // 
                         // Get config settings:
@@ -105,7 +105,7 @@ class Config
                         }
 
                         if (!isset($config['root'])) {
-                                $config['root'] = $this->topdir;
+                                $config['root'] = $this->_topdir;
                         }
 
                         if (!isset($config['docs'])) {
@@ -144,32 +144,32 @@ class Config
                                 }
                         }
                         
-                        self::$cached = $config;
+                        self::$_cached = $config;
                 }
  
-                $this->config = self::$cached;
+                $this->_config = self::$_cached;
         }
 
         public function __get($name)
         {
-                if (isset($this->config[$name])) {
-                        return $this->config[$name];
+                if (isset($this->_config[$name])) {
+                        return $this->_config[$name];
                 }
         }
 
         public function __set($name, $value)
         {
-                $this->config[$name] = $value;
+                $this->_config[$name] = $value;
         }
 
         public function __isset($name)
         {
-                return array_key_exists($name, $this->config);
+                return array_key_exists($name, $this->_config);
         }
 
         private function locate($path)
         {
-                foreach (array($this->topdir, $this->prjdir, __DIR__) as $test) {
+                foreach (array($this->_topdir, $this->_prjdir, __DIR__) as $test) {
                         if (($dest = realpath(sprintf("%s/%s", $test, $path)))) {
                                 return $dest;
                         }

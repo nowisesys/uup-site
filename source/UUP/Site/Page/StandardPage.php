@@ -46,12 +46,12 @@ abstract class StandardPage implements TemplatePage
          * The page title. 
          * @var string
          */
-        protected $title;
+        protected $_title;
         /**
          * The template used for page rendering.
          * @var string  
          */
-        private $template;
+        private $_template;
         /**
          * The site configuration object.
          * @var Config 
@@ -72,8 +72,8 @@ abstract class StandardPage implements TemplatePage
                         ob_start();
                 }
 
-                $this->title = $title;
-                $this->template = $template;
+                $this->_title = $title;
+                $this->_template = $template;
                 $this->config = new Config($config);
         }
 
@@ -103,7 +103,7 @@ abstract class StandardPage implements TemplatePage
          */
         final public function render()
         {
-                include(sprintf("%s/%s/%s.ui", $this->config->template, $this->config->theme, $this->template));
+                include(sprintf("%s/%s/%s.ui", $this->config->template, $this->config->theme, $this->_template));
         }
 
         /**
@@ -150,7 +150,7 @@ abstract class StandardPage implements TemplatePage
          */
         public function getTitle()
         {
-                return $this->title;
+                return $this->_title;
         }
 
         /**

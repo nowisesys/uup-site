@@ -64,29 +64,29 @@ class Locale
          * The browsers prefered language.
          * @var string
          */
-        private $langpref = null;
+        private $_langpref = null;
         /**
          * The two letter country code.
          * @var string
          */
-        private $langcode = null;
+        private $_langcode = null;
         /**
          * The language <-> locale map.
          * @var array 
          */
-        private $map;
+        private $_map;
         //
         // Construct the gettext and locale object.
         //
 
         public function __construct()
         {
-                $this->map = $this->getDefaultMap();
+                $this->_map = $this->getDefaultMap();
                 if (!$this->detectLanguage()) {
-                        reset($this->map);       // Fall back on first language in map
-                        $this->langcode = key($this->map);
+                        reset($this->_map);       // Fall back on first language in map
+                        $this->_langcode = key($this->_map);
                 }
-                $this->setLanguage($this->langcode);
+                $this->setLanguage($this->_langcode);
         }
 
         //
@@ -94,7 +94,7 @@ class Locale
         //
         public function setLocaleMap($map)
         {
-                $this->map = $map;
+                $this->_map = $map;
         }
 
         //
@@ -102,7 +102,7 @@ class Locale
         //
         public function getCharSet()
         {
-                return $this->map[$this->langcode]["charset"];
+                return $this->_map[$this->_langcode]["charset"];
         }
 
         //
@@ -112,7 +112,7 @@ class Locale
         public function getLanguageList()
         {
                 if (extension_loaded("gettext")) {
-                        return array_keys($this->map);
+                        return array_keys($this->_map);
                 }
                 return null;
         }
@@ -123,8 +123,8 @@ class Locale
         //
         public function isAlias($langcode)
         {
-                if (isset($this->map[$langcode])) {
-                        return is_string($this->map[$langcode]);
+                if (isset($this->_map[$langcode])) {
+                        return is_string($this->_map[$langcode]);
                 }
                 return false;
         }
@@ -135,9 +135,9 @@ class Locale
         public function getLanguageData($langcode)
         {
                 if ($this->isAlias($langcode)) {
-                        return $this->map[$this->map[$langcode]];
+                        return $this->_map[$this->_map[$langcode]];
                 } else {
-                        return $this->map[$langcode];
+                        return $this->_map[$langcode];
                 }
         }
 
@@ -147,7 +147,7 @@ class Locale
         public function hasLanguage($langcode)
         {
                 if (extension_loaded("gettext")) {
-                        return isset($this->map[$langcode]);
+                        return isset($this->_map[$langcode]);
                 }
                 return false;
         }
@@ -157,9 +157,9 @@ class Locale
         //
         public function setLanguage($langcode)
         {
-                if ($this->langcode != $langcode) {
+                if ($this->_langcode != $langcode) {
                         if ($this->hasLanguage($langcode)) {
-                                $this->langcode = $langcode;
+                                $this->_langcode = $langcode;
                         }
                 }
                 $this->setLocale(LC_MESSAGES);
@@ -174,7 +174,7 @@ class Locale
         //
         public function getLanguage()
         {
-                return $this->langcode;
+                return $this->_langcode;
         }
 
         //
@@ -183,7 +183,7 @@ class Locale
         //
         public function getPreferedLanguage()
         {
-                return $this->langpref;
+                return $this->_langpref;
         }
 
         //
@@ -191,7 +191,7 @@ class Locale
         //
         public function getLocale()
         {
-                return $this->map[$this->langcode]["locale"];
+                return $this->_map[$this->_langcode]["locale"];
         }
 
         //
@@ -202,8 +202,8 @@ class Locale
         //
         public function setLocale($category)
         {
-                if (isset($this->map[$this->langcode]["locale"])) {
-                        setlocale($category, $this->map[$this->langcode]["locale"]);
+                if (isset($this->_map[$this->_langcode]["locale"])) {
+                        setlocale($category, $this->_map[$this->_langcode]["locale"]);
                 }
         }
 
@@ -239,14 +239,14 @@ class Locale
                         $list = explode(",", $_SERVER['HTTP_ACCEPT_LANGUAGE']);
                         foreach ($list as $str) {
                                 list($lang) = explode(";", trim($str));     // lang;q=0.x
-                                if (!isset($this->langpref)) {
-                                        $this->langpref = substr($lang, 0, 2);
+                                if (!isset($this->_langpref)) {
+                                        $this->_langpref = substr($lang, 0, 2);
                                 }
                                 if ($this->hasLanguage($lang)) {
                                         if ($this->isAlias($lang)) {
-                                                $lang = $this->map[$lang];
+                                                $lang = $this->_map[$lang];
                                         }
-                                        $this->langcode = $lang;
+                                        $this->_langcode = $lang;
                                         return true;
                                 }
                         }
@@ -304,7 +304,7 @@ class Locale
         //
         public function __toString()
         {
-                return $this->map[$this->langcode]["lang"];
+                return $this->_map[$this->_langcode]["lang"];
         }
 
 }
