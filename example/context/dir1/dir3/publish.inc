@@ -9,6 +9,6 @@ return array(
                 "href" => "http://www.example.com/webmaster",
                 "name" => _("Webmaster")
         ),
-        "created" => "2015",
+        "copying" => "2015",
         "updated" => getlastmod()
 );
