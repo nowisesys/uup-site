@@ -159,6 +159,10 @@ return array(
 //                ),
 //                "copying" => "2015",
 //                "updated" => getlastmod()
-//        )
+//        ),
+//        /**
+//         * The exception handling mode (bitmask of one or more UUP_SITE_EXCEPT_XXX constants).
+//         */
+//        'exception' => UUP_SITE_EXCEPT_BRIEF | UUP_SITE_EXCEPT_LOG
 
 );

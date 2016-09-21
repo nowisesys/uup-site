@@ -43,8 +43,28 @@ class ErrorPage extends StandardPage
 
         public function printContent()
         {
-                printf("<h1>Error</h1>\n");
-                print_r($this->_exception);
+                printf("<h1>Oops, something went wrong!</h1>\n");
+
+                if ($this->config->exception & UUP_SITE_EXCEPT_LOG) {
+                        error_log(print_r($this->_exception, true));
+                }
+
+                if ($this->config->exception & UUP_SITE_EXCEPT_SILENT) {
+                        printf("An exception occured, but error reporing has been suppressed by the system manager.");
+                        return;
+                }
+                if ($this->config->exception & UUP_SITE_EXCEPT_BRIEF) {
+                        printf("<b>%s:</b> %s<br/>\n", get_class($this->_exception), $this->_exception->getMessage());
+                }
+                if ($this->config->exception & UUP_SITE_EXCEPT_STACK) {
+                        $stack = $this->_exception->getTraceAsString();
+                        printf("<b>Stack:</b> %s<br/>\n", $stack);
+                }
+                if ($this->config->exception & UUP_SITE_EXCEPT_DUMP) {
+                        printf("<p><pre><code>\n");
+                        print_r($this->_exception);
+                        printf("</code></pre></p>\n");
+                }
         }
 
 }

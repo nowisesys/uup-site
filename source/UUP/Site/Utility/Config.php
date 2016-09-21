@@ -18,6 +18,37 @@
 
 namespace UUP\Site\Utility;
 
+if (!defined('UUP_SITE_EXCEPT_LOG')) {
+        /**
+         * Log exception to error log.
+         */
+        define('UUP_SITE_EXCEPT_LOG', 1);
+}
+if (!defined('UUP_SITE_EXCEPT_SILENT')) {
+        /**
+         * Silent ignore reporting exceptions.
+         */
+        define('UUP_SITE_EXCEPT_SILENT', 2);
+}
+if (!defined('UUP_SITE_EXCEPT_DUMP')) {
+        /**
+         * Display exception using dump (not for production mode).
+         */
+        define('UUP_SITE_EXCEPT_DUMP', 4);
+}
+if (!defined('UUP_SITE_EXCEPT_BRIEF')) {
+        /**
+         * Display brief exception message.
+         */
+        define('UUP_SITE_EXCEPT_BRIEF', 8);
+}
+if (!defined('UUP_SITE_EXCEPT_STACK')) {
+        /**
+         * Include stack in output (not for production mode).
+         */
+        define('UUP_SITE_EXCEPT_STACK', 16);
+}
+
 /**
  * Site configuration class.
  *
@@ -36,6 +67,8 @@ namespace UUP\Site\Utility;
  * 
  * @property array $topmenu Optional top bar menu.
  * @property array $publish Optional publisher information.
+ * 
+ * @property int $exception The exception reporting mode.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -126,6 +159,9 @@ class Config
                         if (!isset($config['location'])) {
                                 $config['location'] = "/";
                         }
+                        if (!isset($config['exception'])) {
+                                $config['exception'] = UUP_SITE_EXCEPT_BRIEF;
+                        }
 
                         foreach (array('css', 'js', 'img') as $asset) {
                                 if (!isset($config[$asset])) {
@@ -143,10 +179,10 @@ class Config
                                         $config[$key] = false;
                                 }
                         }
-                        
+
                         self::$_cached = $config;
                 }
- 
+
                 $this->_config = self::$_cached;
         }
 
