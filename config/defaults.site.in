@@ -106,37 +106,45 @@ return array(
 //                /**
 //                 * Default language.
 //                 */
-//                'default'    => 'en_US',
+//                'default'    => 'en-us',
 //                /**
-//                 * Available languages (PO directories and aliases).
+//                 * Available translations and locales.
 //                 */
-//                'languages'  => array(
-//                        "se" => array(
+//                'map'  => array(
+//                        "sv-se" => array(
 //                                "locale"  => "sv_SE", // Swedish
-//                                "charset" => "utf-8",
-//                                "lang"    => _("Swedish")
+//                                "lang"    => _("Swedish"),
+//                                "country" => _("Sweden")
 //                        ),
-//                        "gb" => array(
+//                        "en-gb" => array(
 //                                "locale"  => "en_GB", // English (GB)
-//                                "charset" => "utf-8",
-//                                "lang"    => _("English (GB)")
+//                                "lang"    => _("English (GB)"),
+//                                "country" => _("United Kingdom")
 //                        ),
-//                        "us" => array(
+//                        "en-us" => array(
 //                                "locale"  => "en_US", // English (US)
-//                                "charset" => "utf-8",
-//                                "lang"    => _("English (US)")
+//                                "lang"    => _("English (US)"),
+//                                "country" => _("United States")
 //                        ),
 //                        "c"  => array(
 //                                "locale"  => "C", // Browser default
-//                                "charset" => null,
-//                                "lang"    => _("Browser default")
-//                        ),
-//                        "sv"    => "se",
-//                        "sv-se" => "se",
-//                        "sv-fi" => "se",
-//                        "en"    => "gb",
-//                        "en-gb" => "gb",
-//                        "en-us" => "us"
+//                                "lang"    => _("Browser Default"),
+//                                "country" => _("Automatic")
+//                        )
+//                ), 
+//                /**
+//                 * Alias to language code mapping.
+//                 */
+//                'alias' => array(
+//                        "sv"    => "sv-se",
+//                        "se"    => "sv-se",
+//                        "en"    => "en-us"
+//                ),
+//                /**
+//                 * The locale categories to apply.
+//                 */
+//                'categories' => array(
+//                        LC_MESSAGES, LC_CTYPE, LC_TIME, LC_NUMERIC
 //                )
 //        ),
 //        /**
@@ -157,7 +165,7 @@ return array(
 //                        "href" => "http://www.example.com/webmaster",
 //                        "name" => "Webmaster"
 //                ),
-//                "copying" => "2015",
+//                "copying" => "2016",
 //                "updated" => getlastmod()
 //        ),
 //        /**

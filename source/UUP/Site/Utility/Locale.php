@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2015-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,37 +21,25 @@ namespace UUP\Site\Utility;
 /**
  * GNU gettext and locale support. 
  * 
- * The template message file (messages.pot) will be located under the locale
- * directory. Create a new translation file using (example for swedish locale):
+ * You need to create a POT file for each text domain. Use xgettext to initialize a 
+ * POT-file in the locale directory:
  * 
- *   bash$> cd locale && mkdir -p sv_SE/LC_MESSAGES
- *   bash$> msginit --no-wrap \
- *                  --input=messages.pot \
- *                  --output=sv_SE/LC_MESSAGES/sv.po \
- *                  --locale=sv_SE
+ *   bash$> find public/proj -name *.php | xgettext -o locale/proj.pot -f-
  * 
- * See 'locale -a' for a list of supported locales. Update and compile the 
- * message files issuing 'make' in the root directory. This will update all 
- * .po files with new/removed translation strings and compile the .po files 
- * to .mo binary files.
+ * Review the generated POT-file. Create new translation files (PO) using msginit:
  * 
- * Then add an map between the language code (2-letter) and the locale name
- * to the array inside getDefaultMap().
- *
+ *   bash$> mkdir -p locale/sv_SE/LC_MESSAGES
+ *   bash$> msginit -i locale/proj.pot -o sv_SE/LC_MESSAGES/proj.po -l sv_SE -v
  * 
- * This class supports setting the language and gettext domain. This also
- * sets the LC_MESSAGES locale category implicit. It's also possible to set
- * other locale categories by calling Locale::setLocale(), i.e. using LC_ALL
- * as argument.
+ * Compile the translation files using msgfmt:
  * 
- * This class ensures that the language (for gettext) is in sync with the 
- * locale settings. Note that setting LC_ALL affects the formatting of dates 
- * and floatpoint numbers. This could lead to problems if caution is not 
- * taken when storing data in the database.
+ *   bash$> msgfmt sv_SE/LC_MESSAGES/proj.po -o sv_SE/LC_MESSAGES/proj.mo
  * 
- * The lang=c is a special case, that we handles as if we where called without
- * cookie or request parameter. It should work as if the page was rendered
- * for the first time.
+ * @property-read string $detected The detected locale entry.
+ * 
+ * @property-read string $locale The active locale.
+ * @property-read string $language The active language (for display).
+ * @property-read string $country The active country (for display).
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -61,250 +49,244 @@ class Locale
 {
 
         /**
-         * The browsers prefered language.
-         * @var string
+         * The system config.
+         * @var Config 
          */
-        private $_langpref = null;
+        private $_config;
         /**
-         * The two letter country code.
-         * @var string
-         */
-        private $_langcode = null;
-        /**
-         * The language <-> locale map.
+         * The locale settings.
          * @var array 
          */
-        private $_map;
-        //
-        // Construct the gettext and locale object.
-        //
+        private $_locale;
+        /**
+         * The locale code.
+         * @var string 
+         */
+        private $_code;
 
-        public function __construct()
+        /**
+         * Constructor
+         * @param Config $config The system config.
+         */
+        public function __construct($config)
         {
-                $this->_map = $this->getDefaultMap();
-                if (!$this->detectLanguage()) {
-                        reset($this->_map);       // Fall back on first language in map
-                        $this->_langcode = key($this->_map);
+                if (isset($config->locale)) {
+                        $this->_config = $config;
+                        $this->_locale = $config->locale;
                 }
-                $this->setLanguage($this->_langcode);
-        }
-
-        //
-        // Set an alternative locale map.
-        //
-        public function setLocaleMap($map)
-        {
-                $this->_map = $map;
-        }
-
-        //
-        // Get the character set for selected locale.
-        //
-        public function getCharSet()
-        {
-                return $this->_map[$this->_langcode]["charset"];
-        }
-
-        //
-        // Get list of supported languages. Return null if switching
-        // language is unsupported (due to missing gettext extension).
-        //
-        public function getLanguageList()
-        {
-                if (extension_loaded("gettext")) {
-                        return array_keys($this->_map);
+                if (isset($this->_locale)) {
+                        $this->detect();
                 }
-                return null;
         }
 
-        //
-        // Return true if language code is an alias in localemap, i.e.
-        // sv => se or en-us => us
-        //
-        public function isAlias($langcode)
+        public function __get($name)
         {
-                if (isset($this->_map[$langcode])) {
-                        return is_string($this->_map[$langcode]);
+                switch ($name) {
+                        case 'detected':
+                                return $this->_code;
+                        case 'locale':
+                                return $this->_locale['map'][$this->_code]['locale'];
+                        case 'language':
+                                return $this->_locale['map'][$this->_code]['lang'];
+                        case 'country':
+                                return $this->_locale['map'][$this->_code]['country'];
                 }
-                return false;
         }
 
-        //
-        // Get the data (name and locale) associated with the language code.
-        //
-        public function getLanguageData($langcode)
+        /**
+         * Detect and apply locale settings.
+         * 
+         * Only locales defined by the configuration (map or alias) are applied. The order of 
+         * precedence for detection are:
+         * <ol>
+         * <li>Request parameter (lang).</li>
+         * <li>Session cookie (lang).</li>
+         * <li>Browser language preferences.</li>
+         * <li>Config default locale (defaults.site).</li>
+         * </ol>
+         */
+        public function detect()
         {
-                if ($this->isAlias($langcode)) {
-                        return $this->_map[$this->_map[$langcode]];
+                if (($code = filter_input(INPUT_GET, 'lang'))) {
+                        if ($this->setLanguage($code)) {
+                                return true;
+                        }
+                } elseif (($code = filter_input(INPUT_COOKIE, 'lang'))) {
+                        if ($this->setLanguage($code)) {
+                                return true;
+                        }
+                } elseif (($code = $this->getPrefered())) {
+                        if ($this->setLanguage($code)) {
+                                return true;
+                        }
                 } else {
-                        return $this->_map[$langcode];
+                        if ($this->setLanguage($this->_locale['default'])) {
+                                return true;
+                        }
                 }
-        }
 
-        //
-        // Return true if language is supported.
-        //
-        public function hasLanguage($langcode)
-        {
-                if (extension_loaded("gettext")) {
-                        return isset($this->_map[$langcode]);
-                }
                 return false;
         }
 
-        //
-        // Set language. Return true if successful.
-        //
-        public function setLanguage($langcode)
+        /**
+         * Select and apply locale.
+         * @param string $code The locale code.
+         * @return boolean
+         */
+        public function select($code)
         {
-                if ($this->_langcode != $langcode) {
-                        if ($this->hasLanguage($langcode)) {
-                                $this->_langcode = $langcode;
-                        }
+                return $this->setLanguage($code);
+        }
+
+        /**
+         * Check if map or alias entry exist.
+         * @param string $code The locale code.
+         * @return boolean
+         */
+        private function hasLanguage($code)
+        {
+                if (isset($this->_locale['map'][$code])) {
+                        return true;
                 }
-                $this->setLocale(LC_MESSAGES);
-                $this->setLocale(LC_CTYPE);
-                $this->setLocale(LC_TIME);
-                $this->setLocale(LC_NUMERIC);
-                $this->setTextDomain();
-        }
-
-        //
-        // Get current selected language.
-        //
-        public function getLanguage()
-        {
-                return $this->_langcode;
-        }
-
-        //
-        // Get the browser prefered language, that is, the first language
-        // from the accept language list.
-        //
-        public function getPreferedLanguage()
-        {
-                return $this->_langpref;
-        }
-
-        //
-        // Get current selected locale.
-        //
-        public function getLocale()
-        {
-                return $this->_map[$this->_langcode]["locale"];
-        }
-
-        //
-        // Set locale for category according to current selected language.
-        // It's not recommended to call this function and later change the
-        // language setting by calling Locale::setLanguage(), this might
-        // lead to mixed setting for the locale and gettext.
-        //
-        public function setLocale($category)
-        {
-                if (isset($this->_map[$this->_langcode]["locale"])) {
-                        setlocale($category, $this->_map[$this->_langcode]["locale"]);
+                if (isset($this->_locale['alias'][$code])) {
+                        return true;
                 }
-        }
 
-        //
-        // Get root path of our locale directory.
-        //
-        public static function getLocaleDir()
-        {
-                return realpath(dirname(__FILE__) . "/../locale");
-        }
-
-        //
-        // Set gettext domain based on current locale.
-        //
-        private function setTextDomain()
-        {
-                bindtextdomain("openexam", self::getLocaleDir());
-                textdomain("openexam");
-        }
-
-        //
-        // Detect language from browser. If an supported language is found,
-        // then it is set as the langcode member and returns true. See RFC
-        // 2616 section 14.4 Accept-Language for more information.
-        //
-        // This function sets $this->langpref to the first language in the
-        // accept language list sent by the browser (no matter whether it's
-        // supported or not).
-        //
-        private function detectLanguage()
-        {
-                if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-                        $list = explode(",", $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-                        foreach ($list as $str) {
-                                list($lang) = explode(";", trim($str));     // lang;q=0.x
-                                if (!isset($this->_langpref)) {
-                                        $this->_langpref = substr($lang, 0, 2);
-                                }
-                                if ($this->hasLanguage($lang)) {
-                                        if ($this->isAlias($lang)) {
-                                                $lang = $this->_map[$lang];
-                                        }
-                                        $this->_langcode = $lang;
-                                        return true;
-                                }
-                        }
-                }
                 return false;
         }
 
-        //
-        // This maps language codes to locale names. Make sure the locale names
-        // match these, or the string won't be translated. The C locale is special,
-        // we act upon it as if the user hasn't selected any language at all.
-        //
-        // Make sure to place the value of the lang key inside _() so it gets
-        // picked for translation.
-        //
-        // This setup suffers from the deficiency that it assumes a one-to-one mapping
-        // between the country and it's language, and in reality this is not always
-        // true, i.e. sv_FI (swedish speaking people in Finland).
-        //
-        private function getDefaultMap()
+        /**
+         * Get locale code. 
+         * @param string $code The locale code.
+         * @return The entry key or false.
+         */
+        private function getLanguage($code)
         {
-                return array
-                        (
-                        "se"    => array(
-                                "locale"  => "sv_SE", // Swedish
-                                "charset" => "utf-8",
-                                "lang"    => _("Swedish")
-                        ),
-                        "gb"    => array(
-                                "locale"  => "en_GB", // English (GB)
-                                "charset" => "utf-8",
-                                "lang"    => _("English (GB)")
-                        ),
-                        "us"    => array(
-                                "locale"  => "en_US", // English (US)
-                                "charset" => "utf-8",
-                                "lang"    => _("English (US)")
-                        ),
-                        "c"     => array(
-                                "locale"  => "C", // Browser default
-                                "charset" => null,
-                                "lang"    => _("Browser default")
-                        ),
-                        "sv"    => "se",
-                        "sv-se" => "se",
-                        "sv-fi" => "se",
-                        "en"    => "gb",
-                        "en-gb" => "gb",
-                        "en-us" => "us"
-                );
+                if ($code == false) {
+                        return $this->_locale['default'];
+                } elseif (isset($this->_locale['map'][$code])) {
+                        return $code;
+                } elseif (isset($this->_locale['alias'][$code])) {
+                        return $this->_locale['alias'][$code];
+                } else {
+                        return false;
+                }
         }
 
-        //
-        // Convert this object to symbolic name.
-        //
-        public function __toString()
+        /**
+         * Set locale, translation and cookie. 
+         * 
+         * @param string $code The locale code.
+         * @return boolean
+         */
+        private function setLanguage($code)
         {
-                return $this->_map[$this->_langcode]["lang"];
+                if ($code == 'c') {
+                        $code = $this->getPrefered();
+                }
+
+                if (!($code = $this->getLanguage($code))) {
+                        return false;
+                }
+                if (!$this->setLocale($this->_locale['map'][$code]['locale'])) {
+                        return false;
+                }
+                if (!$this->setTextDomain()) {
+                        return false;
+                }
+                if (!setcookie("lang", $code, 0, $this->_config->location)) {
+                        return false;
+                }
+
+
+                $this->_code = $code;
+                return true;
+        }
+
+        /**
+         * Check if locale is used.
+         * @return boolean
+         */
+        public function useLocale()
+        {
+                return isset($this->_locale);
+        }
+
+        /**
+         * Set locale.
+         * @param string $locale The locale string (e.g. sv_SE).
+         * @return boolean
+         */
+        private function setLocale($locale)
+        {
+                foreach ($this->_locale['categories'] as $category) {
+                        if (!setlocale($category, $locale)) {
+                                error_log("Failed set locale $locale (needs to be generated?)");
+                                return false;
+                        }
+                }
+
+                return true;
+        }
+
+        /**
+         * Set translation text domain.
+         * 
+         * Call this function to use a custom text domain for page translation. Useful for a
+         * big site where a single PO-file may becode really large. This can also be useful
+         * for partitioning different locations in their own text domain.
+         * 
+         * Usually, all translation files are keept in the same directory so using the path
+         * argument is never needed. One use could be when sharing home directories.
+         * 
+         * @param string $name The text domain name.
+         * @param string $path The path of translation files.
+         * @return boolean
+         */
+        public function setTextDomain($name = null, $path = null)
+        {
+                if (!isset($name)) {
+                        $name = $this->_locale['textdomain'];
+                }
+                if (!isset($path)) {
+                        $path = $this->_locale['directory'];
+                }
+                if ($path[0] != '/') {
+                        $path = sprintf("%s/%s", $this->_config->proj, $path);
+                }
+
+                if (!file_exists($path)) {
+                        error_log("The text domain $path is missing");
+                        return false;
+                }
+                if (!bindtextdomain($name, $path)) {
+                        error_log("Failed bind text domain $name in $path");
+                        return false;
+                }
+                if (!textdomain($name)) {
+                        error_log("Failed set default text domain $name");
+                        return false;
+                }
+
+                return true;
+        }
+
+        /**
+         * Get prefered language from browser.
+         */
+        private function getPrefered()
+        {
+                if (($prefered = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE'))) {
+                        $codes = explode(',', $prefered);
+                        foreach ($codes as $code) {
+                                $code = explode(";", str_replace("_", "-", strtolower($code)))[0];
+                                if (($code = $this->getLanguage($code))) {
+                                        return $code;
+                                }
+                        }
+                }
+
+                return false;
         }
 
 }
@@ -324,36 +306,21 @@ if (!extension_loaded('gettext')) {
                 return $text;
         }
 
-        function bindtextdomain($package, $dir)
+        function ngettext($text1, $text2, $n)
         {
-                
+                return $n == 1 ? $text1 : $text2;
         }
 
-        function textdomain($package)
+        function bindtextdomain($domain, $directory)
         {
-                
+                return true;
+        }
+
+        function textdomain($domain)
+        {
+                return true;
         }
 
 }
-
-// 
-// Set language, locale and gettext domain.
-//
-$locale = new Locale();
-if (isset($_GET['lang'])) {
-        if ($_GET['lang'] == "c") {
-                setcookie("lang", $locale->getLanguage(), 0, "/");
-        } else {
-                $locale->setLanguage($_GET['lang']);
-                setcookie("lang", $_GET['lang'], 0, "/");
-        }
-} elseif (isset($_COOKIE['lang'])) {
-        $locale->setLanguage($_COOKIE['lang']);
-}
-
-// 
-// Set locale category to current locale.
-// 
-// $locale->setLocale(LC_ALL);
 
 ?>

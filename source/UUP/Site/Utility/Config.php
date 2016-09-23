@@ -54,6 +54,7 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  *
  * @property string $root The top directory (virtual host).
  * @property string $docs The document root directory.
+ * @property string $proj The project directory.
  * @property string $template The template directory.
  * @property string $location The URI location.
  * 
@@ -140,6 +141,9 @@ class Config
                         if (!isset($config['root'])) {
                                 $config['root'] = $this->_topdir;
                         }
+                        if (!isset($config['proj'])) {
+                                $config['proj'] = $this->_prjdir;
+                        }
 
                         if (!isset($config['docs'])) {
                                 $config['docs'] = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT');
@@ -179,7 +183,7 @@ class Config
                                         $config[$key] = false;
                                 }
                         }
-
+                        
                         self::$_cached = $config;
                 }
 

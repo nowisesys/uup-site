@@ -24,6 +24,7 @@ use UUP\Site\Page\Context\Menu\TopMenu;
 use UUP\Site\Page\Context\Menus;
 use UUP\Site\Page\Context\Publisher;
 use UUP\Site\Utility\Config;
+use UUP\Site\Utility\Locale;
 
 /**
  * Standard page for this site.
@@ -57,6 +58,11 @@ abstract class StandardPage implements TemplatePage
          * @var Config 
          */
         public $config;
+        /**
+         * The locale settings object.
+         * @var Locale 
+         */
+        public $locale;
 
         /**
          * Constructor.
@@ -74,7 +80,9 @@ abstract class StandardPage implements TemplatePage
 
                 $this->_title = $title;
                 $this->_template = $template;
+
                 $this->config = new Config($config);
+                $this->locale = new Locale($this->config);
         }
 
         public function __get($name)

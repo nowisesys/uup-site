@@ -140,5 +140,35 @@ to render an ordinary web site.
     See example/context for infrastructure example. See example/multi for example
     on programmatically defined menus. The site config file has some influence on menu 
     handling too.
+
+** Locales and translation:
+
+    See comments in UUP\Site\Utility\Locale on how to create POT-files, add new locales
+    and translations (PO-files) and compiling PO -> MO. 
+
+    If the site/application is huge, then its recommended to use multiple text domains:
+
+    site/
+      +-- htdocs/                       // Document root
+      |     +-- dir1/
+      |     +-- dir2/
+     ...   ...
+      +-- locale/                       // Support for locale (gettext)
+      |     +-- dir1.pot
+      |     +-- dir2.pot
+     ...   ...
+
+     Each page can initialize its own text domain in the constructor:
+
+        class MyPage extends StandardPage
+        {
+
+                public function __construct()
+                {
+                        parent::__construct("My page");
+                        $this->locale->setTextDomain("dir2");
+                }
+     
+        }
         
 // Anders Lövgren, 2015-12-07
