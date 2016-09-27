@@ -31,7 +31,7 @@ namespace UUP\Site\Page;
  * handle all public pages request. The obvious benefit is that view pages don't have
  * to include the autoloader nor instantiate itself and then call render(). 
  * 
- * See example/routed for more information.
+ * See example/routing for more information.
  * 
  * Setup:
  * -----------
@@ -40,7 +40,7 @@ namespace UUP\Site\Page;
  * RewriteEngine On
  * RewriteCond %{REQUEST_FILENAME} !-d
  * RewriteCond %{REQUEST_FILENAME} !-f
- * RewriteRule ^(.*)$ /index.php?uri=$1 [QSA,L]
+ * RewriteRule ^(.*)$ /dispatch.php?uri=$1 [QSA,L]
  * </code>
  * 
  * Notice:
