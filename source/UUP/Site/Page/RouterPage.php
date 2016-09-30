@@ -139,7 +139,7 @@ class RouterPage extends StandardPage
                 }
 
                 if (!class_exists($this->_name)) {
-                        throw new \Exception("The requested class what not found");
+                        throw new \Exception("The requested class was not found");
                 } else {
                         $page = new $this->_name();
                         $page->render();
