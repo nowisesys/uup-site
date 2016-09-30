@@ -30,7 +30,7 @@ use UUP\Site\Page\StandardPage;
  * The base class inheritance makes it possible to use the ordinary context
  * files (sidebar/topbar menus and publisher).
  * 
- * See example/routing/extension/simple for demo.
+ * See example/view for demo.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP

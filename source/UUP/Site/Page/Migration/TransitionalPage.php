@@ -25,7 +25,9 @@ use UUP\Site\Page\StandardPage;
  * 
  * Don't use this class unless you need it. It provides support for migration
  * from an anchient template system using naked PHP function (e.g. print_body() 
- * and print_title()). 
+ * and print_title()).
+ * 
+ * See example/transitional for demo.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
