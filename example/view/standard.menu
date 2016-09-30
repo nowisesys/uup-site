@@ -1,0 +1,6 @@
+<?php
+
+return array(
+    _('Page 1') => 'page1.php',
+    _('Page 2') => 'page2.php'
+);
