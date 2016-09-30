@@ -124,6 +124,19 @@ abstract class StandardPage implements TemplatePage
                 $page->render();
         }
 
+        /**
+         * Set render template.
+         * @param string $template The template name.
+         */
+        public function setTemplate($template)
+        {
+                $this->_template = $template;
+        }
+
+        /**
+         * Get site configuration.
+         * @return Config
+         */
         public function getConfig()
         {
                 return $this->config;
