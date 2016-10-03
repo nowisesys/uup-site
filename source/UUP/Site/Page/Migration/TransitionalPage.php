@@ -42,27 +42,43 @@ class TransitionalPage extends StandardPage
          */
         private $_page;
         /**
+         * Output deprecation warning to error log.
+         * @var bool
+         */
+        private $_warn;
+        /**
          * The body content.
          * @var string 
          */
-        private $_body = "";
+        private $_body = false;
         /**
          * The page headers.
          * @var string 
          */
-        private $_header = "";
+        private $_header = false;
 
         /**
          * Constructor.
          * @param string $page The transitional page path.
+         * @param bool $warn Output deprecation warning to error log.
          */
-        public function __construct($page)
+        public function __construct($page, $warn = false)
         {
                 $this->_page = $page;
+                $this->_warn = $warn;
+
                 $this->capture();
 
                 parent::__construct($this->_title);
-                error_log("Notice: The script $page is rendered using deprecated template system. Consider migrate from transitional rendering to standard page class (pure OOP) See 'uup-site.sh --migrate' and 'admin/migrate.php'.");
+        }
+
+        /**
+         * Check if body content was found.
+         * @return bool
+         */
+        public function hasContent()
+        {
+                return is_string($this->_body);
         }
 
         public function printContent()
@@ -77,8 +93,15 @@ class TransitionalPage extends StandardPage
 
         private function capture()
         {
-                require_once($this->_page);
+                if (!file_exists($this->_page)) {
+                        return;
+                }
+                if (strstr(file_get_contents($this->_page), 'print_body') === false) {
+                        return;
+                }
+
                 ob_start();
+                include_once($this->_page);
 
                 if (function_exists('print_headers')) {
                         print_headers();
@@ -96,6 +119,10 @@ class TransitionalPage extends StandardPage
                         ob_clean();
                 } else {
                         $this->_title = strtoupper(basename($this->_page, "php"));
+                }
+
+                if ($this->_warn) {
+                        error_log("Notice: The script $this->_page is rendered using deprecated template system. Consider migrate from transitional rendering to standard page class (pure OOP) See 'uup-site.sh --migrate' and 'admin/migrate.php'.");
                 }
 
                 ob_end_clean();

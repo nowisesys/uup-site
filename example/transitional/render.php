@@ -23,6 +23,7 @@ use UUP\Site\Page\Migration\TransitionalPage;
 if (!defined('UUP_SITE_DIRECT_RENDERING')) {
         define('UUP_SITE_DIRECT_RENDERING', true);
 }
+set_include_path(get_include_path() . PATH_SEPARATOR . "../../admin");
 
 $page = new TransitionalPage("index.php");
 $page->render();
