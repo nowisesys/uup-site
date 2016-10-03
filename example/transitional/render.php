@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
@@ -18,6 +19,10 @@
 require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
 use UUP\Site\Page\Migration\TransitionalPage;
+
+if (!defined('UUP_SITE_DIRECT_RENDERING')) {
+        define('UUP_SITE_DIRECT_RENDERING', true);
+}
 
 $page = new TransitionalPage("index.php");
 $page->render();

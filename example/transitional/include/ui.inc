@@ -24,9 +24,11 @@ if (!function_exists('load_ui_template')) {
 
         function load_ui_template($template)
         {
-                $page = new TransitionalPage("index.php");
-                $page->setTemplate($template);
-                $page->render();
+                if (!defined('UUP_SITE_DIRECT_RENDERING')) {
+                        $page = new TransitionalPage(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME'));
+                        $page->setTemplate($template);
+                        $page->render();
+                }
         }
 
 }
