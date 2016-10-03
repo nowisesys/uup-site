@@ -68,6 +68,7 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * 
  * @property array $topmenu Optional top bar menu.
  * @property array $publish Optional publisher information.
+ * @property array $headers Optional HTTP headers.
  * 
  * @property int $exception The exception reporting mode.
  * 
@@ -178,7 +179,7 @@ class Config
                                 }
                         }
 
-                        foreach (array('topmenu', 'publish') as $key) {
+                        foreach (array('topmenu', 'publish', 'headers') as $key) {
                                 if (!isset($config[$key])) {
                                         $config[$key] = false;
                                 }

@@ -18,6 +18,7 @@
 
 namespace UUP\Site\Page;
 
+use UUP\Site\Page\Context\Headers;
 use UUP\Site\Page\Context\Menu\SideMenu;
 use UUP\Site\Page\Context\Menu\StandardMenu;
 use UUP\Site\Page\Context\Menu\TopMenu;
@@ -31,6 +32,7 @@ use UUP\Site\Utility\Locale;
  * 
  * @property-read Publisher $publisher Page publisher information.
  * @property-read Menus $menus Page menus.
+ * @property-read Headers $headers Custom HTTP headers.
  * 
  * @property-read TopMenu $topmenu The top menu.
  * @property-read StandardMenu $navmenu The navigation (standard) menu.
@@ -94,6 +96,9 @@ abstract class StandardPage implements TemplatePage
                         case 'menus':
                                 $this->menus = $this->getMenus();
                                 return $this->menus;
+                        case 'headers':
+                                $this->headers = $this->getHeaders();
+                                return $this->headers;
                         case 'topmenu':
                                 return $this->menus->top;
                         case 'navmenu':
@@ -166,6 +171,15 @@ abstract class StandardPage implements TemplatePage
         }
 
         /**
+         * Get custom HTTP headers.
+         * @return Headers
+         */
+        public function getHeaders()
+        {
+                return new Headers($this->config->headers);
+        }
+
+        /**
          * Get page title.
          * @return string
          */
@@ -183,7 +197,18 @@ abstract class StandardPage implements TemplatePage
          */
         public function printHeader()
         {
-                
+                if ($this->config->headers) {
+                        echo "\n";
+                        foreach ($this->headers as $tag => $attributes) {
+                                foreach ($attributes as $attr) {
+                                        echo "\t\t<$tag";
+                                        foreach ($attr as $key => $val) {
+                                                echo " $key=\"$val\"";
+                                        }
+                                        echo " />\n";
+                                }
+                        }
+                }
         }
 
 }

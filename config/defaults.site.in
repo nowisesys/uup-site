@@ -148,8 +148,13 @@ return array(
 //                )
 //        ),
 //        /**
-//         * Static defined top menu (array) or dynamic build from topmenu.menu files. 
-//         * Use false to completely disable top menus.
+//         * Static defined HTTP headers (array) or dynamic fetched from headers.inc 
+//         * files in script dir if true. Use false to completely disable.
+//         */
+//        'headers'   => false,
+//        /**
+//         * Static defined top menu (array) or dynamic build from topmenu.menu files
+//         * if true. Use false to completely disable.
 //         */
 //        'topmenu'   => false,
 //        /**

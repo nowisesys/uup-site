@@ -38,6 +38,7 @@ class IndexPage extends StandardPage
                 print_r($this->topmenu);
                 print_r($this->sidemenu);
                 print_r($this->publisher);
+                print_r($this->headers);
                 echo "</code></pre></p>\n";
         }
 

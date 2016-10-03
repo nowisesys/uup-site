@@ -43,7 +43,7 @@ class Menus
 
         /**
          * Constructor.
-         * @param array|boolean $topmeny The top menu. 
+         * @param array|boolean $topmenu The top menu. 
          */
         public function __construct($topmenu)
         {
