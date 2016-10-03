@@ -1,0 +1,6 @@
+<?php
+
+return array(
+    _('DD') => 'page3',
+    _('AA') => 'page4'
+);

@@ -18,24 +18,19 @@
 
 use UUP\Site\Page\StandardPage;
 
-class IndexPage extends StandardPage
+class GettingStartedPage extends StandardPage
 {
 
         public function __construct()
         {
-                parent::__construct("Index");
+                parent::__construct("Wanting to get started?");
         }
 
         public function printContent()
         {
-                echo "<h1>Index view for router test</h1>\n";
-                
-                echo "<ul>Some example links:\n";
-                echo "<li><a href=\"about\">about</a></li>\n";
-                echo "<li><a href=\"test/\">index</a></li>\n";
-                echo "<li><a href=\"test/getting-started\">getting-started</a></li>\n";
-                echo "<li><a href=\"test/view\">view</a></li>\n";
-                echo "</ul>\n";
+                echo "<h1>You have already getting started again!</h1>\n";
+                echo "<hr/>\n";
+                echo "<p>If you see this message, then routing is working as expected.</p>\n";
         }
 
 }

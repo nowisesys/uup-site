@@ -93,6 +93,11 @@ class RouterPage extends StandardPage
          */
         private $_name;
         /**
+         * The working directory.
+         * @var string 
+         */
+        private $_root;
+        /**
          * The class name suffix.
          * @var string 
          */
@@ -117,6 +122,7 @@ class RouterPage extends StandardPage
                 parent::__construct("Router", null, $config);
 
                 $this->config->uri = filter_input(INPUT_GET, 'uri');
+                $this->_root = getcwd();
                 $this->_page = $this->getPage();
                 $this->_name = $this->getName();
         }
@@ -132,16 +138,28 @@ class RouterPage extends StandardPage
          */
         public function handle()
         {
+                set_include_path(get_include_path() . PATH_SEPARATOR . sprintf("%s/admin", $this->config->proj));
+
                 if (!file_exists($this->_page)) {
                         throw new \Exception("Requested page don't exist");
                 } else {
+                        ob_start();
                         require($this->_page);
+                        ob_end_clean();
                 }
 
-                if (!class_exists($this->_name)) {
-                        throw new \Exception("The requested class was not found");
-                } else {
+                if (!chdir(dirname($this->_page))) {
+                        error_log(sprintf("Failed change directory on route %s", $this->config->uri));
+                }
+
+                if (class_exists($this->_name)) {
                         $page = new $this->_name();
+                        $page->render();
+                } elseif (function_exists('print_body')) {
+                        $page = new Migration\TransitionalPage($this->_page);
+                        $page->render();
+                } else {
+                        $page = new StandardView($this->_name, $this->_page);
                         $page->render();
                 }
         }
@@ -177,6 +195,16 @@ class RouterPage extends StandardPage
         }
 
         /**
+         * Set working directory.
+         * @param string $dir The root directory.
+         */
+        public function setDirectory($dir)
+        {
+                $this->_root = $dir;
+                $this->_page = $this->getPage();
+        }
+
+        /**
          * Get class name.
          * @return string
          */
@@ -193,7 +221,7 @@ class RouterPage extends StandardPage
          */
         private function getPage()
         {
-                return sprintf("%s.%s", $this->config->uri, $this->_ext);
+                return sprintf("%s/%s.%s", $this->_root, $this->config->uri, $this->_ext);
         }
 
 }
