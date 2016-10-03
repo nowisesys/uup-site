@@ -1,5 +1,9 @@
 #!/bin/bash
-#
+# 
+# Usage: 
+# uup-site.sh --setup
+# uup-site.sh --migrate <dir>|<file>
+#        
 # Author: Anders Lövgren
 # Date:   2015-12-16
 
@@ -52,8 +56,52 @@ function setup_standalone()
     setup_dispatcher .
 }
 
-if [ -d vendor/bmc/uup-site ]; then
-  setup_package
-else
-  setup_standalone
-fi
+function setup()
+{
+    if [ -d vendor/bmc/uup-site ]; then
+        setup_package
+    else
+        setup_standalone
+    fi
+}
+
+function migrate_page()
+{
+    if [ -e admin/migrate.php ]; then
+        php admin/migrate.php $1 -o -f
+    fi
+}
+
+function migrate_dir()
+{
+    find "$1" -type f -name *.php | while read f; do
+        migrate_page $f
+    done
+}
+
+function migrate()
+{
+    shift
+
+    for p in $*; do
+        if [ -d $p ]; then
+            migrate_dir $p
+        elif [ -f $p ]; then
+            migrate_page $p
+        else
+            echo "$0: can't find $p"
+        fi
+    done
+}
+
+case "$1" in
+    --setup)
+        setup
+        ;;
+    --migrate)
+        migrate $*
+        ;;
+    *)
+        setup
+        ;;
+esac
