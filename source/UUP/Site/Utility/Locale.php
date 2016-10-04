@@ -21,8 +21,9 @@ namespace UUP\Site\Utility;
 /**
  * GNU gettext and locale support. 
  * 
- * You need to create a POT file for each text domain. Use xgettext to initialize a 
- * POT-file in the locale directory:
+ * You need to create a POT file for each text domain. Use xgettext to initialize
+ * a POT-file in the locale directory (requires at least one of the input file 
+ * having strings tagged for translation):
  * 
  *   bash$> find public/proj -name *.php | xgettext -o locale/proj.pot -f-
  * 
