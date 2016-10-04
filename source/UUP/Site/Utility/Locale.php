@@ -72,9 +72,9 @@ class Locale
         public function __construct($config)
         {
                 if (!extension_loaded('gettext')) {
-                        error_log("The gettext extension is not loaded");
+                        trigger_error("The gettext extension is not loaded");
                 }
-                
+
                 if (isset($config->locale)) {
                         $this->_config = $config;
                         $this->_locale = $config->locale;
