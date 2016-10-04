@@ -30,7 +30,7 @@ namespace UUP\Site\Utility;
  * Review the generated POT-file. Create new translation files (PO) using msginit:
  * 
  *   bash$> mkdir -p locale/sv_SE/LC_MESSAGES
- *   bash$> msginit -i locale/proj.pot -o sv_SE/LC_MESSAGES/proj.po -l sv_SE -v
+ *   bash$> msginit -i locale/proj.pot -o locale/sv_SE/LC_MESSAGES/proj.po -l sv_SE 
  * 
  * Compile the translation files using msgfmt:
  * 
@@ -71,6 +71,10 @@ class Locale
          */
         public function __construct($config)
         {
+                if (!extension_loaded('gettext')) {
+                        error_log("The gettext extension is not loaded");
+                }
+                
                 if (isset($config->locale)) {
                         $this->_config = $config;
                         $this->_locale = $config->locale;
