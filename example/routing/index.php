@@ -31,6 +31,7 @@ class IndexPage extends StandardPage
                 echo "<h1>Index view for router test</h1>\n";
                 
                 echo "<ul>Some example links:\n";
+                echo "<li><a href=\"welcome\">welcome</a></li>\n";
                 echo "<li><a href=\"about\">about</a></li>\n";
                 echo "<li><a href=\"test/\">index</a></li>\n";
                 echo "<li><a href=\"test/getting-started\">getting-started</a></li>\n";
