@@ -18,6 +18,11 @@
 
 namespace UUP\Site\Page;
 
+use UUP\Site\Page\Context\Headers;
+use UUP\Site\Page\Context\Menus;
+use UUP\Site\Page\Context\Publisher;
+use UUP\Site\Utility\Config;
+
 /**
  * Interface for page classes.
  * 
@@ -40,21 +45,31 @@ interface TemplatePage
 
         /**
          * Get page title.
+         * @return string
          */
         function getTitle();
         
         /**
          * Get page menus.
+         * @return Menus
          */
         function getMenus();
 
         /**
          * Get publish info.
+         * @return Publisher 
          */
         function getPublisher();
 
         /**
          * Get site configuration.
+         * @return Config 
          */
         function getConfig();
+        
+        /**
+         * Get custom HTTP headers.
+         * @return Headers 
+         */
+        function getHeaders();
 }
