@@ -30,7 +30,7 @@ class IndexPage extends StandardPage
                 // 
                 // Use start page template instead of default standard template.
                 // 
-                parent::__construct(__CLASS__, "start");
+                parent::__construct(__CLASS__, "welcome");
 
                 // 
                 // Example of per page menus:

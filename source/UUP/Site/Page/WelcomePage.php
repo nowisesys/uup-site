@@ -25,7 +25,7 @@ namespace UUP\Site\Page;
  * @package UUP
  * @subpackage Site
  */
-abstract class StartPage extends StandardPage
+abstract class WelcomePage extends StandardPage
 {
 
         /**
@@ -35,7 +35,7 @@ abstract class StartPage extends StandardPage
          */
         public function __construct($title, $config = null)
         {
-                parent::__construct($title, "start", $config);
+                parent::__construct($title, "welcome", $config);
         }
 
 }

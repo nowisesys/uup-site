@@ -1,6 +1,6 @@
 <?php
 
-use UUP\Site\Page\StartPage;
+use UUP\Site\Page\WelcomePage as StartPage;
 
 /*
  * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
@@ -40,9 +40,9 @@ class WelcomePage extends StartPage
         {
                 printf("<h1>The welcome page</h1>");
                 printf("<p>This page class derives from start page instead of the generic standard page class.</p>\n");
-                printf("<p>The main content is provided by this class, while the jumbo above is defined by the start page template. ");
+                printf("<p>The main content is provided by this class, while the jumbo above is defined by the welcome page template. ");
                 printf("Start pages usually has centered content and provides on or more sub sections that might be oriented in columns at bottom or in rows higher up on the page.</p>\n");
-                printf("<p>An site or application typical has a single page (index) using the start page template.</p>\n");
+                printf("<p>An site or application typical has a single page (index) using the welcome page template.</p>\n");
         }
 
 }
