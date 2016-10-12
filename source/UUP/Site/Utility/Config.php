@@ -52,6 +52,8 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
 /**
  * Site configuration class.
  *
+ * @property string $name The site name.
+ * 
  * @property string $root The top directory (virtual host).
  * @property string $docs The document root directory.
  * @property string $proj The project directory.

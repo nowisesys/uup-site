@@ -102,4 +102,9 @@ class format
                 }
         }
 
+        public function title()
+        {
+                return sprintf("%s - %s", $this->page->config->name, $this->page->getTitle());
+        }
+
 }

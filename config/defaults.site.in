@@ -56,6 +56,10 @@
 
 return array(
 //        /**
+//         * Common site name.
+//         */
+//        'name' => 'Default site name',
+//        /**
 //         * Default theme.
 //         */
 //        'theme' => 'default',
@@ -151,7 +155,22 @@ return array(
 //         * Static defined HTTP headers (array) or dynamic fetched from headers.inc 
 //         * files in script dir if true. Use false to completely disable.
 //         */
-//        'headers'   => false,
+//        'headers' => array(
+//                'meta' => array(
+//                        array(
+//                                'name'    => 'robots',
+//                                'content' => 'index, follow'
+//                        ),
+//                        array(
+//                                'name'    => 'keywords',
+//                                'content' => 'some,tags,for,site'
+//                        ),
+//                        array(
+//                                'name'    => 'author',
+//                                'content' => 'Anders Lövgren'
+//                        )
+//                )
+//        ),
 //        /**
 //         * Static defined top menu (array) or dynamic build from topmenu.menu files
 //         * if true. Use false to completely disable.
