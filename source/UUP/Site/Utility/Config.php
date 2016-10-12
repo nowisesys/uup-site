@@ -168,7 +168,7 @@ class Config
                                 $config['exception'] = UUP_SITE_EXCEPT_BRIEF;
                         }
 
-                        foreach (array('css', 'js', 'img') as $asset) {
+                        foreach (array('css', 'js', 'img', 'fonts') as $asset) {
                                 if (!isset($config[$asset])) {
                                         $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $asset);
                                 } elseif ($config[$asset][0] != '/') {
@@ -265,7 +265,7 @@ class Config
          */
         public function getFont($name)
         {
-                return sprintf("%s/%s", $this->font, $name);
+                return sprintf("%s/%s", $this->fonts, $name);
         }
 
 }
