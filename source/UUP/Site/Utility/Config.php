@@ -128,7 +128,7 @@ class Config
                         } elseif (($config = $this->locate("config/defaults.site"))) {
                                 $config = require($config);
                         } else {
-                                throw new \Exception("Failed locate default.site");
+                                throw new \Exception("Failed locate defaults.site");
                         }
 
                         if (filter_input(INPUT_COOKIE, 'theme')) {
