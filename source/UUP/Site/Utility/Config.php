@@ -71,6 +71,7 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * @property array $topmenu Optional top bar menu.
  * @property array $publish Optional publisher information.
  * @property array $headers Optional HTTP headers.
+ * @property string $footer Optional footer file.
  * 
  * @property int $exception The exception reporting mode.
  * 
@@ -186,7 +187,25 @@ class Config
                                         $config[$key] = false;
                                 }
                         }
-                        
+
+                        if (!isset($config['footer'])) {
+                                $config['footer'] = true;
+                        }
+                        if ($config['footer']) {
+                                if (!is_string($config['footer'])) {
+                                        $config['footer'] = 'footer.inc';
+                                }
+                                if (!file_exists($config['footer'])) {
+                                        $config['footer'] = $this->locate($config['footer']);
+                                }
+                                if (!isset($config['footer'])) {
+                                        $config['footer'] = sprintf("%s/%s/footer.inc", $config['template'], $config['theme']);
+                                }
+                                if (!file_exists($config['footer'])) {
+                                        $config['footer'] = false;
+                                }
+                        }
+
                         self::$_cached = $config;
                 }
 

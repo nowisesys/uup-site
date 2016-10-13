@@ -172,6 +172,11 @@ return array(
 //                )
 //        ),
 //        /**
+//         * Use footer file. Search for named file (defaults to 'footer.inc') in
+//         * some standard locations. Defaults to true, use false to disable.
+//         */
+//        'footer' => true,
+//        /**
 //         * Static defined top menu (array) or dynamic build from topmenu.menu files
 //         * if true. Use false to completely disable.
 //         */
