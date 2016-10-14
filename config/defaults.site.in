@@ -6,19 +6,18 @@
  * This array gets passed to Config. Undefined options will be assigned a value
  * detected from server environment or from pre-defined defaults.
  * 
- * Without any option set the structure are assumed to be:
+ * The directory structure are assumed to be:
  * 
  * Directory:           Option:
  * -----------          ----------
  * vhost/               // root
+ *   +-- config/        // configuration
  *   +-- cgi-bin/       
- *   +-- htdocs/        // docs
- *   |     +-- css/     // css
- *   |     +-- js/      // js
- *   |     +-- img/     // img
- *   +-- locale/        // locale -> directory
+ *   +-- public/        // public files and documents (htdocs)
+ *   |     +-- theme/   // theme suport (css, js, img, fonts)
+ *   +-- locale/        // translation files (gettext)
  *   +-- template/      // template
- *   +-- vendor/
+ *   +-- vendor/        // composer directory
  * 
  * Default values:
  * 
@@ -106,7 +105,7 @@ return array(
 //                /**
 //                 * The text domain name.
 //                 */
-//                'textdomain' => 'uup-site',
+//                'textdomain' => 'messages',
 //                /**
 //                 * Default language.
 //                 */
