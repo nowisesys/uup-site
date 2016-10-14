@@ -10,13 +10,14 @@ Despite its name, this package can be used as the rendering engine in any web
 application. In the following though, we will outline the process for using it
 to render an ordinary web site.
 
-** Site Layout:
+** Directory structure:
 
-    Proposed site layout. All directory location are configurable in config/defaults.site
-    that is used to initialize a page class instance.
+    Locations are configurable in config/defaults.site that is used when initializing 
+    a page class instance. This is the suggested directory structure:
 
     site/
-      +-- htdocs/                       // Document root
+      +-- config/                       // Configuration
+      +-- public/                       // Document root
       |     +-- theme/xyz/assets/       // Theme support files
       |                     +-- css/
       |                     +-- js/
@@ -30,7 +31,7 @@ to render an ordinary web site.
 ** Site config:
 
     The config/defaults.site file is looked for in the package directory (vendor/bmc/uup-site)
-    or in the site directory (the virtual host directory). 
+    or in the site directory (the virtual host directory). All directory and 
 
 ** Setup:
 
@@ -99,7 +100,20 @@ to render an ordinary web site.
 
     Download and install themes from http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site. 
 
-** Example (different ways of rendering a page class):
+** Infrastructure:
+
+    Menus and publish information can either be defined by having custom files in
+    the page directory or programmatically by redefining menu content in the page 
+    constructor.
+
+    See example/context for infrastructure example. See example/multi for example
+    on programmatically defined menus. The site config file has some influence on menu 
+    handling too.
+
+** Pages:
+
+    A page class can be rendered either direct or using routing. Using routing
+    is the recommended method that in addition supports views.
 
     o) Using direct rendering:
 
@@ -131,15 +145,15 @@ to render an ordinary web site.
 
     More examples is included in example directory in the source package.
 
-** Infrastructure:
+** Views:
 
-    Menus and publish information can either be defined by having custom files in
-    the page directory or programmatically by redefining menu content in the page 
-    constructor.
+    While pages are complete classes, views are simple files that contains just
+    the main section content (HTML/PHP fragments). Using routing is the recommended 
+    method for render views.
 
-    See example/context for infrastructure example. See example/multi for example
-    on programmatically defined menus. The site config file has some influence on menu 
-    handling too.
+    Using standard page class for rendering views makes the context (i.e. menus) 
+    available for decoration. Views are intended for web sites, while pages are 
+    more targeted at web application (more control).
 
 ** Locales and translation:
 
