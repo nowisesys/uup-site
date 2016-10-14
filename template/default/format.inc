@@ -88,6 +88,16 @@ class format
                 }
         }
 
+        public function content()
+        {
+                $this->page->printContent();
+        }
+
+        public function headers()
+        {
+                $this->page->printHeader();
+        }
+
         public function footer()
         {
                 $publisher = $this->page->publisher;

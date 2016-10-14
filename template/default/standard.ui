@@ -1,7 +1,10 @@
+<!--
 <?php
 include_once('format.inc');
 $output = new format($this);
+$config = $this->config;
 ?>
+-->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,13 +12,13 @@ $output = new format($this);
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <?php $this->printHeader(); ?>
+        <?php $output->headers(); ?>
 
-        <link href="<?= $this->config->getCss('bootstrap.min.css')  ?>" rel="stylesheet">
-        <link href="<?= $this->config->getCss('custom.css') ?>" rel="stylesheet">        
+        <link href="<?= $config->getCss('bootstrap.min.css')  ?>" rel="stylesheet">
+        <link href="<?= $config->getCss('custom.css') ?>" rel="stylesheet">        
 
-        <script src="<?= $this->config->getJs('jquery.min.js') ?>"></script>
-        <script src="<?= $this->config->getJs('bootstrap.min.js') ?>"></script>
+        <script src="<?= $config->getJs('jquery.min.js') ?>"></script>
+        <script src="<?= $config->getJs('bootstrap.min.js') ?>"></script>
 
         <script>
             // 
@@ -62,7 +65,7 @@ $output = new format($this);
                     <?php $output->navmenu(); ?>
                 </div>
                 <div class="col-sm-8 text-left"> 
-                    <?php $this->printContent(); ?>                            
+                    <?php $output->content(); ?>                            
                 </div>
                 <div class="col-sm-2 sidenav">
                     <?php $output->sidemenu(); ?>
