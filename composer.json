@@ -13,9 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "twitter/bootstrap": "^3.3",
-        "frameworks/jquery": "^2.1"
+        "php": ">=5.4.0"
     },
     "suggest": {
         "bmc/uup-html": ">=1.0.5",
