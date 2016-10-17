@@ -17,6 +17,7 @@ function setup_config()
     for file in apache.conf defaults.site; do
         if ! [ -e config/$file ]; then
             cp -a $srcdir/config/$file.in config/$file
+            echo "(i) File config/$file has been installed. Please modify to match your location."
         fi
     done
 }
