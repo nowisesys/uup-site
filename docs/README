@@ -7,8 +7,12 @@ page layout from content. It supports multiple theme, rendering page direct or
 using a dispatcher (routing) script.
 
 Despite its name, this package can be used as the rendering engine in any web
-application. In the following though, we will outline the process for using it
-to render an ordinary web site.
+application. In the following though we will outline the process for using it
+to render an ordinary web site, but the same approach can equally well be used
+for an web application.
+
+This package and optional theme can either be installed using composer or by
+unzip everything in proper places.
 
 ** Directory structure:
 
@@ -95,10 +99,13 @@ to render an ordinary web site.
 ** Themes:
 
     All themes should at least provide the standard.ui template, but it's up to user 
-    to define any number of *.ui files as needed. See template/default for example on
-    theme construction.
+    to define any number of *.ui files as needed. See theme/default for example on
+    theme construction. More themes can be downloaded and installed from:
+    
+        http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site. 
 
-    Download and install themes from http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site. 
+    Install new themes be either require them using composer or simply download and
+    unpack them inside the theme directory.
 
 ** Infrastructure:
 
@@ -172,7 +179,7 @@ to render an ordinary web site.
       |     +-- dir2.pot
      ...   ...
 
-     Each page can initialize its own text domain in the constructor:
+    Each page can initialize its own text domain in the constructor:
 
         class MyPage extends StandardPage
         {
@@ -184,5 +191,11 @@ to render an ordinary web site.
                 }
      
         }
+
+    An example makefile is distributed in the admin directory that can serve as 
+    an inspiration for keeping translation files (POT/PO-files) up to date. Notice
+    that it only supports a single message.pot:
+
+        bash$> make -f admin/Makefile
         
 // Anders Lövgren, 2015-12-07
