@@ -188,7 +188,7 @@ class Config
                 } elseif (($config = $this->locate("config/defaults.site"))) {
                         $config = require($config);
                 } else {
-                        die("Failed locate defaults.site");
+                        die("Failed locate defaults.site (have you missed running uup-site.sh in application or site root?)");
                 }
 
                 if (filter_input(INPUT_COOKIE, 'theme')) {
