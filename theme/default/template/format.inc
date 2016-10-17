@@ -49,10 +49,14 @@ class format
                 return $this->hash;
         }
 
-        public function topmenu()
+        public function topmenu($small)
         {
                 foreach ($this->page->topmenu as $name => $link) {
-                        printf("<li id=\"%s\" class=\"topmenu\"><a href=\"%s\">%s</a></li>\n", md5(basename($link)), $link, $name);
+                        if ($small) {
+                                printf("<li id=\"%s\"><a class=\"w3-padding-large\" href=\"%s\">%s</a></li>\n", md5(basename($link)), $link, $name);
+                        } else {
+                                printf("<li id=\"%s\" class=\"w3-hide-small\"><a href=\"%s\" class=\"w3-padding-large w3-hover-white\">%s</a></li>\n", md5(basename($link)), $link, $name);
+                        }
                 }
         }
 
