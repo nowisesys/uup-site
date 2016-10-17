@@ -23,12 +23,17 @@ function setup_config()
 
 function setup_themes()
 {
-    for t in $srcdir/theme/*; do 
-        sh $t/setup.sh
-    done
-    for t in vendor/uup-theme-*; do 
-        sh $t/setup.sh
-    done
+    if [ -d $srcdir/theme ]; then
+        for t in $srcdir/theme/*; do 
+            sh $t/setup.sh
+        done
+    fi
+
+    if [ -d vendor/uup-theme-* ]; then
+        for t in vendor/uup-theme-*; do 
+            sh $t/setup.sh
+        done
+    fi
 }
 
 function setup_dispatcher()
