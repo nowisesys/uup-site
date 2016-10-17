@@ -1,11 +1,11 @@
 #!/bin/bash
 #
 # Author: Anders Lövgren
-# Date:   2015-12-14
+# Date:   2016-10-17
 
 set -x
 
-name=default
+name=bootstrap
 destdir=${destdir:-"public"}
 
 cwd=$(pwd)
@@ -19,8 +19,11 @@ ln -sf $cwd/vendor/twitter/bootstrap/dist/fonts/*       $destdir/theme/$name/ass
 ln -sf $cwd/vendor/twitter/bootstrap/dist/js/*.min.js   $destdir/theme/$name/assets/js
 ln -sf $cwd/vendor/frameworks/jquery/jquery.min.js      $destdir/theme/$name/assets/js
 
-ln -sf $src/css/* $destdir/theme/$name/assets/css
-ln -sf $src/img/* $destdir/theme/$name/assets/img
+cp -a $src/public/css/* $destdir/theme/$name/assets/css
+cp -a $src/public/img/* $destdir/theme/$name/assets/img
 
-ln -sf $src/*.ui  $cwd/template/$name
-ln -sf $src/*.inc $cwd/template/$name
+for file in $src/template/*; do
+    if ! [ -e $cwd/template/$file ]; then
+        cp -a $file $cwd/template/$name
+    fi
+done
