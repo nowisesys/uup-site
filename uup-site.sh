@@ -21,9 +21,12 @@ function setup_config()
     done
 }
 
-function setup_templates()
+function setup_themes()
 {
-    for t in $srcdir/template/*; do 
+    for t in $srcdir/theme/*; do 
+        sh $t/setup.sh
+    done
+    for t in vendor/uup-theme-*; do 
         sh $t/setup.sh
     done
 }
@@ -44,7 +47,7 @@ function setup_package()
 {
     echo "Setup in package mode"
     setup_config vendor/bmc/uup-site
-    setup_templates
+    setup_themes
     setup_dispatcher vendor/bmc/uup-site
 }
 
@@ -52,7 +55,7 @@ function setup_standalone()
 {
     echo "Setup in standalone mode"
     setup_config .
-    setup_templates
+    setup_themes
     setup_dispatcher .
 }
 
