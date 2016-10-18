@@ -347,4 +347,13 @@ class Config
                 return sprintf("%s/%s", $this->fonts, $name);
         }
 
+        /**
+         * Get config data.
+         * @return array
+         */
+        public function getData()
+        {
+                return $this->_config;
+        }
+
 }
