@@ -128,8 +128,6 @@ class Config
                 if (!isset($this->_prjdir)) {
                         $this->_prjdir = $this->_config['proj'];
                 }
-
-                error_log(print_r($this, true));
         }
 
         public function __get($name)
