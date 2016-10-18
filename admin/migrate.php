@@ -28,6 +28,7 @@ use UUP\Site\Page\Migration\TransitionalPage;
 
 /**
  * Conversion helper class.
+ * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  */
 class Convert
 {
@@ -172,6 +173,10 @@ class Convert
 
 }
 
+/**
+ * The migration application class.
+ * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
+ */
 class Application
 {
 
