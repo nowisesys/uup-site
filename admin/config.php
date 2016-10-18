@@ -95,9 +95,13 @@ class Application
                                 // 
                                 case "-c":
                                 case "--config":
-                                        die(__METHOD__);
-                                        $this->_config = $val;
-                                        $this->_object = new Config($val);
+                                        if (!file_exists($val)) {
+                                                fprintf(STDERR, "(-) The config file $val is missing.\n");
+                                                exit(1);
+                                        } else {
+                                                $this->_config = $val;
+                                                $this->_object = new Config($val, false, false);
+                                        }
                                         break;
                                 case "-o":
                                 case "--output":
@@ -224,18 +228,18 @@ class Application
                 printf("  -J,--json:       Output in JSON format\n");
                 printf("Config:\n");
                 printf("  --name=str:      The site name\n");
-                
+
                 printf("  --root=path:     The top directory (virtual host)\n");
                 printf("  --docs=path:     The document root directory\n");
                 printf("  --proj=path:     The project directory\n");
                 printf("  --template=name: The template directory\n");
                 printf("  --location=path: The URI location\n");
-                
+
                 printf("  --css=path:      The CSS location\n");
                 printf("  --js=path:       The JS location\n");
                 printf("  --img=path:      The images location\n");
                 printf("  --font=path:     The fonts location\n");
-                
+
                 printf("  --theme=str:     The default theme\n");
                 printf("\n");
                 printf("Example:\n");
