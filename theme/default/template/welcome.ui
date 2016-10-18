@@ -1,31 +1,31 @@
 <!--
+    Theme derived from http://www.w3schools.com/w3css/tryw3css_templates_start_page.htm
 <?php
 include_once('format.inc');
 $output = new format($this);
 $config = $this->config;
 ?>
 -->
-<!--
-    Theme derived from http://www.w3schools.com/w3css/tryw3css_templates_start_page.htm
- -->
 <!DOCTYPE html>
 <html>
-    <title><?= $output->title() ?></title>
+    <head>
+        <title><?= $output->title() ?></title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <link rel="stylesheet" href="<?= $config->getCss('w3.css') ?>">
-    <link rel="stylesheet" href="<?= $config->getCss('fonts/lato.css') ?>">
-    <link rel="stylesheet" href="<?= $config->getCss('fonts/montserrat.css') ?>">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-    
-    <?php $output->headers(); ?>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-        .w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
-        .fa-anchor,.fa-coffee {font-size:200px}
-    </style>
+        <link rel="stylesheet" href="<?= $config->getCss('w3.css') ?>">
+        <link rel="stylesheet" href="<?= $config->getCss('fonts/lato.css') ?>">
+        <link rel="stylesheet" href="<?= $config->getCss('fonts/montserrat.css') ?>">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+        <?php $output->headers(); ?>
+
+        <style>
+            body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+            .w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
+            .fa-anchor,.fa-coffee {font-size:200px}
+        </style>
+    </head>
 
     <body>
 
@@ -35,7 +35,7 @@ $config = $this->config;
                 <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
                     <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="<?= _('Toggle Navigation Menu') ?>"><i class="fa fa-bars"></i></a>
                 </li>
-                <li><a href="#" class="w3-padding-large w3-white"><?= _('Home') ?></a></li>
+                <li><a href="<?= $config->location ?>" class="w3-padding-large w3-white"><?= _('Home') ?></a></li>
                 <?php $output->topmenu(false); ?>
             </ul>
 
