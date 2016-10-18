@@ -199,6 +199,10 @@ return array(
 //        /**
 //         * The exception handling mode (bitmask of one or more UUP_SITE_EXCEPT_XXX constants).
 //         */
-//        'exception' => UUP_SITE_EXCEPT_BRIEF | UUP_SITE_EXCEPT_LOG
+//        'exception' => UUP_SITE_EXCEPT_BRIEF | UUP_SITE_EXCEPT_LOG,
+//        /**
+//         * Dump parsed config to error log.
+//         */
+//        'debug' => false,
 
 );

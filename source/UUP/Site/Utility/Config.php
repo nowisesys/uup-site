@@ -266,6 +266,10 @@ class Config
                         }
                 }
 
+                if (isset($config['debug']) && $config['debug'] == true) {
+                        error_log(print_r($config, true));
+                }
+
                 self::$_cached = $config;
                 $this->_config = $config;
         }
