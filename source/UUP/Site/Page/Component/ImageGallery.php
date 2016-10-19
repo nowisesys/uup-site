@@ -19,7 +19,7 @@
 namespace UUP\Site\Page\Component;
 
 /**
- * Abstraction of an image gallery.
+ * Image gallery component.
  * 
  * @property-read array $images The array of images.
  *
@@ -31,14 +31,21 @@ class ImageGallery
 {
 
         private $_images;
-        private $_thumbs;
 
-        public function __construct($images = null, $thumbs = null)
+        public function __construct($images = array())
         {
-                
+                $this->_images = $images;
         }
 
-        public function scan()
+        public function __get($name)
+        {
+                switch ($name) {
+                        case 'images':
+                                return $this->_images;
+                }
+        }
+
+        public function scan($images, $thumbs = null)
         {
                 
         }

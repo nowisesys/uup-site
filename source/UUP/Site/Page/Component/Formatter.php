@@ -36,7 +36,7 @@ namespace UUP\Site\Page\Component;
  *      public function printContent() 
  *      {
  *              $gallery = new ImageGallery();
- *              $gallery->scan("images", "thumbs");
+ *              $gallery->scan("images", "small");
  * 
  *              $this->formatter->outputGallery($gallery);
  *      }
