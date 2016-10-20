@@ -90,8 +90,6 @@ function migrate_dir()
 
 function migrate()
 {
-    shift
-
     for p in $*; do
         if [ -d $p ]; then
             migrate_dir $p
@@ -103,12 +101,22 @@ function migrate()
     done
 }
 
+function config()
+{
+    php admin/config.php $*
+}
+
 case "$1" in
     --setup)
         setup
         ;;
     --migrate)
-        migrate $*
+       shift
+       migrate $*
+        ;;
+    --config)
+        shift
+        config $*
         ;;
     *)
         setup

@@ -280,7 +280,7 @@ class Application
 // Begin script execution:
 // 
 try {
-        $application = new Application($_SERVER['argv'][1]);
+        $application = new Application();
         $application->parse($_SERVER['argc'], $_SERVER['argv']);
         $application->process();
 } catch (Exception $exception) {
