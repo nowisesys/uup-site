@@ -1,9 +1,12 @@
 #!/bin/bash
 # 
 # Usage: 
-# uup-site.sh --setup
-# uup-site.sh --migrate <dir>|<file>...
-# uup-site.sh --config <options>
+# 
+#   uup-site.sh --setup                     // setup site and theme(s)
+#   uup-site.sh --config <options>          // run configuration script (batch)
+# 
+#   uup-site.sh --develop                   // setup develop mode
+#   uup-site.sh --migrate <dir>|<file>...   // migrate existing site (expert)
 # 
 # Author: Anders Lövgren
 # Date:   2015-12-16
@@ -107,13 +110,30 @@ function config()
     php admin/config.php $*
 }
 
+function develop()
+{
+    ( cd theme/default
+      if ! [ -h assets ]; then 
+            ln -s public assets
+      fi )
+
+    ( cd template
+      if [ -d default ]; then
+        mv default default-saved
+        ln -s ../theme/default/template default
+      fi )
+}
+
 case "$1" in
     --setup)
         setup
         ;;
+    --develop)
+        develop
+        ;;
     --migrate)
-       shift
-       migrate $*
+        shift
+        migrate $*
         ;;
     --config)
         shift
