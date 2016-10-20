@@ -67,7 +67,7 @@ unzip everything in proper places.
 
         Run the uup-site.php script to finish setup:
 
-            bash$> ./vendor/bin/uup-site.sh
+            bash$> ./vendor/bin/uup-site.sh --setup
 
     o) Use in standalone mode:
 
@@ -88,7 +88,7 @@ unzip everything in proper places.
 
         Run uup-site.php to initialize the site or application:
 
-            bash$> ./uup-site.sh
+            bash$> ./uup-site.sh --setup
 
         Open config/defaults.site to tweak options. The default options (none) should be
         fine in most cases.

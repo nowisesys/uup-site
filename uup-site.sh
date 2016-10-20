@@ -140,6 +140,8 @@ case "$1" in
         config $*
         ;;
     *)
-        setup
+        echo "$0 --setup"
+        echo "$0 --config <options>"
+        exit 1
         ;;
 esac
