@@ -19,22 +19,17 @@
 namespace UUP\Site\Page\Component;
 
 /**
- * Section component.
+ * Interface for components.
  * 
- * The section component spans the whole page horizontal and provides at least 
- * an header and content. The ingress and image/font is optional. The image/font
- * can be aligned on left or right hand side.
- *
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  * @package UUP
  * @subpackage Site
  */
-class Section implements Component
+interface Component
 {
 
-        public function render()
-        {
-                
-        }
-
+        /**
+         * Render this component as HTML.
+         */
+        function render();
 }

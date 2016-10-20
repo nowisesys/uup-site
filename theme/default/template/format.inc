@@ -53,9 +53,9 @@ class format
         {
                 foreach ($this->page->topmenu as $name => $link) {
                         if ($small) {
-                                printf("<li id=\"%s\"><a class=\"w3-padding-large\" href=\"%s\">%s</a></li>\n", md5(basename($link)), $link, $name);
+                                printf("<li id=\"%s\"><a href=\"%s\" class=\"w3-padding-8\">%s</a></li>\n", md5(basename($link)), $link, $name);
                         } else {
-                                printf("<li id=\"%s\" class=\"w3-hide-small\"><a href=\"%s\" class=\"w3-padding-large w3-hover-white\">%s</a></li>\n", md5(basename($link)), $link, $name);
+                                printf("<li id=\"%s\"><a href=\"%s\" class=\"w3-hover-white w3-padding-16 w3-hide-small\">%s</a></li>\n", md5(basename($link)), $link, $name);
                         }
                 }
         }
@@ -63,8 +63,8 @@ class format
         public function navmenu()
         {
                 foreach ($this->page->navmenu as $menu) {
-                        foreach ($menu as $name => $link) {
-                                echo "<li><a href=\"$link\">$name</a></li>\n";
+                        foreach ($menu as $link => $name) {
+                                printf("<a href=\"%s\">%s</a>\n", md5(basename($link)), $link, $name);
                         }
                 }
         }

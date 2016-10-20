@@ -93,6 +93,8 @@ abstract class StandardPage implements TemplatePage
 
                 $this->config = new Config($config);
                 $this->locale = new Locale($this->config);
+                
+                $this->_formatter = new Formatter();
         }
 
         public function __get($name)

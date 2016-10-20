@@ -1,12 +1,12 @@
-<!--
-    Theme derived from http://www.w3schools.com/w3css/tryw3css_templates_start_page.htm
 <?php
 include_once('format.inc');
 $output = new format($this);
 $config = $this->config;
 ?>
--->
 <!DOCTYPE html>
+<!--
+    Theme derived from http://www.w3schools.com/w3css/tryw3css_templates_start_page.htm
+-->
 <html>
     <head>
         <title><?= $output->title() ?></title>
@@ -29,17 +29,18 @@ $config = $this->config;
 
     <body>
 
-        <!-- Navbar -->
+        <!-- navigation bar -->
         <div class="w3-top">
+            <!-- Top menu -->
             <ul class="w3-navbar w3-red w3-card-2 w3-left-align w3-large">
                 <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
-                    <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="<?= _('Toggle Navigation Menu') ?>"><i class="fa fa-bars"></i></a>
+                    <a class="w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="toggleNavbarOpen()" title="<?= _('Toggle Navigation Menu') ?>"><i class="fa fa-bars"></i></a>
                 </li>
                 <li><a href="<?= $config->location ?>" class="w3-padding-large w3-white"><?= _('Home') ?></a></li>
                 <?php $output->topmenu(false); ?>
             </ul>
 
-            <!-- Navbar on small screens -->
+            <!-- Navigation bar on small screens -->
             <div id="toggle-navbar-open" class="w3-hide w3-hide-large w3-hide-medium">
                 <ul class="w3-navbar w3-left-align w3-large w3-black">
                     <?php $output->topmenu(true); ?>
@@ -47,7 +48,7 @@ $config = $this->config;
             </div>
         </div>
 
-        <!-- Header -->
+        <!-- Page header -->
         <header class="w3-container w3-red w3-center w3-padding-128">
             <h1 class="w3-margin w3-jumbo">START PAGE</h1>
             <p class="w3-xlarge">Template by w3.css</p>
@@ -107,14 +108,17 @@ $config = $this->config;
                 <a href="#" class="w3-hover-text-grey"><i class="fa fa-flickr"></i></a>
                 <a href="#" class="w3-hover-text-indigo"><i class="fa fa-linkedin"></i></a>
             </div>
-            <p>Powered by <a href="http://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+            <p>Powered by 
+                <a href="http://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a> and
+                <a href="http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/" target="_blank">uup-site</a>
+            </p>
         </footer>
 
         <script>
             // 
             // Used to toggle the menu on small screens when clicking on the menu button.
             // 
-            function myFunction() {
+            function toggleNavbarOpen() {
                 var x = document.getElementById("toggle-navbar-open");
                 if (x.className.indexOf("w3-show") == -1) {
                     x.className += " w3-show";

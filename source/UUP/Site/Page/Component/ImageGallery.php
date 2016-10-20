@@ -21,13 +21,15 @@ namespace UUP\Site\Page\Component;
 /**
  * Image gallery component.
  * 
- * @property-read array $images The array of images.
+ * @property array $images The array of images.
+ * @property int $height The height of thumbnails.
+ * @property int $width The width of thumbnails.
  *
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  * @package UUP
  * @subpackage Site
  */
-class ImageGallery
+class ImageGallery implements Component
 {
 
         private $_images;
@@ -37,15 +39,33 @@ class ImageGallery
                 $this->_images = $images;
         }
 
-        public function __get($name)
+        /**
+         * Scan an image directory.
+         * 
+         * The thumbs argument is either a string (e.g. "small") or a callback 
+         * that receives the image path as argument and is expected to return
+         * an thumbnail path. 
+         * 
+         * When callback is used, it can also return false to exclude an image
+         * from the gallery.
+         * 
+         * The images directory path should be relative. The scan is performed
+         * from inside that directory.
+         * 
+         * @param string $images The image directory path.
+         * @param string|callable $thumbs The thumbnail URL generator.
+         */
+        public function scan($images, $thumbs = null)
         {
-                switch ($name) {
-                        case 'images':
-                                return $this->_images;
+                if (!file_exists($images)) {
+                        throw new \Exception("The image diretory $images is missing");
                 }
         }
 
-        public function scan($images, $thumbs = null)
+        /**
+         * Render gallery as HTML.
+         */
+        public function render()
         {
                 
         }

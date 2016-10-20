@@ -16,25 +16,25 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page\Component;
+require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
-/**
- * Section component.
- * 
- * The section component spans the whole page horizontal and provides at least 
- * an header and content. The ingress and image/font is optional. The image/font
- * can be aligned on left or right hand side.
- *
- * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
- * @package UUP
- * @subpackage Site
- */
-class Section implements Component
+use UUP\Site\Page\Component\Button;
+use UUP\Site\Page\StandardPage;
+
+class ButtonsPage extends StandardPage
 {
-
-        public function render()
+        public function __construct()
         {
-                
+                parent::__construct("Buttons");
+        }
+
+        public function printContent()
+        {
+                printf(__METHOD__);
+                $this->formatter->printButton(new Button());
         }
 
 }
+
+$page = new ButtonsPage();
+$page->render();

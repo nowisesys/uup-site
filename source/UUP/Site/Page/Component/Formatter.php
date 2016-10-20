@@ -27,21 +27,29 @@ namespace UUP\Site\Page\Component;
  * content.
  * 
  * This class tries to solve that problem by allowing themes to redefine how
- * section, cards and galleries are output. Each page gets an handle to the
- * theme formatter passed and can use it when rendering content.
+ * i.e. section, cards and galleries are output. Each page gets an handle to 
+ * the theme formatter passed and can use it when rendering content.
  * 
  * <code>
  * class MyPage extends StandardPage
  * {
  *      public function printContent() 
  *      {
+ *              // 
+ *              // The formatter object is injected by current theme.
+ *              // 
+ * 
  *              $gallery = new ImageGallery();
+ *              $gallery->height = 250;
+ *              $gallery->width  = 400;
  *              $gallery->scan("images", "small");
  * 
  *              $this->formatter->outputGallery($gallery);
  *      }
  * }
  * </code>
+ * 
+ * See example/component for more information.
  * 
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  * @package UUP
@@ -50,19 +58,40 @@ namespace UUP\Site\Page\Component;
 class Formatter
 {
 
-        public function outputGallery($gallery)
+        /**
+         * Output image gallery component.
+         * @param ImageGallery $component The image gallery object.
+         */
+        public function printGallery($component)
         {
-                
+                $component->render();
         }
 
-        public function outputCard($card)
+        /**
+         * Output card component.
+         * @param Card $component The card object.
+         */
+        public function printCard($component)
         {
-                
+                $component->render();
         }
 
-        public function outputSection($section)
+        /**
+         * Output section component.
+         * @param Section $component The section object.
+         */
+        public function printSection($component)
         {
-                
+                $component->render();
+        }
+
+        /**
+         * Output button component.
+         * @param Button $component The button object.
+         */
+        public function printButton($component)
+        {
+                $component->render();
         }
 
 }
