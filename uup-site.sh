@@ -2,8 +2,9 @@
 # 
 # Usage: 
 # uup-site.sh --setup
-# uup-site.sh --migrate <dir>|<file>
-#        
+# uup-site.sh --migrate <dir>|<file>...
+# uup-site.sh --config <options>
+# 
 # Author: Anders Lövgren
 # Date:   2015-12-16
 
