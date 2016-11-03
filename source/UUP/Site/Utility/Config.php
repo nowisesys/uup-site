@@ -75,6 +75,17 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * 
  * @property int $exception The exception reporting mode.
  * 
+ * @method string css(string $filepath) Get CSS file location.
+ * @method string stylesheet(string $filepath) Get CSS file location.
+ * 
+ * @method string font(string $filepath) Get font file location.
+ * 
+ * @method string image(string $filepath) Get image file location.
+ * @method string img(string $filepath) Get image file location.
+ * 
+ * @method string js(string $filepath) Get javascript file location.
+ * @method string javascript(string $filepath) Get javascript file location.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
@@ -145,6 +156,23 @@ class Config
         public function __isset($name)
         {
                 return array_key_exists($name, $this->_config);
+        }
+
+        public function __call($name, $arguments)
+        {
+                switch ($name) {
+                        case 'css':
+                        case 'stylesheet':
+                                return $this->getCss($arguments[0]);
+                        case 'font':
+                                return $this->getFont($arguments[0]);
+                        case 'image':
+                        case 'img':
+                                return $this->getImage($arguments[0]);
+                        case 'js':
+                        case 'javascript':
+                                return $this->getJs($arguments[0]);
+                }
         }
 
         /**
