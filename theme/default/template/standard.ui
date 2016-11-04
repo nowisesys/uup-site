@@ -23,9 +23,15 @@ $config = $this->config;
 
     <body>
         <style>
-            body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-            .w3-navbar,h1,button {font-family: "Montserrat", sans-serif}
-            .fa-anchor,.fa-coffee {font-size:200px}
+            body, h1, h2, h3, h4, h5, h6 {
+                font-family: "Lato", sans-serif
+            }
+            .w3-navbar, h1, button {
+                font-family: "Montserrat", sans-serif
+            }
+            .fa-anchor, .fa-coffee {
+                font-size:200px
+            }
         </style>
 
         <!-- Site logotype etc. -->
@@ -44,30 +50,49 @@ $config = $this->config;
         </div>
 
         <!-- Navigation bar -->
-        <ul id="topbar-menu" class="w3-navbar w3-card-2 w3-wide w3-red">
-            <li class="w3-opennav w3-left">
-                <a class="w3-hover-white w3-theme w3-padding-16" onclick="toggle_sidenav_open()" href="javascript:void(0)">
-                    <i class="fa fa-bars fa-lg"></i>
-                </a>
-            </li>
-            <li><a href="<?= $config->location ?>" class="w3-padding-16 w3-white w3-hide-small"><?= _('Home') ?></a></li>
-            <?php $output->topmenu(false) ?>
-            <li class="w3-opennav w3-right w3-hide-large w3-hide-medium">
-                <a class="w3-hover-white w3-theme w3-padding-16" onclick="toggle_navbar_open()" href="javascript:void(0)">
-                    <i class="fa fa-ellipsis-v fa-lg"></i>
-                </a>
-            </li>
-            <li class="w3-right">
-                <a class="w3-hover-white w3-padding-16 w3-right" title="<?= _('Search in content') ?>" onclick="open_search(this)" href="javascript:void(0)">
-                    <i class="fa fa-search fa-lg"></i>
-                </a>
-            </li>
-            <li class="w3-right">
-                <a class="w3-hover-white w3-padding-16 w3-right" title="<?= _('Translate this page') ?>" onclick="open_translate(this)" href="javascript:void(0)">
-                    <i class="fa fa-globe fa-lg"></i>
-                </a>
-            </li>
-        </ul>
+        <div id="topbar-menu" class="w3-card-2 w3-slim w3-red">
+            <div style="overflow:auto;">
+                <ul class="w3-navbar w3-left" style="overflow: hidden;">
+                    <li class="w3-opennav w3-left">
+                        <a class="w3-hover-white w3-theme w3-padding-16" onclick="toggle_sidenav_open()" href="javascript:void(0)">
+                            <i class="fa fa-bars fa-lg"></i>
+                        </a>
+                    </li>
+                    <li><a href="<?= $config->location ?>" class="w3-padding-16 w3-white w3-hide-small"><?= _('Home') ?></a></li>
+                    <?php $output->topmenu(false) ?>
+                </ul>
+                <ul class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
+                    <li class="w3-opennav w3-right w3-hide-large w3-hide-medium">
+                        <a class="w3-hover-white w3-padding-16 w3-right" onclick="toggle_navbar_open()" href="javascript:void(0)">
+                            <i class="fa fa-ellipsis-v fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="w3-right" id="search-button">
+                        <a class="w3-opennav w3-right w3-hover-white w3-padding-16 " title="<?= _('Search in content') ?>" onclick="open_search(this)" href="javascript:void(0)">
+                            <i class="fa fa-search fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="w3-right">
+                        <a class="w3-hover-white w3-right w3-padding-16" title="<?= _('Translate this page') ?>" onclick="open_translate(this)" href="javascript:void(0)">
+                            <i class="fa fa-globe fa-lg"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--
+            The search box is displayed left aligned for small devices and on
+            right hand side for other.
+        -->
+        <nav id="search-box" class="w3-theme w3-wide" style="display: none">
+            <div class="w3-right w3-hide-small w3-card-2">
+                <h1>Search (normal)</h1>
+            </div>
+            <div class="w3-right w3-hide-large w3-hide-medium">
+                <h1>Search (small)</h1>
+            </div>
+        </nav> 
 
         <!-- Navigation menu (for small devices) -->
         <ul id="navbar-menu" class="w3-hide-medium w3-hide-large w3-theme w3-wide" style="display: none">
@@ -127,10 +152,35 @@ $config = $this->config;
                 }
             }
 
+            function open_translate(elmnt) {
+                var a = document.getElementById("google_translate_element");
+                if (a.style.display === "") {
+                    a.style.display = "none";
+                    elmnt.innerHTML = "&#xe801;";
+                } else {
+                    a.style.display = "";
+                    if (window.innerWidth > 500) {
+                        a.style.width = "40%";
+                    } else {
+                        a.style.width = "100%";
+                    }
+                    elmnt.innerHTML = "<span style='font-family:verdana;font-weight:bold;'>X</span>";
+                }
+            }
+
+            function open_search(elmnt) {
+                var x = document.getElementById("search-box");
+                if (x.className.indexOf("w3-show") === -1) {
+                    x.className += " w3-show";
+                } else {
+                    x.className = x.className.replace(" w3-show", "");
+                }
+            }
+
             var scrolling = false;
 
             window.addEventListener('scroll', function (e) {
-                if (window.scrollY > 87) {
+                if (window.scrollY > 20) {
                     if (scrolling) {
                         return;
                     } else {
