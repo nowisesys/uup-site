@@ -1,7 +1,6 @@
 <?php
 
 return array(
-    _('Home')    => 'index.php',
     _('Start')   => 'start.php',
     _('About')   => 'about.php',
     _('Contact') => 'contact.php'
