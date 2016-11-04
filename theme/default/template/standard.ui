@@ -44,7 +44,7 @@ $config = $this->config;
         </div>
 
         <!-- Navigation bar -->
-        <ul class="w3-navbar w3-card-2 w3-wide w3-red">
+        <ul id="topbar-menu" class="w3-navbar w3-card-2 w3-wide w3-red">
             <li class="w3-opennav w3-left">
                 <a class="w3-hover-white w3-theme w3-padding-16" onclick="toggle_sidenav_open()" href="javascript:void(0)">
                     <i class="fa fa-bars fa-lg"></i>
@@ -108,9 +108,7 @@ $config = $this->config;
         </div>
 
         <script>
-            // 
-            // Used to toggle the menu on small screens when clicking on the menu button.
-            // 
+
             function toggle_navbar_open() {
                 var x = document.getElementById("navbar-menu");
                 if (x.className.indexOf("w3-show") == -1) {
@@ -128,6 +126,32 @@ $config = $this->config;
                     x.className = x.className.replace(" w3-show", "");
                 }
             }
+
+            var scrolling = false;
+
+            window.addEventListener('scroll', function (e) {
+                if (window.scrollY > 87) {
+                    if (scrolling) {
+                        return;
+                    } else {
+                        scrolling = true;
+                    }
+                } else {
+                    if (!scrolling) {
+                        return;
+                    } else {
+                        scrolling = false;
+                    }
+                }
+
+                var xt = document.getElementById("topbar-menu");
+
+                if (scrolling) {
+                    xt.className += " w3-top";
+                } else {
+                    xt.className = xt.className.replace(" w3-top", "");
+                }
+            });
 
         </script>
 
