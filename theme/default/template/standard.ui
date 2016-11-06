@@ -86,18 +86,16 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             The search box is displayed left aligned for small devices and on
             right hand side for other.
         -->
-        <div class="w3-container">
-            <nav id="search-box" class="w3-theme w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16" style="display: none">
-                <div class="w3-right w3-hide-small">
-                    <input type="text" onchange="save_search(this)">
-                    <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
-                </div>
-                <div class="w3-left w3-hide-large w3-hide-medium">
-                    <input type="text" onchange="save_search(this)">
-                    <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
-                </div>
-            </nav> 
-        </div>
+        <nav id="search-box" class="w3-row w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16" style="display: none">
+            <div class="w3-right w3-hide-small">
+                <input type="text" onchange="save_search(this)">
+                <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
+            </div>
+            <div class="w3-left w3-hide-large w3-hide-medium">
+                <input type="text" onchange="save_search(this)">
+                <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
+            </div>
+        </nav> 
 
         <!-- Navigation menu (for small devices) -->
         <div class="w3-container">
