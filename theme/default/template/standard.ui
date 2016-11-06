@@ -86,7 +86,7 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             The search box is displayed left aligned for small devices and on
             right hand side for other.
         -->
-        <nav id="search-box" class="w3-row w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16" style="display: none">
+        <nav id="search-box" class="w3-row w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16 w3-border-bottom" style="display: none">
             <div class="w3-right w3-hide-small">
                 <input type="text" onchange="save_search(this)">
                 <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
@@ -105,7 +105,7 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
         </div>
 
         <!-- Side bar navigation -->
-        <nav id="sidenav-menu" class="w3-sidenav w3-collapse w3-white w3-card-2">
+        <nav id="sidenav-menu" class="w3-sidenav w3-collapse w3-white w3-card-2 w3-animate-left">
             <h1><?= _("Menu") ?></h1>
             <?php $output->navmenu() ?>
         </nav>
