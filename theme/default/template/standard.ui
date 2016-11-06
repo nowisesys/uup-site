@@ -33,6 +33,20 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             .fa-anchor, .fa-coffee {
                 font-size:200px
             }
+            @media screen {
+                .main-content {
+                    margin-left: 200px;
+                }
+            }
+            @media print {
+                .no-print {
+                    display: none;
+                    visibility: hidden;
+                }     
+                .main-content {
+                    margin-left: 10px;
+                }
+            }
         </style>
 
         <!-- Site logotype etc. -->
@@ -51,7 +65,7 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
         </div>
 
         <!-- Navigation bar -->
-        <div id="topbar-menu" class="w3-card-2 w3-slim w3-red">
+        <div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-red">
             <div style="overflow:auto;">
                 <ul class="w3-navbar w3-left" style="overflow: hidden;">
                     <li class="w3-opennav w3-left">
@@ -86,7 +100,7 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             The search box is displayed left aligned for small devices and on
             right hand side for other.
         -->
-        <nav id="search-box" class="w3-row w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16 w3-border-bottom" style="display: none">
+        <nav id="search-box" class="no-print w3-row w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16" style="display: none">
             <div class="w3-right w3-hide-small">
                 <input type="text" onchange="save_search(this)">
                 <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
@@ -98,29 +112,29 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
         </nav> 
 
         <!-- Navigation menu (for small devices) -->
-        <div class="w3-container">
+        <div class="no-print w3-container">
             <ul id="navbar-menu" class="w3-navbar w3-large w3-hide-medium w3-hide-large w3-theme w3-wide" style="display: none">
                 <?php $output->topmenu(true) ?>            
             </ul> 
         </div>
 
         <!-- Side bar navigation -->
-        <nav id="sidenav-menu" class="w3-sidenav w3-collapse w3-white w3-card-2 w3-animate-left">
+        <nav id="sidenav-menu" class="no-print w3-sidenav w3-collapse w3-white w3-card-2">
             <h1><?= _("Menu") ?></h1>
             <?php $output->navmenu() ?>
         </nav>
 
-        <div class="w3-main" style="margin-left:200px">
+        <div class="main-content w3-main">
             <div class="w3-container">
                 <?php $output->content(); ?>                                            
             </div>
 
-            <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
+            <div class="no-print w3-container w3-black w3-center w3-opacity w3-padding-64">
                 <h1 class="w3-margin w3-xlarge">Quote of the day: live life</h1>
             </div>
 
             <!-- Footer -->
-            <footer class="w3-container w3-padding-64 w3-center w3-opacity">  
+            <footer class="no-print w3-container w3-padding-64 w3-center w3-opacity">  
                 <?php $output->footer() ?>
                 <div class="w3-xlarge w3-padding-32">
                     <a href="#" class="w3-hover-text-indigo"><i class="fa fa-facebook-official"></i></a>
