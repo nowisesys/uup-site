@@ -2,6 +2,7 @@
 include_once('format.inc');
 $output = new format($this);
 $config = $this->config;
+$config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
 ?>
 <!DOCTYPE html>
 <!--
@@ -85,19 +86,25 @@ $config = $this->config;
             The search box is displayed left aligned for small devices and on
             right hand side for other.
         -->
-        <nav id="search-box" class="w3-theme w3-wide" style="display: none">
-            <div class="w3-right w3-hide-small w3-card-2">
-                <h1>Search (normal)</h1>
-            </div>
-            <div class="w3-right w3-hide-large w3-hide-medium">
-                <h1>Search (small)</h1>
-            </div>
-        </nav> 
+        <div class="w3-container">
+            <nav id="search-box" class="w3-theme w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16" style="display: none">
+                <div class="w3-right w3-hide-small">
+                    <input type="text" onchange="save_search(this)">
+                    <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
+                </div>
+                <div class="w3-left w3-hide-large w3-hide-medium">
+                    <input type="text" onchange="save_search(this)">
+                    <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
+                </div>
+            </nav> 
+        </div>
 
         <!-- Navigation menu (for small devices) -->
-        <ul id="navbar-menu" class="w3-hide-medium w3-hide-large w3-theme w3-wide" style="display: none">
-            <?php $output->topmenu(true) ?>            
-        </ul> 
+        <div class="w3-container">
+            <ul id="navbar-menu" class="w3-navbar w3-large w3-hide-medium w3-hide-large w3-theme w3-wide" style="display: none">
+                <?php $output->topmenu(true) ?>            
+            </ul> 
+        </div>
 
         <!-- Side bar navigation -->
         <nav id="sidenav-menu" class="w3-sidenav w3-collapse w3-white w3-card-2">
@@ -152,11 +159,11 @@ $config = $this->config;
                 }
             }
 
-            function open_translate(elmnt) {
+            function open_translate(obj) {
                 var a = document.getElementById("google_translate_element");
                 if (a.style.display === "") {
                     a.style.display = "none";
-                    elmnt.innerHTML = "&#xe801;";
+                    obj.innerHTML = "&#xe801;";
                 } else {
                     a.style.display = "";
                     if (window.innerWidth > 500) {
@@ -164,12 +171,18 @@ $config = $this->config;
                     } else {
                         a.style.width = "100%";
                     }
-                    elmnt.innerHTML = "<span style='font-family:verdana;font-weight:bold;'>X</span>";
+                    obj.innerHTML = "<span style='font-family:verdana;font-weight:bold;'>X</span>";
                 }
             }
 
-            function open_search(elmnt) {
+            // 
+            // Simple search.
+            // 
+            var search_string;
+
+            function open_search(obj) {
                 var x = document.getElementById("search-box");
+
                 if (x.className.indexOf("w3-show") === -1) {
                     x.className += " w3-show";
                 } else {
@@ -177,9 +190,22 @@ $config = $this->config;
                 }
             }
 
-            var scrolling = false;
+            function save_search(input) {
+                search_string = input.value;
+            }
 
+            function send_search(site) {
+                var query = "https://www.google.se/#q=" + search_string + "+site:" + site;
+                document.location = query;
+            }
+
+            // 
+            // Set navigation menu always on top when scrolling.
+            // 
+            var scrolling = false;
             window.addEventListener('scroll', function (e) {
+                var xt = document.getElementById("topbar-menu");
+
                 if (window.scrollY > 20) {
                     if (scrolling) {
                         return;
@@ -193,8 +219,6 @@ $config = $this->config;
                         scrolling = false;
                     }
                 }
-
-                var xt = document.getElementById("topbar-menu");
 
                 if (scrolling) {
                     xt.className += " w3-top";
