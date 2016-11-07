@@ -76,7 +76,7 @@
             <li><a href="<?= $config->location ?>" class="w3-padding-16 w3-white w3-hide-small"><?= _('Home') ?></a></li>
             <?php $output->topmenu(false) ?>
         </ul>
-        <ul class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
+        <ul id="topbar-tools" class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
             <li class="w3-opennav w3-right w3-hide-large w3-hide-medium">
                 <a class="w3-hover-white w3-padding-16 w3-right" onclick="toggle_navbar_open()" href="javascript:void(0)">
                     <i class="fa fa-ellipsis-v fa-lg"></i>
@@ -226,6 +226,7 @@
         var scrolling = false;
         window.addEventListener('scroll', function (e) {
             var xt = document.getElementById("topbar-menu");
+            var tt = document.getElementById("topbar-tools");
 
             if (window.scrollY > 20) {
                 if (scrolling) {
@@ -243,8 +244,10 @@
 
             if (scrolling) {
                 xt.className += " w3-top";
+                tt.style.display = "none";
             } else {
                 xt.className = xt.className.replace(" w3-top", "");
+                tt.style.display = "";
             }
         });
 
