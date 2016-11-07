@@ -47,6 +47,20 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
                     margin-left: 10px;
                 }
             }
+            @media (max-width: 650px) {
+                .panel {
+                    width: 100%;
+                }
+            }
+            @media (min-width: 650px) {
+                .panel {
+                    min-width: 550px;
+                }
+            }
+            .goog-te-gadget-simple {
+                border: none;
+            }
+
         </style>
 
         <!-- Site logotype etc. -->
@@ -83,12 +97,12 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
                         </a>
                     </li>
                     <li class="w3-right" id="search-button">
-                        <a class="w3-opennav w3-right w3-hover-white w3-padding-16 " title="<?= _('Search in content') ?>" onclick="open_search(this)" href="javascript:void(0)">
+                        <a class="w3-opennav w3-right w3-hover-white w3-padding-16 " title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
                             <i class="fa fa-search fa-lg"></i>
                         </a>
                     </li>
                     <li class="w3-right">
-                        <a class="w3-hover-white w3-right w3-padding-16" title="<?= _('Translate this page') ?>" onclick="open_translate(this)" href="javascript:void(0)">
+                        <a class="w3-hover-white w3-right w3-padding-16" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
                             <i class="fa fa-globe fa-lg"></i>
                         </a>
                     </li>
@@ -96,24 +110,29 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             </div>
         </div>
 
-        <!--
-            The search box is displayed left aligned for small devices and on
-            right hand side for other.
-        -->
-        <nav id="search-box" class="no-print w3-row w3-wide w3-padding-left w3-padding-right w3-padding-bottom w3-padding-16" style="display: none">
-            <div class="w3-right w3-hide-small">
-                <input type="text" onchange="save_search(this)">
-                <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
+        <!-- Language selection and translation -->
+        <div id="language-box" class="panel w3-row-padding w3-padding-16" style="display: none">
+            <div class="w3-twothird w3-margin-bottom">
+                <div class="w3-input w3-border" id="google_translate_element"></div>
             </div>
-            <div class="w3-left w3-hide-large w3-hide-medium">
-                <input type="text" onchange="save_search(this)">
-                <button class="w3-btn w3-green search" onclick="send_search('<?= $config->site ?>')"><?= _('Search') ?></button>
+            <div class="w3-third">
+                <input class="w3-btn w3-blue w3-large" type="button" onclick="#" value="<?= _('Google Translate') ?>">
             </div>
-        </nav> 
+        </div>
+
+        <!-- Content search box -->
+        <div id="search-box" class="panel w3-row-padding w3-padding-16" style="display: none">
+            <div class="w3-twothird w3-margin-bottom">
+                <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type text for search..">
+            </div>
+            <div class="w3-third">
+                <input class="w3-btn w3-green w3-large search" type="button" onclick="send_search('<?= $config->site ?>')" value="<?= _('Search Site') ?>">
+            </div>
+        </div>
 
         <!-- Navigation menu (for small devices) -->
-        <div class="no-print w3-container">
-            <ul id="navbar-menu" class="w3-navbar w3-large w3-hide-medium w3-hide-large w3-theme w3-wide" style="display: none">
+        <div id="navbar-menu" class="panel no-print w3-container w3-center" style="display: none">
+            <ul class="w3-navbar w3-large w3-hide-medium w3-hide-large w3-theme w3-wide">
                 <?php $output->topmenu(true) ?>            
             </ul> 
         </div>
@@ -153,38 +172,74 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
 
         <script>
 
+            function close_panels() {
+                var i, x = document.getElementsByClassName("panel");
+                for (i = 0; i < x.length; i++) {
+                    x[i].className = x[i].className.replace(" w3-show", "");
+                    x[i].style.display = "none";
+                }
+            }
+
+            function open_panel(x) {
+                x.style.display = "inline-block";
+                x.className += " w3-show";
+            }
+
+            function toggle_panel_display(x) {
+                var open = (x.style.display === 'none');
+
+                if (x.className.indexOf("w3-right")) {
+                    x.className = x.className.replace(" w3-right", "");
+                }
+                if (x.className.indexOf("w3-left")) {
+                    x.className = x.className.replace(" w3-left", "");
+                }
+
+                if (window.innerWidth < 650) {
+                    x.className += " w3-left";
+                } else {
+                    x.className += " w3-right";
+                }
+
+                if (open) {
+                    close_panels();
+                    open_panel(x);
+                } else {
+                    close_panels();
+                }
+            }
+            
+            // 
+            // Navigation menus.
+            // 
             function toggle_navbar_open() {
                 var x = document.getElementById("navbar-menu");
-                if (x.className.indexOf("w3-show") == -1) {
-                    x.className += " w3-show";
-                } else {
-                    x.className = x.className.replace(" w3-show", "");
-                }
+                toggle_panel_display(x);
             }
 
             function toggle_sidenav_open() {
                 var x = document.getElementById("sidenav-menu");
-                if (x.className.indexOf("w3-show") == -1) {
+                if (x.className.indexOf("w3-show") === -1) {
                     x.className += " w3-show";
                 } else {
                     x.className = x.className.replace(" w3-show", "");
                 }
             }
 
-            function open_translate(obj) {
-                var a = document.getElementById("google_translate_element");
-                if (a.style.display === "") {
-                    a.style.display = "none";
-                    obj.innerHTML = "&#xe801;";
-                } else {
-                    a.style.display = "";
-                    if (window.innerWidth > 500) {
-                        a.style.width = "40%";
-                    } else {
-                        a.style.width = "100%";
-                    }
-                    obj.innerHTML = "<span style='font-family:verdana;font-weight:bold;'>X</span>";
-                }
+            // 
+            // Translation
+            // 
+            function toggle_translate_open(obj) {
+                var x = document.getElementById("language-box");
+                toggle_panel_display(x);
+            }
+
+            function google_translate_element_init() {
+                new google.translate.TranslateElement({
+                    pageLanguage: 'en',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                    multilanguagePage: true
+                }, 'google_translate_element');
             }
 
             // 
@@ -192,14 +247,9 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             // 
             var search_string;
 
-            function open_search(obj) {
+            function toggle_search_open(obj) {
                 var x = document.getElementById("search-box");
-
-                if (x.className.indexOf("w3-show") === -1) {
-                    x.className += " w3-show";
-                } else {
-                    x.className = x.className.replace(" w3-show", "");
-                }
+                toggle_panel_display(x);
             }
 
             function save_search(input) {
@@ -240,6 +290,8 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             });
 
         </script>
+
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>
 
     </body>
 </html>
