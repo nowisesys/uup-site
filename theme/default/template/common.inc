@@ -73,8 +73,15 @@
                     <i class="fa fa-bars fa-lg"></i>
                 </a>
             </li>
-            <li><a href="<?= $config->location ?>" class="w3-padding-16 w3-white w3-hide-small"><?= _('Home') ?></a></li>
+            <li>
+                <a href="<?= $config->location ?>" class="w3-padding-16 w3-white w3-hide-small"><?= _('Home') ?></a>
+            </li>
             <?php $output->topmenu(false) ?>
+        </ul>
+        <ul id="topbar-sitehome" class="w3-navbar w3-left" style="overflow: hidden; display: none">
+            <li>
+                <a href="<?= $config->location ?>" class="w3-padding-8 w3-xlarge w3-hover-red"><?= $config->name ?></a>
+            </li>
         </ul>
         <ul id="topbar-tools" class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
             <li class="w3-opennav w3-right w3-hide-large w3-hide-medium">
@@ -225,8 +232,9 @@
         // 
         var scrolling = false;
         window.addEventListener('scroll', function (e) {
-            var xt = document.getElementById("topbar-menu");
+            var tm = document.getElementById("topbar-menu");
             var tt = document.getElementById("topbar-tools");
+            var ts = document.getElementById("topbar-sitehome");
 
             if (window.scrollY > 20) {
                 if (scrolling) {
@@ -243,11 +251,13 @@
             }
 
             if (scrolling) {
-                xt.className += " w3-top";
+                tm.className += " w3-top";
                 tt.style.display = "none";
+                ts.style.display = "inline-block";
             } else {
-                xt.className = xt.className.replace(" w3-top", "");
+                tm.className = tm.className.replace(" w3-top", "");
                 tt.style.display = "";
+                ts.style.display = "none";
             }
         });
 
