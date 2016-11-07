@@ -2,67 +2,27 @@
 include_once('format.inc');
 $output = new format($this);
 $config = $this->config;
-$config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
+$config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');  // For translation
 ?>
 <!DOCTYPE html>
 <!--
     Theme derived from http://www.w3schools.com/w3css/tryw3css_templates_start_page.htm
+
+    Author: Anders Lövgren
+    Date:   2016-11-07
 -->
 <html>
     <head>
         <title><?= $output->title() ?></title>
-
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <link rel="stylesheet" href="<?= $config->css('w3.css') ?>">
         <link rel="stylesheet" href="<?= $config->css('fonts/lato.css') ?>">
         <link rel="stylesheet" href="<?= $config->css('fonts/montserrat.css') ?>">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-
         <?php $output->headers(); ?>
     </head>
 
     <body>
-        <style>
-            body, h1, h2, h3, h4, h5, h6 {
-                font-family: "Lato", sans-serif
-            }
-            .w3-navbar, h1, button {
-                font-family: "Montserrat", sans-serif
-            }
-            .fa-anchor, .fa-coffee {
-                font-size:200px
-            }
-            @media screen {
-                .main-content {
-                    margin-left: 200px;
-                }
-            }
-            @media print {
-                .no-print {
-                    display: none;
-                    visibility: hidden;
-                }     
-                .main-content {
-                    margin-left: 10px;
-                }
-            }
-            @media (max-width: 650px) {
-                .panel {
-                    width: 100%;
-                }
-            }
-            @media (min-width: 650px) {
-                .panel {
-                    min-width: 550px;
-                }
-            }
-            .goog-te-gadget-simple {
-                border: none;
-            }
-
-        </style>
-
         <!-- Site logotype etc. -->
         <div id='header'>
             <div class="w3-hide-small w3-hide-medium" style='text-align: center'>
@@ -78,70 +38,7 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             </div>
         </div>
 
-        <!-- Navigation bar -->
-        <div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-red">
-            <div style="overflow:auto;">
-                <ul class="w3-navbar w3-left" style="overflow: hidden;">
-                    <li class="w3-opennav w3-left">
-                        <a class="w3-hover-white w3-theme w3-padding-16" onclick="toggle_sidenav_open()" href="javascript:void(0)">
-                            <i class="fa fa-bars fa-lg"></i>
-                        </a>
-                    </li>
-                    <li><a href="<?= $config->location ?>" class="w3-padding-16 w3-white w3-hide-small"><?= _('Home') ?></a></li>
-                    <?php $output->topmenu(false) ?>
-                </ul>
-                <ul class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
-                    <li class="w3-opennav w3-right w3-hide-large w3-hide-medium">
-                        <a class="w3-hover-white w3-padding-16 w3-right" onclick="toggle_navbar_open()" href="javascript:void(0)">
-                            <i class="fa fa-ellipsis-v fa-lg"></i>
-                        </a>
-                    </li>
-                    <li class="w3-right" id="search-button">
-                        <a class="w3-opennav w3-right w3-hover-white w3-padding-16 " title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
-                            <i class="fa fa-search fa-lg"></i>
-                        </a>
-                    </li>
-                    <li class="w3-right">
-                        <a class="w3-hover-white w3-right w3-padding-16" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
-                            <i class="fa fa-globe fa-lg"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Language selection and translation -->
-        <div id="language-box" class="panel w3-row-padding w3-padding-16" style="display: none">
-            <div class="w3-twothird w3-margin-bottom">
-                <div class="w3-input w3-border" id="google_translate_element"></div>
-            </div>
-            <div class="w3-third">
-                <input class="w3-btn w3-blue w3-large" type="button" onclick="#" value="<?= _('Google Translate') ?>">
-            </div>
-        </div>
-
-        <!-- Content search box -->
-        <div id="search-box" class="panel w3-row-padding w3-padding-16" style="display: none">
-            <div class="w3-twothird w3-margin-bottom">
-                <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type text for search..">
-            </div>
-            <div class="w3-third">
-                <input class="w3-btn w3-green w3-large search" type="button" onclick="send_search('<?= $config->site ?>')" value="<?= _('Search Site') ?>">
-            </div>
-        </div>
-
-        <!-- Navigation menu (for small devices) -->
-        <div id="navbar-menu" class="panel no-print w3-container w3-center" style="display: none">
-            <ul class="w3-navbar w3-large w3-hide-medium w3-hide-large w3-theme w3-wide">
-                <?php $output->topmenu(true) ?>            
-            </ul> 
-        </div>
-
-        <!-- Side bar navigation -->
-        <nav id="sidenav-menu" class="no-print w3-sidenav w3-collapse w3-white w3-card-2">
-            <h1><?= _("Menu") ?></h1>
-            <?php $output->navmenu() ?>
-        </nav>
+        <?php include('common.inc') ?>
 
         <div class="main-content w3-main">
             <div class="w3-container">
@@ -169,129 +66,6 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
             </footer>
 
         </div>
-
-        <script>
-
-            function close_panels() {
-                var i, x = document.getElementsByClassName("panel");
-                for (i = 0; i < x.length; i++) {
-                    x[i].className = x[i].className.replace(" w3-show", "");
-                    x[i].style.display = "none";
-                }
-            }
-
-            function open_panel(x) {
-                x.style.display = "inline-block";
-                x.className += " w3-show";
-            }
-
-            function toggle_panel_display(x) {
-                var open = (x.style.display === 'none');
-
-                if (x.className.indexOf("w3-right")) {
-                    x.className = x.className.replace(" w3-right", "");
-                }
-                if (x.className.indexOf("w3-left")) {
-                    x.className = x.className.replace(" w3-left", "");
-                }
-
-                if (window.innerWidth < 650) {
-                    x.className += " w3-left";
-                } else {
-                    x.className += " w3-right";
-                }
-
-                if (open) {
-                    close_panels();
-                    open_panel(x);
-                } else {
-                    close_panels();
-                }
-            }
-            
-            // 
-            // Navigation menus.
-            // 
-            function toggle_navbar_open() {
-                var x = document.getElementById("navbar-menu");
-                toggle_panel_display(x);
-            }
-
-            function toggle_sidenav_open() {
-                var x = document.getElementById("sidenav-menu");
-                if (x.className.indexOf("w3-show") === -1) {
-                    x.className += " w3-show";
-                } else {
-                    x.className = x.className.replace(" w3-show", "");
-                }
-            }
-
-            // 
-            // Translation
-            // 
-            function toggle_translate_open(obj) {
-                var x = document.getElementById("language-box");
-                toggle_panel_display(x);
-            }
-
-            function google_translate_element_init() {
-                new google.translate.TranslateElement({
-                    pageLanguage: 'en',
-                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                    multilanguagePage: true
-                }, 'google_translate_element');
-            }
-
-            // 
-            // Simple search.
-            // 
-            var search_string;
-
-            function toggle_search_open(obj) {
-                var x = document.getElementById("search-box");
-                toggle_panel_display(x);
-            }
-
-            function save_search(input) {
-                search_string = input.value;
-            }
-
-            function send_search(site) {
-                var query = "https://www.google.se/#q=" + search_string + "+site:" + site;
-                document.location = query;
-            }
-
-            // 
-            // Set navigation menu always on top when scrolling.
-            // 
-            var scrolling = false;
-            window.addEventListener('scroll', function (e) {
-                var xt = document.getElementById("topbar-menu");
-
-                if (window.scrollY > 20) {
-                    if (scrolling) {
-                        return;
-                    } else {
-                        scrolling = true;
-                    }
-                } else {
-                    if (!scrolling) {
-                        return;
-                    } else {
-                        scrolling = false;
-                    }
-                }
-
-                if (scrolling) {
-                    xt.className += " w3-top";
-                } else {
-                    xt.className = xt.className.replace(" w3-top", "");
-                }
-            });
-
-        </script>
-
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>
 
     </body>
 </html>
