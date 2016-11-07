@@ -69,33 +69,33 @@
     <div style="overflow:auto;">
         <ul class="w3-navbar w3-left" style="overflow: hidden;">
             <li class="w3-opennav w3-left">
-                <a class="w3-hover-white w3-theme w3-padding-16" onclick="toggle_sidenav_open()" href="javascript:void(0)">
+                <a class="w3-hover-white w3-theme w3-padding-16 w3-large" onclick="toggle_sidenav_open()" href="javascript:void(0)">
                     <i class="fa fa-bars fa-lg"></i>
                 </a>
             </li>
             <li>
-                <a href="<?= $config->location ?>" class="w3-padding-16 w3-white w3-hide-small"><?= _('Home') ?></a>
+                <a href="<?= $config->location ?>" class="w3-padding-16 w3-large w3-white w3-hide-small"><?= _('Home') ?></a>
             </li>
             <?php $output->topmenu(false) ?>
         </ul>
-        <ul id="topbar-sitehome" class="w3-navbar w3-left" style="overflow: hidden; display: none">
+        <ul id="topbar-sitehome" class="w3-navbar w3-right" style="overflow: hidden; display: none">
             <li>
-                <a href="<?= $config->location ?>" class="w3-padding-8 w3-xlarge w3-hover-red"><?= $config->name ?></a>
+                <a href="<?= $config->location ?>" class="w3-padding-16 w3-large w3-hover-red"><?= $config->name ?></a>
             </li>
         </ul>
         <ul id="topbar-tools" class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
             <li class="w3-opennav w3-right w3-hide-large w3-hide-medium">
-                <a class="w3-hover-white w3-padding-16 w3-right" onclick="toggle_navbar_open()" href="javascript:void(0)">
+                <a class="w3-hover-white w3-padding-16 w3-large w3-right" onclick="toggle_navbar_open()" href="javascript:void(0)">
                     <i class="fa fa-ellipsis-v fa-lg"></i>
                 </a>
             </li>
             <li class="w3-right" id="search-button">
-                <a class="w3-opennav w3-right w3-hover-white w3-padding-16 " title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
+                <a class="w3-opennav w3-right w3-hover-white w3-padding-16 w3-large" title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
                     <i class="fa fa-search fa-lg"></i>
                 </a>
             </li>
             <li class="w3-right">
-                <a class="w3-hover-white w3-right w3-padding-16" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
+                <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
                     <i class="fa fa-globe fa-lg"></i>
                 </a>
             </li>
@@ -116,7 +116,7 @@
 <!-- Content search box -->
 <div id="search-box" class="panel w3-row-padding w3-padding-16 w3-white" style="display: none">
     <div class="w3-twothird w3-margin-bottom">
-        <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type text for search..">
+        <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type search text..">
     </div>
     <div class="w3-third">
         <input class="w3-btn w3-green w3-large search" type="button" onclick="send_search('<?= $config->site ?>')" value="<?= _('Search Site') ?>">
