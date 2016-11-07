@@ -36,16 +36,17 @@ class StandardMenu extends \ArrayObject
                 $menus = array();
 
                 if (file_exists("standard.menu")) {
-                        $menus[] = include("standard.menu");
+                        $menus[] = new MenuData(include("standard.menu"));
                 }
                 if (file_exists("../standard.menu")) {
-                        $menus[] = include("../standard.menu");
+                        $menus[] = new MenuData(include("../standard.menu"));
                 }
                 if (file_exists("../../standard.menu")) {
-                        $menus[] = include("../../standard.menu");
+                        $menus[] = new MenuData(include("../../standard.menu"));
                 }
-
-                parent::__construct($menus);
+                if (count($menus) != 0) {
+                        parent::__construct($menus);
+                }
         }
 
 }

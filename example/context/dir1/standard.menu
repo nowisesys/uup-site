@@ -1,6 +1,9 @@
 <?php
 
 return array(
-    _('Page 3') => 'page3',
-    _('Page 4') => 'page4'
+    'head' => _('Dir 1'),
+    'data' => array(
+        _('Page 3') => 'page3',
+        _('Page 4') => 'page4'
+    )
 );
