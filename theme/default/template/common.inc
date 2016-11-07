@@ -131,12 +131,23 @@
 </div>
 
 <!-- Side bar navigation -->
-<nav id="sidenav-menu" class="no-print w3-sidenav w3-collapse w3-white w3-card-2">
+<nav id="sidenav-menu" class="no-print w3-sidenav w3-collapse w3-white w3-card-2" style="display: none; z-index: 5">
     <h1><?= _("Menu") ?></h1>
     <?php $output->navmenu() ?>
 </nav>
 
+<!-- Main content overlay with 50% opaqueness when sidebar menu is opened -->
+<div class="w3-overlay w3-animate-opacity" onclick="close_overlay()" style="cursor:pointer" id="page-overlay"></div>
+
 <script>
+
+        function close_overlay() {
+            var xm = document.getElementById("sidenav-menu");
+            var xo = document.getElementById("page-overlay");
+
+            xm.style.display = 'none';
+            xo.style.display = 'none';
+        }
 
         function close_panels() {
             var i, x = document.getElementsByClassName("panel");
@@ -184,11 +195,15 @@
         }
 
         function toggle_sidenav_open() {
-            var x = document.getElementById("sidenav-menu");
-            if (x.className.indexOf("w3-show") === -1) {
-                x.className += " w3-show";
+            var xm = document.getElementById("sidenav-menu");
+            var xo = document.getElementById("page-overlay");
+
+            if (xm.style.display === 'none') {
+                xm.style.display = 'block';
+                xo.style.display = 'block';
             } else {
-                x.className = x.className.replace(" w3-show", "");
+                xm.style.display = 'none';
+                xo.style.display = 'none';
             }
         }
 
