@@ -130,12 +130,6 @@
     </ul> 
 </div>
 
-<!-- Side bar navigation -->
-<nav id="sidenav-menu" class="no-print w3-sidenav w3-collapse w3-white w3-card-2" style="display: none; z-index: 5">
-    <h1><?= _("Menu") ?></h1>
-    <?php $output->navmenu() ?>
-</nav>
-
 <!-- Main content overlay with 50% opaqueness when sidebar menu is opened -->
 <div class="w3-overlay w3-animate-opacity" onclick="close_overlay()" style="cursor:pointer" id="page-overlay"></div>
 
