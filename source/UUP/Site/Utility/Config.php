@@ -217,17 +217,6 @@ class Config
                         die("Failed locate defaults.site (have you missed running uup-site.sh in application or site root?)");
                 }
 
-                if (filter_input(INPUT_COOKIE, 'theme')) {
-                        $config['theme'] = filter_input(INPUT_COOKIE, 'theme');
-                }
-                if (filter_input(INPUT_GET, 'theme')) {
-                        $config['theme'] = filter_input(INPUT_GET, 'theme');
-                        setcookie("theme", $config['theme']);
-                }
-                if (!isset($config['theme'])) {
-                        $config['theme'] = 'default';
-                }
-
                 if (!isset($config['root'])) {
                         $config['root'] = $this->_topdir;
                 } else {
@@ -257,6 +246,17 @@ class Config
                 }
                 if (!isset($config['exception'])) {
                         $config['exception'] = UUP_SITE_EXCEPT_BRIEF;
+                }
+
+                if (filter_input(INPUT_COOKIE, 'theme')) {
+                        $config['theme'] = filter_input(INPUT_COOKIE, 'theme');
+                }
+                if (filter_input(INPUT_GET, 'theme')) {
+                        $config['theme'] = filter_input(INPUT_GET, 'theme');
+                        setcookie("theme", $config['theme'], 0, $config['location']);
+                }
+                if (!isset($config['theme'])) {
+                        $config['theme'] = 'default';
                 }
 
                 foreach (array('css', 'js', 'img', 'fonts') as $asset) {
