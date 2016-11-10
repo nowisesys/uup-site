@@ -2,7 +2,6 @@
 include_once('format.inc');
 $output = new format($this);
 $config = $this->config;
-$config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');  // For translation
 ?>
 <!DOCTYPE html>
 <!--
@@ -23,6 +22,13 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');  // For translation
     </head>
 
     <body>
+        <style>
+            .header-container {
+                background-image: url('http://www.pachd.com/free-images/nature-images/sunset-04.jpg');
+                background-repeat: no-repeat;
+                background-size:cover;
+            }
+        </style>
 
         <!-- Side bar navigation -->
         <?php include('common.inc') ?>
@@ -32,14 +38,18 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');  // For translation
         </nav>
 
         <!-- Page header -->
-        <header class="w3-container w3-red w3-center w3-padding-128">
+        <header class="header-container w3-container w3-center w3-padding-64">
             <h1 class="w3-margin w3-jumbo">START PAGE</h1>
             <p class="w3-xlarge">Template by w3.css</p>
             <button class="w3-btn w3-padding-16 w3-large w3-margin-top">Get Started</button>
         </header>
 
-        <?php $output->content(); ?>                            
-        <?php $output->sections(); ?>
+        <div class='w3-container w3-padding-32 w3-margin-left'>
+            <?php $output->content(); ?>                                        
+        </div>
+        <div class='w3-container w3-light-grey w3-padding-32'>
+            <?php $output->sections(); ?>
+        </div>
 
         <!-- First Grid -->
         <div class="w3-row-padding w3-padding-64 w3-container">
@@ -85,11 +95,11 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');  // For translation
         <footer class="w3-container w3-padding-64 w3-center w3-opacity">  
             <?php $output->footer() ?>
             <div class="w3-xlarge w3-padding-32">
-                <a href="#" class="w3-hover-text-indigo"><i class="fa fa-facebook-official"></i></a>
-                <a href="#" class="w3-hover-text-red"><i class="fa fa-pinterest-p"></i></a>
-                <a href="#" class="w3-hover-text-light-blue"><i class="fa fa-twitter"></i></a>
-                <a href="#" class="w3-hover-text-grey"><i class="fa fa-flickr"></i></a>
-                <a href="#" class="w3-hover-text-indigo"><i class="fa fa-linkedin"></i></a>
+                <a href="<?= sprintf('https://www.facebook.com/sharer/sharer.php?u=%s', $config->request) ?>" class="w3-hover-text-indigo"><i class="fa fa-facebook-official"></i></a>
+                <a href="<?= sprintf('https://twitter.com/home?status=%s', $config->request) ?>" class="w3-hover-text-light-blue"><i class="fa fa-twitter"></i></a>
+                <a href="<?= sprintf('https://www.linkedin.com/shareArticle?mini=true&url=%s&title=%s', $config->request, urlencode($output->title())) ?>" class="w3-hover-text-indigo"><i class="fa fa-linkedin"></i></a>
+                <a href="<?= sprintf('https://pinterest.com/pin/create/button/?url=%s&media=&description=%s', $config->request, urlencode($output->title())) ?>" class="w3-hover-text-red"><i class="fa fa-pinterest-p"></i></a>
+                <a href="<?= sprintf('https://plus.google.com/share?url==%s', $config->request) ?>" class="w3-hover-text-light-green"><i class="fa fa-google-plus"></i></a>
             </div>
             <p>Powered by 
                 <a href="http://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a> and

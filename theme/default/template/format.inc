@@ -83,14 +83,16 @@ class format
 
         public function sections()
         {
+                printf("<div class=\"w3-row\">\n");
                 foreach ($this->page->sections as $head => $cont) {
-                        printf("<div class=\"col-sm-4 section\">\n");
-                        printf("<div class=\"secthead\">%s</div>\n", $head);
-                        printf("<img src=\"%s\"/><br/>\n", $cont['image']);
-                        printf("<div class=\"secttext\">%s", $cont['text']);
-                        printf("<button type=\"button\" class=\"btn btn-default\" onclick=\"location.href = '%s'\">More</button>\n", $cont['link']);
-                        printf("</div>\n</div>\n");
+                        printf("<div class=\"w3-third w3-center w3-margin-16\">\n");
+                        printf("<h1>%s</h1>\n", $head);
+                        printf("<img src=\"%s\"/ class=\"w3-image\" style=\"max-height:230px;min-height:200px\">\n", $cont['image']);
+                        printf("<p class=\"w3-text-grey\">%s</p>\n", $cont['text']);
+                        printf("<button class=\"w3-btn w3-green\" onclick=\"location.href = '%s'\">More</button>\n", $cont['link']);
+                        printf("</div>\n");
                 }
+                printf("</div>\n");
         }
 
         public function content()

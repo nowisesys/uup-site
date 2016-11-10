@@ -65,7 +65,7 @@
 </style>
 
 <!-- Navigation bar -->
-<div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-red">
+<div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-black">
     <div style="overflow:auto;">
         <ul class="w3-navbar w3-left" style="overflow: hidden;">
             <li class="w3-opennav w3-left">
@@ -80,7 +80,7 @@
         </ul>
         <ul id="topbar-sitehome" class="w3-navbar w3-right" style="overflow: hidden; display: none">
             <li>
-                <a href="<?= $config->location ?>" class="w3-padding-16 w3-large w3-hover-red"><?= $config->name ?></a>
+                <a href="<?= $config->location ?>" class="w3-padding-16 w3-large w3-hover-light-grey"><?= $config->name ?></a>
             </li>
         </ul>
         <ul id="topbar-tools" class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
