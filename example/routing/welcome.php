@@ -31,6 +31,16 @@ class WelcomePage extends StartPage
                         _('Introduction') => array(
                                 'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                 'image' => $this->config->getImage('introduction.png'),
+                                'link'  => 'page1.php'
+                        ),
+                        _('Products')     => array(
+                                'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                'image' => $this->config->getImage('products.jpg'),
+                                'link'  => 'page2.php'
+                        ),
+                        _('Contact')      => array(
+                                'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                'image' => $this->config->getImage('contact.jpg'),
                                 'link'  => 'page3.php'
                         )
                 );
