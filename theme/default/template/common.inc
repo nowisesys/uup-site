@@ -61,7 +61,10 @@
     .goog-te-gadget-simple {
         border: none;
     }
-
+    .goog-te-menu-value > span {
+        color: grey;
+        font-size: 14px;
+    }
 </style>
 
 <!-- Navigation bar -->
