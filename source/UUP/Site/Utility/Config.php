@@ -52,6 +52,9 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
 /**
  * Site configuration class.
  *
+ * @property-read string $request The request URL.
+ * 
+ * @property string $site The site address.
  * @property string $name The site name.
  * 
  * @property string $root The top directory (virtual host).
@@ -215,6 +218,26 @@ class Config
                         $config = require($config);
                 } else {
                         die("Failed locate defaults.site (have you missed running uup-site.sh in application or site root?)");
+                }
+
+                if (!isset($config['request'])) {
+                        if (filter_input(INPUT_SERVER, 'SERVER_PORT') == 80 ||
+                            filter_input(INPUT_SERVER, 'SERVER_PORT') == 443) {
+                                $config['request'] = sprintf(
+                                    "%s://%s%s", filter_input(INPUT_SERVER, 'REQUEST_SCHEME'), filter_input(INPUT_SERVER, 'SERVER_NAME'), filter_input(INPUT_SERVER, 'REQUEST_URI')
+                                );
+                        } else {
+                                $config['request'] = sprintf(
+                                    "%s://%s:%d%s", filter_input(INPUT_SERVER, 'REQUEST_SCHEME'), filter_input(INPUT_SERVER, 'SERVER_NAME'), filter_input(INPUT_SERVER, 'SERVER_PORT'), filter_input(INPUT_SERVER, 'REQUEST_URI')
+                                );
+                        }
+                }
+
+                if (!isset($config['site'])) {
+                        $config['site'] = filter_input(INPUT_SERVER, 'SERVER_NAME');
+                }
+                if (!isset($config['name'])) {
+                        $config['name'] = 'Default site name';
                 }
 
                 if (!isset($config['root'])) {
