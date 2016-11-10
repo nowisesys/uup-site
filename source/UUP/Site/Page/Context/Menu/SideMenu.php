@@ -30,11 +30,16 @@ class SideMenu extends \ArrayObject
 
         /**
          * Constructor.
+         * @param array|boolean $sidebar The sidebar menu.
          */
-        public function __construct()
+        public function __construct($sidebar = true)
         {
-                if (file_exists("sidebar.menu")) {
-                        parent::__construct(include("sidebar.menu"));
+                if ($sidebar != false) {
+                        if (is_array($sidebar)) {
+                                parent::__construct($sidebar);
+                        } elseif (file_exists("sidebar.menu")) {
+                                parent::__construct(include("sidebar.menu"));
+                        }
                 }
         }
 

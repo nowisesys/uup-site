@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
+require_once(realpath(__DIR__ . '/../../../../vendor/autoload.php'));
 
 use UUP\Site\Page\StandardPage;
 
@@ -29,17 +29,11 @@ class IndexPage extends StandardPage
 
         public function printContent()
         {
-                echo "<h1>Navigation menus</h1>\n";
-                echo "<p>Examples on using navigation menus, both defined by class or in external files.</p>\n";
-                
-                printf("<ul>\n");
-                printf("<li><a href=\"file\">Use navigation menus defined in file system</a></li>\n");
-                printf("<li><a href=\"object\">Use navigation menus defined inside the class</a></li>\n");
-                printf("</ul>\n");
+                echo "<h1>Sidebar menu</h1>\n";
+                echo "<p>This is a test of using sidebar menus defined by sidebar.menu located in the file system.</p>\n";
                 
                 echo "<p><pre><code>\n";
-                print_r($this->navmenu);
-                print_r($this->menus);
+                print_r($this->sidemenu);
                 echo "</code></pre></p>\n";
         }
 

@@ -158,7 +158,7 @@ abstract class StandardPage implements TemplatePage
          */
         public function getMenus()
         {
-                return new Menus($this->config->topmenu, $this->config->navmenu);
+                return new Menus($this->config->topmenu, $this->config->navmenu, $this->config->sidebar);
         }
 
         /**

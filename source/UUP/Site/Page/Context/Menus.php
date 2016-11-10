@@ -44,15 +44,22 @@ class Menus
          * @var array|boolean $topmeny The navigation menu. 
          */
         private $_navmenu;
+        /**
+         * @var array|boolean $topmeny The sidebar menu. 
+         */
+        private $_sidebar;
 
         /**
          * Constructor.
          * @param array|boolean $topmenu The top menu. 
+         * @param array|boolean $navmenu The navigation menu. 
+         * @param array|boolean $sidebar The sidebar menu. 
          */
-        public function __construct($topmenu, $navmenu)
+        public function __construct($topmenu, $navmenu, $sidebar)
         {
                 $this->_topmenu = $topmenu;
                 $this->_navmenu = $navmenu;
+                $this->_sidebar = $sidebar;
         }
 
         public function __get($name)
@@ -91,7 +98,7 @@ class Menus
          */
         public function getSideMenu()
         {
-                return new SideMenu();
+                return new SideMenu($this->_sidebar);
         }
 
         /**

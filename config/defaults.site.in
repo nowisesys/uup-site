@@ -186,6 +186,11 @@ return array(
 //         */
 //        'navmenu'   => true,
 //        /**
+//         * Static defined sidebar menu (array) or dynamic build from sidebar.menu 
+//         * files. Use false to completely disable.
+//         */
+//        'sidebar'   => true,
+//        /**
 //         * Content specification (array) or dynamic fetched from content.spec files
 //         * if true. Use false to completely disable.
 //         */

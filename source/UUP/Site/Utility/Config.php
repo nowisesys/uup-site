@@ -73,6 +73,7 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * 
  * @property boolean|array $topmenu Optional top bar menu.
  * @property boolean|array $navmenu Optional navigation menu.
+ * @property boolean|array $sidebar Optional sidebar menu.
  * @property boolean|array $publish Optional publisher information.
  * @property boolean|array $headers Optional HTTP headers.
  * @property boolean|array $content Optional content specification.
@@ -297,6 +298,9 @@ class Config
 
                 if (!isset($config['navmenu'])) {
                         $config['navmenu'] = true;      // enabled by default
+                }
+                if (!isset($config['sidebar'])) {
+                        $config['sidebar'] = true;      // enabled by default
                 }
                 foreach (array('topmenu', 'publish', 'headers', 'content') as $key) {
                         if (!isset($config[$key])) {
