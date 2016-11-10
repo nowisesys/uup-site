@@ -45,8 +45,13 @@ class Publisher extends \ArrayObject
                         parent::__construct(include("publish.inc"));
                 } elseif (file_exists(sprintf("%s/publish.inc", $template))) {
                         parent::__construct(include(sprintf("%s/publish.inc", $template)));
-                } elseif ($publish) {
+                } elseif (is_array($publish)) {
                         parent::__construct($publish);
+                } else {
+                        parent::__construct(array(
+                                "copying" => date('Y'),
+                                "updated" => getlastmod()
+                        ));
                 }
         }
 
