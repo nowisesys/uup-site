@@ -40,14 +40,19 @@ class Menus
          * @var array|boolean $topmeny The top menu. 
          */
         private $_topmenu;
+        /**
+         * @var array|boolean $topmeny The navigation menu. 
+         */
+        private $_navmenu;
 
         /**
          * Constructor.
          * @param array|boolean $topmenu The top menu. 
          */
-        public function __construct($topmenu)
+        public function __construct($topmenu, $navmenu)
         {
                 $this->_topmenu = $topmenu;
+                $this->_navmenu = $navmenu;
         }
 
         public function __get($name)
@@ -73,7 +78,7 @@ class Menus
          */
         public function getNavMenu()
         {
-                return new StandardMenu();
+                return new StandardMenu($this->_navmenu);
         }
 
         /**

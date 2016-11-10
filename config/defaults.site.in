@@ -181,6 +181,11 @@ return array(
 //         */
 //        'topmenu'   => false,
 //        /**
+//         * Static defined navigation menu (array) or dynamic build from standard.menu 
+//         * files unless false.
+//         */
+//        'navmenu'   => true,
+//        /**
 //         * Content specification (array) or dynamic fetched from content.spec files
 //         * if true. Use false to completely disable.
 //         */

@@ -30,22 +30,35 @@ class StandardMenu extends \ArrayObject
 
         /**
          * Constructor.
+         * @param array|boolean $navmenu The top menu.
          */
-        public function __construct()
+        public function __construct($navmenu = false)
         {
-                $menus = array();
+                if ($navmenu != false) {
+                        if (is_array($navmenu)) {
+                                $menus = array(new MenuData($navmenu));
+                        } else {
+                                $menus = array();
 
-                if (file_exists("standard.menu")) {
-                        $menus[] = new MenuData(include("standard.menu"));
-                }
-                if (file_exists("../standard.menu")) {
-                        $menus[] = new MenuData(include("../standard.menu"));
-                }
-                if (file_exists("../../standard.menu")) {
-                        $menus[] = new MenuData(include("../../standard.menu"));
-                }
-                if (count($menus) != 0) {
-                        parent::__construct($menus);
+                                if (file_exists("standard.menu")) {
+                                        $menus[] = new MenuData(include("standard.menu"));
+                                } else {
+                                        $menus[] = false;
+                                }
+                                if (file_exists("../standard.menu")) {
+                                        $menus[] = new MenuData(include("../standard.menu"));
+                                } else {
+                                        $menus[] = false;
+                                }
+                                if (file_exists("../../standard.menu")) {
+                                        $menus[] = new MenuData(include("../../standard.menu"));
+                                } else {
+                                        $menus[] = false;
+                                }
+                        }
+                        if (count($menus) != 0) {
+                                parent::__construct($menus);
+                        }
                 }
         }
 
