@@ -72,14 +72,13 @@ class format
                 }
         }
 
-        public function sidemenu()
+        public function sidebar()
         {
-                foreach ($this->page->sidemenu as $hval => $menu) {
-                        echo "<div class=\"well\">\n";
-                        foreach ($menu as $name => $link) {
-                                echo "<li><a href=\"$link\">$name</a></li>\n";
+                foreach ($this->page->sidemenu as $sect => $data) {
+                        printf("<h3>%s</h3>\n", $sect);
+                        foreach ($data as $name => $link) {
+                                printf("<a id=\"%s\" href=\"%s\">%s</a>\n", md5(basename($link)), $link, $name);
                         }
-                        echo "</div>\n";
                 }
         }
 
