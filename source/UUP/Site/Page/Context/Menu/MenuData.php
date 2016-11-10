@@ -33,13 +33,25 @@ class MenuData
          * Constructor.
          * @param array $data The header data.
          */
-        public function __construct($data)
+        public function __construct($data, $parent = null)
         {
+                if (isset($parent)) {
+                        self::relocate($data, $parent);
+                }
                 if (isset($data['head'])) {
                         $this->name = $data['head'];
                 }
                 if (isset($data['data'])) {
                         $this->data = $data['data'];
+                }
+        }
+
+        private static function relocate(&$data, $parent)
+        {
+                if (isset($data['data'])) {
+                        foreach ($data['data'] as $name => $link) {
+                                $data['data'][$name] = $parent . '/' . $link;
+                        }
                 }
         }
 
