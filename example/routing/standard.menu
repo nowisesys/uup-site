@@ -1,6 +1,11 @@
 <?php
 
 return array(
-    _('DD') => 'page3',
-    _('AA') => 'page4'
+    'head' => _('Routing'),
+    'data' => array(
+        _('About')    => 'about',
+        _('Standard') => 'index',
+        _('Welcome')  => 'welcome',
+        _('Test')     => 'test'
+    )
 );
