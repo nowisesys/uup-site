@@ -18,7 +18,6 @@
 
 namespace UUP\Site\Page;
 
-use UUP\Site\Page\Component\Formatter;
 use UUP\Site\Page\Context\Headers;
 use UUP\Site\Page\Context\Menu\SideMenu;
 use UUP\Site\Page\Context\Menu\StandardMenu;
@@ -38,8 +37,6 @@ use UUP\Site\Utility\Locale;
  * @property-read TopMenu $topmenu The top menu.
  * @property-read StandardMenu $navmenu The navigation (standard) menu.
  * @property-read SideMenu $sidemenu The sidebar menu.
- * 
- * @property-read Formatter $formatter Theme specific formatter.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -93,8 +90,6 @@ abstract class StandardPage implements TemplatePage
 
                 $this->config = new Config($config);
                 $this->locale = new Locale($this->config);
-                
-                $this->_formatter = new Formatter();
         }
 
         public function __get($name)
@@ -148,15 +143,6 @@ abstract class StandardPage implements TemplatePage
         public function setTemplate($template)
         {
                 $this->_template = $template;
-        }
-
-        /**
-         * Set theme specific formatter.
-         * @param Formatter $formatter The formatter object.
-         */
-        public function setFormatter($formatter)
-        {
-                $this->_formatter = $formatter;
         }
 
         /**

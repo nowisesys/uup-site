@@ -18,7 +18,6 @@
 
 namespace UUP\Site\Page;
 
-use UUP\Site\Page\Component\Formatter;
 use UUP\Site\Page\Context\Headers;
 use UUP\Site\Page\Context\Menus;
 use UUP\Site\Page\Context\Publisher;
@@ -73,10 +72,4 @@ interface TemplatePage
          * @return Headers 
          */
         function getHeaders();
-
-        /**
-         * Set theme formatter.
-         * @param Formatter $formatter The formatter object.
-         */
-        function setFormatter($formatter);
 }
