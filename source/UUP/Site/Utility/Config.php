@@ -71,10 +71,11 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * @property array $locale Options for locale and gettext.
  * @property string $theme The default theme.
  * 
- * @property array $topmenu Optional top bar menu.
- * @property array $publish Optional publisher information.
- * @property array $headers Optional HTTP headers.
- * @property string $footer Optional footer file.
+ * @property boolean|array $topmenu Optional top bar menu.
+ * @property boolean|array $publish Optional publisher information.
+ * @property boolean|array $headers Optional HTTP headers.
+ * @property boolean|array $content Optional content specification.
+ * @property boolean|string $footer Optional footer file.
  * 
  * @property int $exception The exception reporting mode.
  * 
@@ -293,7 +294,7 @@ class Config
                         }
                 }
 
-                foreach (array('topmenu', 'publish', 'headers') as $key) {
+                foreach (array('topmenu', 'publish', 'headers', 'content') as $key) {
                         if (!isset($config[$key])) {
                                 $config[$key] = false;
                         }

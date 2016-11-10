@@ -18,6 +18,7 @@
 
 namespace UUP\Site\Page;
 
+use UUP\Site\Page\Context\Content;
 use UUP\Site\Page\Context\Headers;
 use UUP\Site\Page\Context\Menu\SideMenu;
 use UUP\Site\Page\Context\Menu\StandardMenu;
@@ -33,6 +34,7 @@ use UUP\Site\Utility\Locale;
  * @property-read Publisher $publisher Page publisher information.
  * @property-read Menus $menus Page menus.
  * @property-read Headers $headers Custom HTTP headers.
+ * @property-read Content $content Page content specification.
  * 
  * @property-read TopMenu $topmenu The top menu.
  * @property-read StandardMenu $navmenu The navigation (standard) menu.
@@ -65,11 +67,6 @@ abstract class StandardPage implements TemplatePage
          * @var Locale 
          */
         public $locale;
-        /**
-         * Theme specific formatter.
-         * @var Formatter 
-         */
-        private $_formatter;
 
         /**
          * Constructor.
@@ -104,14 +101,15 @@ abstract class StandardPage implements TemplatePage
                         case 'headers':
                                 $this->headers = $this->getHeaders();
                                 return $this->headers;
+                        case 'content':
+                                $this->content = $this->getContent();
+                                return $this->content;
                         case 'topmenu':
                                 return $this->menus->top;
                         case 'navmenu':
                                 return $this->menus->nav;
                         case 'sidemenu':
                                 return $this->menus->side;
-                        case 'formatter':
-                                return $this->_formatter;
                 }
         }
 
@@ -187,6 +185,15 @@ abstract class StandardPage implements TemplatePage
         }
 
         /**
+         * Get custom content specification.
+         * @return Content
+         */
+        public function getContent()
+        {
+                return new Content($this->config->template, $this->config->content);
+        }
+
+        /**
          * Get page title.
          * @return string
          */
@@ -213,6 +220,18 @@ abstract class StandardPage implements TemplatePage
                                                 echo " $key=\"$val\"";
                                         }
                                         echo " />\n";
+                                }
+                        }
+                }
+                if ($this->config->content) {
+                        echo "\n";
+                        foreach ($this->content as $key => $val) {
+                                if ($key == 'name') {
+                                        printf("<meta name=\"application-name\" content=\"%s\">\n", $val);
+                                } elseif ($key == 'info') {
+                                        printf("<meta name=\"description\" content=\"%s\">\n", $val);
+                                } elseif ($key == 'tags') {
+                                        printf("<meta name=\"keywords\" content=\"%s\">\n", implode(',', $val));
                                 }
                         }
                 }

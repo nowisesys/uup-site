@@ -18,6 +18,7 @@
 
 namespace UUP\Site\Page;
 
+use UUP\Site\Page\Context\Content;
 use UUP\Site\Page\Context\Headers;
 use UUP\Site\Page\Context\Menus;
 use UUP\Site\Page\Context\Publisher;
@@ -72,4 +73,10 @@ interface TemplatePage
          * @return Headers 
          */
         function getHeaders();
+
+        /**
+         * Get custom content specification.
+         * @return Content
+         */
+        function getContent();
 }

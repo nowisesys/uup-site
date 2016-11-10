@@ -181,6 +181,11 @@ return array(
 //         */
 //        'topmenu'   => false,
 //        /**
+//         * Content specification (array) or dynamic fetched from content.spec files
+//         * if true. Use false to completely disable.
+//         */
+//         'content'  => false,
+//        /**
 //         * Publisher information. Can be overridden by publish.inc in page directory or
 //         * template/publish.inc defined for all pages.
 //         */
