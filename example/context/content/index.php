@@ -33,9 +33,9 @@ class IndexPage extends StandardPage
                 echo "<h1>Content specification test</h1>\n";
 
                 if ($this->config->content) {
-                        echo "<p>This is a test of content specification (i.e. from content.spec). If you look at the page source (in the browser), you should see &lt;meta name=\"...\" content=\"...\"&gt; defined by the content.spec file.</p>\n";
+                        echo "<p>This is a test of content specification (i.e. from content.spec).</p>\n";
                 } else {
-                        echo "<p>Use of content specification is <u>disabled</u> in the configuration.</p>\n";
+                        echo "<p>Use of content specification is <u>disabled</u> in the configuration, but these examples will dynamic enable support for content specification.</p>\n";
                 }
 
                 printf("<ul>\n");

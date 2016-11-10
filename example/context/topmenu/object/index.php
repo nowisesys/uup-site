@@ -36,7 +36,7 @@ class IndexPage extends StandardPage
         public function printContent()
         {
                 echo "<h1>Page topmenu</h1>\n";
-                echo "<p>This is a test of using top menus defined by the page class. When using the default theme, you should see the links appearing in the topbar menu.</p>\n";
+                echo "<p>This is a test of using top menus defined by the page class. When using the default theme, you should now see the links appearing in the topbar menu.</p>\n";
 
                 echo "<p><pre><code>\n";
                 print_r($this->topmenu);

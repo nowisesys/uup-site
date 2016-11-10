@@ -26,22 +26,18 @@ class IndexPage extends StandardPage
         public function __construct()
         {
                 parent::__construct(__CLASS__);
+                $this->config->content = true;
         }
 
         public function printContent()
         {
                 echo "<h1>Content specification test</h1>\n";
-
-                if ($this->config->content) {
-                        echo "<p>This is a test of content specification (i.e. from content.spec). If you look at the page source (in the browser), you should see &lt;meta name=\"...\" content=\"...\"&gt; defined by the content.spec file.</p>\n";
-                } else {
-                        echo "<p>Use of content specification is <u>disabled</u> in the configuration.</p>\n";
-                }
+                echo "<p>This is a test of content specification (i.e. from content.spec). If you look at the page source (in the browser), you should see &lt;meta name=\"...\" content=\"...\"&gt; defined by the content.spec file.</p>\n";
 
                 printf("<div class=\"w3-row-padding w3-padding-64 w3-container\">\n");
                 printf("<div class=\"w3-content\">\n");
-                
-                printf("<div class=\"w3-twothird\">\n");                
+
+                printf("<div class=\"w3-twothird\">\n");
                 printf("<h1>%s</h1>\n", $this->content->name);
                 printf("<h5 class=\"w3-padding-32\">%s</h5>\n", $this->content->info);
                 printf("<p class=\"w3-text-grey\">%s</p>\n", $this->content->desc);
@@ -50,7 +46,7 @@ class IndexPage extends StandardPage
                 printf("<div class=\"w3-third w3-center\">\n");
                 printf("<img src=\"%s\">\n", $this->content->image);
                 printf("</div>\n");
-                
+
                 printf("</div>\n");
                 printf("</div>\n");
         }

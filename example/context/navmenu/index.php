@@ -22,6 +22,7 @@ use UUP\Site\Page\StandardPage;
 
 class IndexPage extends StandardPage
 {
+
         public function __construct()
         {
                 parent::__construct(__CLASS__);
@@ -31,12 +32,16 @@ class IndexPage extends StandardPage
         {
                 echo "<h1>Navigation menus</h1>\n";
                 echo "<p>Examples on using navigation menus, both defined by class or in external files.</p>\n";
-                
+
+                if (!$this->config->navmenu) {
+                        echo "<p>Use of navigation menus is <u>disabled</u> in the configuration, but these examples will dynamic enable support for testing purposes.</p>\n";
+                }
+
                 printf("<ul>\n");
                 printf("<li><a href=\"file\">Use navigation menus defined in file system</a></li>\n");
                 printf("<li><a href=\"object\">Use navigation menus defined inside the class</a></li>\n");
                 printf("</ul>\n");
-                
+
                 echo "<p><pre><code>\n";
                 print_r($this->navmenu);
                 print_r($this->menus);

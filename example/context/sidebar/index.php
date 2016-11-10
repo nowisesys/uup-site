@@ -33,6 +33,10 @@ class IndexPage extends StandardPage
                 echo "<h1>Sidebar menu</h1>\n";
                 echo "<p>Examples on using sidebar menus. The location of sidebar is defined by each theme that can also chose to hide the sidebar on any kind devices. A sensable approach could by to merge the sidebar menu with the navigation menu combined with a separator.</p>\n";
 
+                if (!$this->config->sidebar) {
+                        echo "<p>Use of sidebar menus is <u>disabled</u> in the configuration, but these examples will dynamic enable support for testing purposes.</p>\n";
+                }
+                
                 printf("<ul>\n");
                 printf("<li><a href=\"file\">Use sidebar menus defined in file system</a></li>\n");
                 printf("<li><a href=\"object\">Use sidebar menus defined inside the class</a></li>\n");
