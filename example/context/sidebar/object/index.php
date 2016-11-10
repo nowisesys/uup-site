@@ -44,7 +44,7 @@ class IndexPage extends StandardPage
                 echo "<p>This is a test of using sidebar menus defined inside the class. Notice that sidebar menus defined inside a class will override a setting that disables sidebar in the configuration file.</p>\n";
 
                 echo "<p><pre><code>\n";
-                print_r($this->sidemenu);
+                print_r($this->sidebar);
                 echo "</code></pre></p>\n";
         }
 

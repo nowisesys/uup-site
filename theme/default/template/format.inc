@@ -63,10 +63,14 @@ class format
         public function navmenu()
         {
                 foreach ($this->page->navmenu as $menu) {
-                        if ($menu) {
-                                printf("<h3>%s</h3>\n", $menu->name);
-                                foreach ($menu->data as $name => $link) {
-                                        printf("<a id=\"%s\" href=\"%s\">%s</a>\n", md5(basename($link)), $link, $name);
+                        if (isset($menu)) {
+                                if (isset($menu->name)) {
+                                        printf("<h3>%s</h3>\n", $menu->name);
+                                }
+                                if (isset($menu->data)) {
+                                        foreach ($menu->data as $name => $link) {
+                                                printf("<a id=\"%s\" href=\"%s\">%s</a>\n", md5(basename($link)), $link, $name);
+                                        }
                                 }
                         }
                 }
@@ -74,7 +78,7 @@ class format
 
         public function sidebar()
         {
-                foreach ($this->page->sidemenu as $sect => $data) {
+                foreach ($this->page->sidebar as $sect => $data) {
                         printf("<h3>%s</h3>\n", $sect);
                         foreach ($data as $name => $link) {
                                 printf("<a id=\"%s\" href=\"%s\">%s</a>\n", md5(basename($link)), $link, $name);

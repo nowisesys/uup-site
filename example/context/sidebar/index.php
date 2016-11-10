@@ -39,7 +39,7 @@ class IndexPage extends StandardPage
                 printf("</ul>\n");
                 
                 echo "<p><pre><code>\n";
-                print_r($this->sidemenu);
+                print_r($this->sidebar);
                 echo "</code></pre></p>\n";
         }
 

@@ -36,7 +36,7 @@ class IndexPage extends StandardPage
                 print_r($this->menus);
                 print_r($this->navmenu);
                 print_r($this->topmenu);
-                print_r($this->sidemenu);
+                print_r($this->sidebar);
                 print_r($this->publisher);
                 echo "</code></pre></p>\n";
         }

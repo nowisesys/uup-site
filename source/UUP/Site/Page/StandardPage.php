@@ -38,7 +38,7 @@ use UUP\Site\Utility\Locale;
  * 
  * @property-read TopMenu $topmenu The top menu.
  * @property-read StandardMenu $navmenu The navigation (standard) menu.
- * @property-read SideMenu $sidemenu The sidebar menu.
+ * @property-read SideMenu $sidebar The sidebar menu.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -108,7 +108,7 @@ abstract class StandardPage implements TemplatePage
                                 return $this->menus->top;
                         case 'navmenu':
                                 return $this->menus->nav;
-                        case 'sidemenu':
+                        case 'sidebar':
                                 return $this->menus->side;
                 }
         }

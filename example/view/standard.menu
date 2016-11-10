@@ -1,6 +1,9 @@
 <?php
 
 return array(
-    _('Page 1') => 'page1.php',
-    _('Page 2') => 'page2.php'
+    'head' => _('View'),
+    'data' => array(
+        _('Index')  => 'index.php',
+        _('Render') => 'render.php'
+    )
 );

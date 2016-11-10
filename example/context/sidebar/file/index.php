@@ -33,7 +33,7 @@ class IndexPage extends StandardPage
                 echo "<p>This is a test of using sidebar menus defined by sidebar.menu located in the file system.</p>\n";
                 
                 echo "<p><pre><code>\n";
-                print_r($this->sidemenu);
+                print_r($this->sidebar);
                 echo "</code></pre></p>\n";
         }
 
