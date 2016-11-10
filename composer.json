@@ -6,6 +6,16 @@
     "keywords": ["template", "site", "uup", "bmc"],
     "homepage": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site",
     "license": "Apache-2.0",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://it.bmc.uu.se/andlov/php/proj/bmc/uup-auth/"
+        },
+        {
+            "type": "composer",
+            "url": "https://it.bmc.uu.se/andlov/php/proj/bmc/uup-html/"            
+        }
+    ],
     "authors": [
         {
             "name": "Anders Lövgren",
@@ -13,11 +23,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "bmc/uup-auth": "^2.2"
     },
     "suggest": {
         "bmc/uup-html": ">=1.0.5",
-        "bmc/uup-auth": ">=2.1.9"
+        "bmc/uup-auth": ">=2.2.0"
     },
     "autoload": {
         "psr-0": {
