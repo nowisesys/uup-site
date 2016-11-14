@@ -31,16 +31,11 @@ $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');  // For translation
             <div class="w3-hide-small w3-hide-large" style='text-align: center'>
                 <div class="w3-text-red w3-large w3-padding-16"><?= $output->title() ?></div>
             </div>
-            <div class="w3-hide-medium w3-hide-large">
-                <div class="w3-text-red w3-large w3-padding-16 w3-xlarge">
-                    <a href="<?= $config->location ?>" style='text-decoration: none; padding-left: 20px'><?= $config->name ?></a>
-                </div>
-            </div>
         </div>
 
         <!-- Side bar navigation -->
         <?php include('common.inc') ?>
-        <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-collapse w3-white w3-card-2" style="display: none; z-index: 5">
+        <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-collapse w3-white w3-card-2" style="display: none; z-index: 2">
             <?php $output->navmenu() ?>
             <?php $output->sidebar() ?>
         </nav>
