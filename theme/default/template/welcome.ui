@@ -26,7 +26,8 @@ $config = $this->config;
             .header-container {
                 background-image: url('http://www.pachd.com/free-images/nature-images/sunset-04.jpg');
                 background-repeat: no-repeat;
-                background-size:cover;
+                background-size: cover;
+                background-position: 50%;
             }
         </style>
 
