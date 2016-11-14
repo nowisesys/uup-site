@@ -244,9 +244,6 @@
         // 
         var scrolling = false;
         window.addEventListener('scroll', function (e) {
-            var tm = document.getElementById("topbar-menu");
-            var tt = document.getElementById("topbar-tools");
-            var ts = document.getElementById("topbar-sitehome");
 
             if (window.scrollY > 20) {
                 if (scrolling) {
@@ -262,14 +259,21 @@
                 }
             }
 
+            var tm = document.getElementById("topbar-menu");
+            var tt = document.getElementById("topbar-tools");
+            var ts = document.getElementById("topbar-sitehome");
+            var sm = document.getElementById("sidenav-menu");
+            
             if (scrolling) {
                 tm.className += " w3-top";
                 tt.style.display = "none";
                 ts.style.display = "inline-block";
+                sm.style.top = "59px";
             } else {
                 tm.className = tm.className.replace(" w3-top", "");
                 tt.style.display = "";
                 ts.style.display = "none";
+                sm.style.top = "auto";          // restore default pos
             }
         });
 
