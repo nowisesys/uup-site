@@ -24,7 +24,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
 require_once(realpath(__DIR__ . '/../vendor/autoload.php'));
 
-use UUP\Site\Page\Migration\TransitionalPage;
+use UUP\Site\Page\Web\Migration\TransitionalPage;
 
 /**
  * Conversion helper class.
@@ -87,7 +87,7 @@ class Convert
                 // 
                 // Output use statement:
                 // 
-                fprintf($this->_out, "\n%s\n", "use UUP\Site\Page\StandardPage;");
+                fprintf($this->_out, "\n%s\n", "use UUP\Site\Page\Web\StandardPage;");
         }
 
         private function outputClass()
@@ -143,7 +143,7 @@ class Convert
                 fprintf($this->_out, "\t\n");
                 fprintf($this->_out, "\tpublic function __construct()\n");
                 fprintf($this->_out, "\t{\n");
-                fprintf($this->_out, "\t\tparent::__construct(\"%s\");\n", $this->_page->getTitle());
+                fprintf($this->_out, "\t\tparent::__construct(\"%s\");\n", $this->_page->title);
                 fprintf($this->_out, "\t}\n");
                 fprintf($this->_out, "\t\n");
         }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page;
+namespace UUP\Site\Page\Web;
+
+use const UUP_SITE_EXCEPT_BRIEF;
+use const UUP_SITE_EXCEPT_DUMP;
+use const UUP_SITE_EXCEPT_LOG;
+use const UUP_SITE_EXCEPT_SILENT;
+use const UUP_SITE_EXCEPT_STACK;
 
 /**
  * Page for displaying error.
@@ -34,23 +40,27 @@ class ErrorPage extends StandardPage
          */
         private $_exception;
 
+        /**
+         * Constructor.
+         * @param \Exception $exception The exception object.
+         */
         public function __construct($exception)
         {
-                parent::__construct("Error");
+                parent::__construct(_("Error"));
                 $this->_exception = $exception;
                 ob_clean();
         }
 
         public function printContent()
         {
-                printf("<h1>Oops, something went wrong!</h1>\n");
+                printf("<h1>%s</h1>\n", _("Oops, something went wrong!"));
 
                 if ($this->config->exception & UUP_SITE_EXCEPT_LOG) {
                         error_log(print_r($this->_exception, true));
                 }
 
                 if ($this->config->exception & UUP_SITE_EXCEPT_SILENT) {
-                        printf("An exception occured, but error reporing has been suppressed by the system manager.");
+                        printf(_("An exception occured, but error reporing has been suppressed by the system manager."));
                         return;
                 }
                 if ($this->config->exception & UUP_SITE_EXCEPT_BRIEF) {

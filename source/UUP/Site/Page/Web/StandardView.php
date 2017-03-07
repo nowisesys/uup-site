@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2016-2017 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page;
-
-use UUP\Site\Page\StandardPage;
+namespace UUP\Site\Page\Web;
 
 /**
  * Simple view support.

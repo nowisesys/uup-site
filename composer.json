@@ -24,11 +24,10 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "bmc/uup-auth": "^2.2"
+        "bmc/uup-auth": "^2.3"
     },
     "suggest": {
-        "bmc/uup-html": ">=1.0.5",
-        "bmc/uup-auth": ">=2.2.0"
+        "bmc/uup-html": ">=1.0.5"
     },
     "autoload": {
         "psr-0": {

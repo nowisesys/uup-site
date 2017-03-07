@@ -129,7 +129,7 @@ unzip everything in proper places.
         // 
         require_once('vendor/autoload.php');
 
-        use UUP\Site\Page\StandardPage;
+        use UUP\Site\Page\Web\StandardPage;
 
         class IndexPage extends StandardPage
         {

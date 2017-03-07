@@ -65,6 +65,10 @@
         color: grey;
         font-size: 14px;
     }
+    goog-te-menu-frame {
+        width: 200px;
+        max-width: 200px;
+    }
 </style>
 
 <!-- Navigation bar -->
@@ -92,6 +96,11 @@
                     <i class="fa fa-ellipsis-v fa-lg"></i>
                 </a>
             </li>
+            <li class="w3-right">
+                <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Open authentication box') ?>" onclick="toggle_logon_open(this)" href="javascript:void(0)">
+                    <i class="fa fa-unlock-alt fa-lg" id="logon-status"></i>
+                </a>
+            </li>
             <li class="w3-right" id="search-button">
                 <a class="w3-opennav w3-right w3-hover-white w3-padding-16 w3-large" title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
                     <i class="fa fa-search fa-lg"></i>
@@ -103,6 +112,16 @@
                 </a>
             </li>
         </ul>
+    </div>
+</div>
+
+<!-- Logon status box -->
+<div id="logon-box" class="panel w3-row-padding w3-padding-16 w3-white" style="display: none">
+    <div class="w3-twothird w3-margin-bottom">
+        <div class="w3-input w3-border" id="logon_status_element"></div>
+    </div>
+    <div class="w3-third">
+        <input class="w3-btn w3-orange w3-large" type="button" onclick="#" value="<?= _('Authenticate') ?>">
     </div>
 </div>
 
@@ -216,6 +235,7 @@
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
                 multilanguagePage: true
             }, 'google_translate_element');
         }
@@ -237,6 +257,26 @@
         function send_search(site) {
             var query = "https://www.google.se/#q=" + search_string + "+site:" + site;
             document.location = query;
+        }
+
+        // 
+        // Authenticate and logon status.
+        // 
+        var logon_exists = <?= $this->session->authenticated() ? 1 : 0 ?>;
+
+        function toggle_logon_open(obj) {
+            var x = document.getElementById("logon-box");
+            toggle_panel_display(x);
+        }
+
+        function set_logon_status() {
+            if (logon_exists) {
+                var x = document.getElementById("logon-status");
+                x.setAttribute("class", "fa fa-lock fa-lg");
+            } else {
+                var x = document.getElementById("logon-status");
+                x.setAttribute("class", "fa fa-unlock-alt fa-lg");
+            }
         }
 
         // 
@@ -263,7 +303,7 @@
             var tt = document.getElementById("topbar-tools");
             var ts = document.getElementById("topbar-sitehome");
             var sm = document.getElementById("sidenav-menu");
-            
+
             if (scrolling) {
                 tm.className += " w3-top";
                 tt.style.display = "none";
@@ -275,6 +315,11 @@
                 ts.style.display = "none";
                 sm.style.top = "auto";          // restore default pos
             }
+        });
+
+        window.addEventListener('load', function () {
+                logon_exists = 1;
+            set_logon_status();
         });
 
 </script>

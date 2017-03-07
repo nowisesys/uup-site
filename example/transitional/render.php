@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2016-2017 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
-use UUP\Site\Page\Migration\TransitionalPage;
+use UUP\Site\Page\Web\Migration\TransitionalPage;
 
 if (!defined('UUP_SITE_DIRECT_RENDERING')) {
         define('UUP_SITE_DIRECT_RENDERING', true);

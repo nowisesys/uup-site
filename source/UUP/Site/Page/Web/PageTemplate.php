@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page;
+namespace UUP\Site\Page\Web;
 
 use UUP\Site\Page\Context\Content;
-use UUP\Site\Page\Context\Headers;
 use UUP\Site\Page\Context\Menus;
 use UUP\Site\Page\Context\Publisher;
-use UUP\Site\Utility\Config;
 
 /**
  * Interface for page classes.
@@ -31,24 +29,8 @@ use UUP\Site\Utility\Config;
  * @package UUP
  * @subpackage Site
  */
-interface TemplatePage
+interface PageTemplate
 {
-
-        /**
-         * Print extra header except for theme default.
-         */
-        function printHeader();
-
-        /**
-         * Print main body content.
-         */
-        function printContent();
-
-        /**
-         * Get page title.
-         * @return string
-         */
-        function getTitle();
 
         /**
          * Get page menus.
@@ -63,20 +45,13 @@ interface TemplatePage
         function getPublisher();
 
         /**
-         * Get site configuration.
-         * @return Config 
-         */
-        function getConfig();
-
-        /**
-         * Get custom HTTP headers.
-         * @return Headers 
-         */
-        function getHeaders();
-
-        /**
          * Get custom content specification.
          * @return Content
          */
         function getContent();
+        
+        /**
+         * Print main body content.
+         */
+        function printContent();
 }

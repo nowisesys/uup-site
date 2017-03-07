@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2016-2017 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,26 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page;
+namespace UUP\Site\Page\Web;
 
 /**
- * Secure page enforcing authentication.
+ * Start page for this site.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
  */
-class SecurePage extends StandardPage
+abstract class WelcomePage extends StandardPage
 {
-
-        /**
-         * The authenti
-         * @var type 
-         */
-        private $_auth;
 
         /**
          * Constructor.
          * @param string $title The page title.
-         * @param string $template The output formatting.
          * @param string $config The defaults.site configuration file.
          */
-        public function __construct($title, $template = "standard", $config = null)
+        public function __construct($title, $config = null)
         {
-                parent::__construct($title, $template, $config);
-        }
-
-        public function printContent()
-        {
-                
+                parent::__construct($title, "welcome", $config);
         }
 
 }

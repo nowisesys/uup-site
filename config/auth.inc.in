@@ -21,22 +21,27 @@
  * the auto-loader when changing the list.
  */
 use UUP\Authentication\Authenticator\Authenticator;
-use UUP\Authentication\Authenticator\BasicHttpAuthenticator;
 use UUP\Authentication\Authenticator\CasAuthenticator;
+use UUP\Authentication\Authenticator\RequestAuthenticator;
 use UUP\Authentication\Restrictor\AddressRestrictor;
 use UUP\Authentication\Validator\LdapBindValidator;
 use UUP\Authentication\Validator\PamValidator;
 
 // 
-// Autheticate against LDAP server.
+// Authenticate against LDAP server.
 // 
-class LdapAuthenticator extends BasicHttpAuthenticator
+class LdapAuthenticator extends RequestAuthenticator
 {
 
         public function __construct($host, $port = 636)
         {
                 parent::__construct(
-                    new LdapBindValidator($host, $port), 'LDAP Authentication'
+                    new LdapBindValidator($host, $port), array(
+                        'name'  => 'ldap',
+                        'login' => '?auth=ldap',
+                        'user'  => 'user',
+                        'pass'  => 'pass'
+                    )
                 );
         }
 
@@ -45,13 +50,17 @@ class LdapAuthenticator extends BasicHttpAuthenticator
 // 
 // Authenticate against local PAM-stack (UNIX only).
 // 
-class SystemAuthentication extends BasicHttpAuthenticator
+class SystemAuthenticator extends RequestAuthenticator
 {
 
         public function __construct()
         {
                 parent::__construct(
-                    new PamValidator(), 'System Authentication'
+                    new PamValidator(), array(
+                        'name'  => 'pam',
+                        'login' => '?auth=pam',
+                        'user'  => 'user',
+                        'pass'  => 'pass')
                 );
         }
 
@@ -69,21 +78,21 @@ return array(
         // Plugin account authenticator objects in stack:
         // 
         'auth'   => array(
-                'pam'  => (new SystemAuthentication())
+                'pam'  => (new SystemAuthenticator())
                     ->visible(true)
-                    ->control(Authenticator::sufficient)
+                    ->control(Authenticator::SUFFICIENT)
                     ->name('System')
-                    ->description('Login using local system account.'),
+                    ->description('System Account (PAM)'),
                 'cas'  => (new CasAuthenticator('cas.example.com'))
                     ->visible(true)
-                    ->control(Authenticator::sufficient)
+                    ->control(Authenticator::SUFFICIENT)
                     ->name('CAS')
-                    ->description('CAS server login'),
+                    ->description('CAS Server Login'),
                 'ldap' => (new LdapAuthenticator('ldaps://ldap.example.com'))
                     ->visible(true)
-                    ->control(Authenticator::sufficient)
+                    ->control(Authenticator::SUFFICIENT)
                     ->name('LDAP')
-                    ->description('LDAP authentication')
+                    ->description('LDAP Authentication')
         ),
         // 
         // Add some login restrictions:
@@ -91,6 +100,6 @@ return array(
         'access' => array(
                 'addr' => (new AddressRestrictor(array('::1', '127.0.0.1', '192.168.0.0/16')))
                     ->visible(false)
-                    ->control(Authenticator::required)
+                    ->control(Authenticator::REQUIRED)
         )
 );

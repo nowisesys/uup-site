@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page;
+namespace UUP\Site\Request;
+
+use UUP\Site\Page\Web\Migration\TransitionalPage;
+use UUP\Site\Page\Web\StandardView;
 
 /**
  * Request router page.
@@ -79,7 +82,7 @@ namespace UUP\Site\Page;
  * @package UUP
  * @subpackage Site
  */
-class RouterPage extends StandardPage
+class Router extends Handler
 {
 
         /**
@@ -119,17 +122,12 @@ class RouterPage extends StandardPage
          */
         public function __construct($config = null)
         {
-                parent::__construct("Router", null, $config);
+                parent::__construct($config);
 
                 $this->config->uri = filter_input(INPUT_GET, 'uri');
                 $this->_root = getcwd();
                 $this->_page = $this->getPage();
                 $this->_name = $this->getName();
-        }
-
-        public function printContent()
-        {
-                
         }
 
         /**
@@ -141,7 +139,7 @@ class RouterPage extends StandardPage
                 set_include_path(get_include_path() . PATH_SEPARATOR . sprintf("%s/admin", $this->config->proj));
 
                 if (!file_exists($this->_page)) {
-                        throw new \Exception("Requested page don't exist");
+                        throw new \Exception(_("Requested page don't exist"));
                 } else {
                         ob_start();
                         require($this->_page);
@@ -156,7 +154,7 @@ class RouterPage extends StandardPage
                         $page = new $this->_name();
                         $page->render();
                 } elseif (function_exists('print_body')) {
-                        $page = new Migration\TransitionalPage($this->_page);
+                        $page = new TransitionalPage($this->_page);
                         $page->render();
                 } else {
                         $page = new StandardView($this->_name, $this->_page);
@@ -222,6 +220,11 @@ class RouterPage extends StandardPage
         private function getPage()
         {
                 return sprintf("%s/%s.%s", $this->_root, $this->config->uri, $this->_ext);
+        }
+
+        public function render()
+        {
+                $this->handle();
         }
 
 }

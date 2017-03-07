@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
-use UUP\Site\Page\StandardPage;
+use UUP\Site\Page\Web\StandardPage;
 
 class Page2 extends StandardPage
 {

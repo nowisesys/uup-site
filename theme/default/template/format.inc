@@ -1,6 +1,6 @@
 <?php
 
-use UUP\Site\Page\StandardPage;
+use UUP\Site\Page\Web\StandardPage;
 
 /*
  * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
@@ -126,7 +126,7 @@ class format
 
         public function title()
         {
-                return sprintf("%s - %s", $this->page->config->name, $this->page->getTitle());
+                return sprintf("%s - %s", $this->page->config->name, $this->page->title);
         }
 
 }

@@ -1,0 +1,11 @@
+<?php
+
+return array(
+    'head' => _('Secure'),
+    'data' => array(
+        _('Normal Page') => 'normal.php',
+        _('Secure Page') => 'secure.php',
+        _('Logon Page')  => 'logon',
+        _('Logoff Page') => 'logoff'
+    )
+);

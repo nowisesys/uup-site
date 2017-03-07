@@ -2,7 +2,7 @@
 
 require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
-use UUP\Site\Page\Migration\TransitionalPage;
+use UUP\Site\Page\Web\Migration\TransitionalPage;
 
 // 
 // Drop in for missing include file.

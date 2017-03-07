@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +51,12 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
 
 /**
  * Site configuration class.
- *
+ * 
+ * @property-read array $data The config data.
+ * 
  * @property-read string $request The request URL.
+ * @property-read boolean $session Session is enabled.
+ * @property-read boolean $debug Request debug is enabled.
  * 
  * @property string $site The site address.
  * @property string $name The site name.
@@ -68,6 +72,7 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * @property string $img The image location.
  * @property string $font The font location.
  * 
+ * @property array $tools The toolbox options.
  * @property array $locale Options for locale and gettext.
  * @property string $theme The default theme.
  * 
@@ -91,6 +96,8 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * 
  * @method string js(string $filepath) Get javascript file location.
  * @method string javascript(string $filepath) Get javascript file location.
+ * 
+ * @method string url(string $dest) Get target URL.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -149,19 +156,29 @@ class Config
 
         public function __get($name)
         {
-                if (isset($this->_config[$name])) {
+                if ($name == 'data') {
+                        return $this->_config;
+                } elseif (isset($this->_config[$name])) {
                         return $this->_config[$name];
                 }
         }
 
         public function __set($name, $value)
         {
-                $this->_config[$name] = $value;
+                if ($name == 'data') {
+                        $this->_config = $value;
+                } else {
+                        $this->_config[$name] = $value;
+                }
         }
 
         public function __isset($name)
         {
-                return array_key_exists($name, $this->_config);
+                if ($name == 'data') {
+                        return isset($this->_config);
+                } else {
+                        return array_key_exists($name, $this->_config);
+                }
         }
 
         public function __call($name, $arguments)
@@ -178,6 +195,8 @@ class Config
                         case 'js':
                         case 'javascript':
                                 return $this->getJs($arguments[0]);
+                        case 'url':
+                                return $this->getUrl($arguments[0]);
                 }
         }
 
@@ -302,10 +321,21 @@ class Config
                 if (!isset($config['sidebar'])) {
                         $config['sidebar'] = true;      // enabled by default
                 }
-                foreach (array('topmenu', 'publish', 'headers', 'content') as $key) {
+                foreach (array('topmenu', 'publish', 'headers', 'content', 'session', 'debug') as $key) {
                         if (!isset($config[$key])) {
                                 $config[$key] = false;
                         }
+                }
+
+                if (!isset($config['tools'])) {
+                        $config['tools'] = array(
+                                'auth'      => false,
+                                'search'    => false,
+                                'translate' => false
+                        );
+                }
+                if ($config['auth']) {
+                        $config['session'] = true;      // requires session support
                 }
 
                 if (!isset($config['footer'])) {
@@ -324,10 +354,6 @@ class Config
                         if (!file_exists($config['footer'])) {
                                 $config['footer'] = false;
                         }
-                }
-
-                if (isset($config['debug']) && $config['debug'] == true) {
-                        error_log(print_r($config, true));
                 }
 
                 self::$_cached = $config;
@@ -418,6 +444,26 @@ class Config
         public function getData()
         {
                 return $this->_config;
+        }
+
+        /**
+         * Get target URL.
+         * 
+         * @param string $dest The target URL (relative, absolute or extern).
+         * @return string
+         * @throws \Exception
+         */
+        public function getUrl($dest)
+        {
+                if (!($comp = parse_url($dest))) {
+                        throw new \Exception(_("Invalid URL $dest for redirect"));
+                } elseif (isset($comp['scheme'])) {
+                        return sprintf("%s", $dest);
+                } elseif ($comp['path'][0] == '/') {
+                        return sprintf("%s", $dest);
+                } else {
+                        return sprintf("%s/%s", $this->location, $dest);
+                }
         }
 
 }

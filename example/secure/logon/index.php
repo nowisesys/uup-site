@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2017 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,25 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page;
+require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
 
-/**
- * Start page for this site.
- *
- * @author Anders Lövgren (QNET/BMC CompDept)
- * @package UUP
- * @subpackage Site
- */
-abstract class WelcomePage extends StandardPage
+use UUP\Site\Page\Web\Security\LogonPage;
+
+class IndexPage extends LogonPage
 {
 
-        /**
-         * Constructor.
-         * @param string $title The page title.
-         * @param string $config The defaults.site configuration file.
-         */
-        public function __construct($title, $config = null)
+        public function printContent()
         {
-                parent::__construct($title, "welcome", $config);
+                parent::printContent();
+
+                if (!$this->_ajax) {
+                        echo "<p><pre><code>\n";
+                        print_r($this->session);
+                        echo "</code></pre></p>\n";
+                }
         }
 
 }
+
+$page = new IndexPage();
+$page->render();
