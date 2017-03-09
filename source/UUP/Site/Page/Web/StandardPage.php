@@ -128,6 +128,20 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
         final public function render()
         {
                 if (isset($this->_template)) {
+                        // 
+                        // Inject commonly used variables:
+                        // 
+                        $config = $this->config;
+                        $session = $this->session;
+
+                        // 
+                        // Set site name for translation:
+                        // 
+                        $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
+                        
+                        // 
+                        // Load template for UI rendering:
+                        // 
                         include(sprintf("%s/%s/%s.ui", $this->config->template, $this->config->theme, $this->_template));
                 } else {
                         $this->printContent();

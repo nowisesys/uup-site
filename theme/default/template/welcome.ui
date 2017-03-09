@@ -1,7 +1,6 @@
 <?php
 include_once('format.inc');
 $output = new format($this);
-$config = $this->config;
 ?>
 <!DOCTYPE html>
 <!--
