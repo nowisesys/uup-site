@@ -1,0 +1,36 @@
+<?php
+/*
+ * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+?>
+
+<?php if (!$this->_ajax) : ?>
+        <p>
+            <span><i class="fa fa-check" style="color: #33cc33; min-width: 20px"></i></span> 
+            <?= ("Your logon session has been destroyed.") ?>
+        </p>
+<?php endif; ?>
+
+<?php if ($this->_auth) : ?>
+        <p>
+            <span><i class="fa fa-info" style="color: #3366ff; min-width: 20px"></i></span> <?= sprintf(_("You are still logged on to %s:"), $this->_desc) ?>
+        </p>
+        <p>
+            <span style="margin: 20px">
+                <input type="button" class="w3-btn w3-blue" onclick="window.location = '?auth=<?= $this->_name ?>'" value="<?= sprintf(_("Logout from %s"), $this->_auth->name) ?>">
+            </span>
+        </p>
+<?php endif; ?>

@@ -18,12 +18,11 @@
 ?>
 
 <p>
-    <?= _("Choose logon method by clicking one of the buttons:") ?>
+    <span><i class="fa fa-check" style="color: #33cc33"></i></span> 
+    <?= sprintf(_("Logged on using %s"), $this->_desc) ?>
 </p>
-
-<?php foreach ($this->auth->authenticators(true) as $name => $auth) : ?>
-        <div style="padding: 10px">
-            <input type="button" class="w3-btn w3-green" value="<?= $auth->name ?>" style="min-width: 100px" onclick="window.location = '?auth=<?= $name ?>'">
-            <span style="margin-left: 20px"><?= $auth->description ?></span>
-        </div>
-<?php endforeach; ?>
+<p>
+    <span style="margin: 20px">
+        <input type="button" class="w3-btn w3-blue" onclick="window.location = '<?= $this->config->url($this->config->auth['logoff']) ?>'" value="<?= _("Logoff") ?>">
+    </span>
+</p>

@@ -69,11 +69,21 @@ class LogoffPage extends StandardPage
          * @var int 
          */
         protected $_step;
+        /**
+         * View fragment pages.
+         * @var array 
+         */
+        private $_pages = array(
+                'destroy'   => 'destroy.phtml',
+                'authent'   => 'authent.phtml',
+                'completed' => 'completed.phtml'
+        );
 
         /**
          * Constructor.
+         * @param array $pages The logon pages.
          */
-        public function __construct()
+        public function __construct($pages = null)
         {
                 parent::__construct(_("Logoff"));
 
@@ -84,26 +94,11 @@ class LogoffPage extends StandardPage
                         $this->setTemplate(null);       // Don't render in template
                 }
 
-                if ($this->session->authenticated()) {
-                        $this->_step = self::STEP_SESSION_DESTROY;
+                $this->setPages($pages);
+                $this->setState($this->_name);
+                $this->setMethod($this->_name);
 
-                        $this->_name = $this->session->auth;
-                        $this->session->destroy();
-                } elseif ($this->_name) {
-                        $this->_step = self::STEP_AUTHENT_LOGOUT;
-
-                        $this->auth->activate($this->_name);
-                        $this->auth->logout();
-                } else {
-                        $this->_step = self::STEP_LOGOUT_COMPLETED;
-                }
-
-                if ($this->_name) {
-                        $this->auth->activate($this->_name);
-
-                        $this->_auth = $this->auth->getAuthenticator();
-                        $this->_desc = $this->auth->getAuthenticator()->description;
-                }
+                $this->process();
         }
 
         public function printContent()
@@ -113,19 +108,108 @@ class LogoffPage extends StandardPage
                 }
 
                 if ($this->_step == self::STEP_SESSION_DESTROY) {
-                        if (!$this->_ajax) {
-                                printf("<p><span><i class=\"fa fa-check\" style=\"color: #33cc33; min-width: 20px\"></i></span> %s</p>\n", ("Your logon session has been destroyed."));
-                        }
-                        if ($this->_auth) {
-                                printf("<p><span><i class=\"fa fa-info\" style=\"color: #3366ff; min-width: 20px\"></i></span> %s</p>\n", sprintf(_("You are still logged on to %s:"), $this->_desc));
-                                printf("<span style=\"margin: 20px\"><input type=\"button\" class=\"w3-btn w3-blue\" onclick=\"window.location='?auth=%s'\" value=\"%s\"></span>\n", $this->_name, sprintf(_("Logout from %s"), $this->_auth->name));
-                        }
+                        include($this->_pages['destroy']);
                 } elseif ($this->_step == self::STEP_AUTHENT_LOGOUT) {
-                        printf("<p><span><i class=\"fa fa-check\" style=\"color: #33cc33; min-width: 20px\"></i></span> %s</p>\n", sprintf(_("You have been logged out from %s."), $this->_desc));
+                        include($this->_pages['authent']);
                 } elseif ($this->_step == self::STEP_LOGOUT_COMPLETED) {
-                        error_log($this->_ajax);
-                        printf("<p><span><i class=\"fa fa-check\" style=\"color: #33cc33; min-width: 20px\"></i></span> %s</p>\n", _("You are currently not logged on."));
-                        printf("<span style=\"margin: 20px\"><input type=\"button\" class=\"w3-btn w3-blue\" onclick=\"window.location='%s'\" value=\"%s\"></span>\n", $this->config->url($this->config->auth['logon']), _("Logon"));
+                        include($this->_pages['completed']);
+                }
+        }
+
+        /**
+         * Set support page.
+         * @param string $type The identifier (i.e. select).
+         * @param string $page The page name
+         */
+        protected function setPage($type, $page)
+        {
+                $this->_pages[$type] = $page;
+        }
+
+        /**
+         * Set support pages.
+         * @param array $pages The support pages.
+         */
+        protected function setPages($pages)
+        {
+                if (isset($pages)) {
+                        $this->_pages = $pages;
+                }
+        }
+
+        /**
+         * Set logout method.
+         * @param string $name The authenticator name.
+         */
+        private function setMethod($name)
+        {
+                if (is_null($name)) {
+                        $this->_name = $this->session->auth;
+                } else {
+                        $this->_name = $name;
+                }
+        }
+
+        /**
+         * Set current logout step.
+         * @param string $name The authenticator name.
+         */
+        private function setState($name)
+        {
+                $this->_step = $this->getState($name);
+        }
+
+        /**
+         * Get current logout step.
+         * @param string $name The authenticator name.
+         * @return int
+         */
+        private function getState($name)
+        {
+                if ($this->session->authenticated()) {
+                        return self::STEP_SESSION_DESTROY;
+                } elseif ($name) {
+                        return self::STEP_AUTHENT_LOGOUT;
+                } else {
+                        return self::STEP_LOGOUT_COMPLETED;
+                }
+        }
+
+        /**
+         * Trigger logout.
+         */
+        private function logout()
+        {
+                $this->auth->activate($this->_name);
+                $this->auth->logout();
+        }
+
+        /**
+         * Destroy current session.
+         */
+        private function destroy()
+        {
+                $this->_name = $this->session->auth;
+                $this->session->destroy();
+        }
+
+        /**
+         * Process current request.
+         */
+        private function process()
+        {
+                if ($this->_step == self::STEP_AUTHENT_LOGOUT) {
+                        $this->logout();
+                }
+                if ($this->_step == self::STEP_SESSION_DESTROY) {
+                        $this->destroy();
+                }
+                if ($this->_name) {
+                        $this->auth->activate($this->_name);
+                }
+                if (($auth = $this->auth->getAuthenticator())) {
+                        $this->_auth = $auth;
+                        $this->_desc = $auth->description;
                 }
         }
 

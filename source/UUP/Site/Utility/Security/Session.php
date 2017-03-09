@@ -86,7 +86,6 @@ class Session
          */
         public function __construct($start = false)
         {
-                error_log(__METHOD__);
                 if ($start) {
                         $this->setup($start);
                 }
@@ -94,7 +93,6 @@ class Session
 
         public function __destruct()
         {
-                error_log(__METHOD__);
                 if ($this->_dirty) {
                         $this->write();
                 }
@@ -102,7 +100,6 @@ class Session
 
         public function __get($name)
         {
-                error_log(__METHOD__);
                 switch ($name) {
                         case 'return':
                                 return $this->get('return');
@@ -123,7 +120,6 @@ class Session
 
         public function __set($name, $value)
         {
-                error_log(__METHOD__);
                 if ($name == 'return') {
                         $this->set($name, $value);
                 }
@@ -135,7 +131,6 @@ class Session
          */
         public function authenticated()
         {
-                error_log(__METHOD__);
                 return isset($this->_data['user']);
         }
 
@@ -145,7 +140,6 @@ class Session
          */
         public function verify()
         {
-                error_log(__METHOD__);
                 if (!$this->auth) {
                         throw new \Exception(_("Logon method is unset"));
                 }
@@ -169,7 +163,6 @@ class Session
          */
         public function expiring()
         {
-                error_log(__METHOD__);
                 return $this->refresh < time() && $this->expires > time();
         }
 
@@ -179,7 +172,6 @@ class Session
          */
         public function expired()
         {
-                error_log(__METHOD__);
                 return $this->expires != 0 && $this->expires < time();
         }
 
@@ -188,7 +180,6 @@ class Session
          */
         public function refresh()
         {
-                error_log(__METHOD__);
                 $this->set('refresh', time() + self::REFRESH);
                 $this->set('expires', time() + self::EXPIRES);
 
@@ -202,7 +193,6 @@ class Session
          */
         public function create($auth, $user)
         {
-                error_log(__METHOD__);
                 $this->set('auth', $auth);
                 $this->set('user', $user);
                 $this->set('peer', filter_input(INPUT_SERVER, 'REMOTE_ADDR'));
@@ -217,7 +207,6 @@ class Session
          */
         public function destroy()
         {
-                error_log(__METHOD__);
                 session_destroy();
                 session_regenerate_id(true);
         }
@@ -229,7 +218,6 @@ class Session
          */
         private function set($key, $val)
         {
-                error_log(__METHOD__);
                 $this->_data[$key] = $val;
                 $this->_dirty = true;
         }
@@ -243,7 +231,6 @@ class Session
          */
         private function get($key = null, $def = false)
         {
-                error_log(__METHOD__);
                 if (isset($this->_data[$key])) {
                         return $this->_data[$key];
                 } else {
@@ -257,7 +244,6 @@ class Session
          */
         public function started()
         {
-                error_log(__METHOD__);
                 return session_status() == PHP_SESSION_ACTIVE;
         }
 
@@ -267,7 +253,6 @@ class Session
          */
         public function start()
         {
-                error_log(__METHOD__);
                 if (is_string($this->_name)) {
                         session_name($this->_name);
                 }
@@ -281,7 +266,6 @@ class Session
          */
         public function close()
         {
-                error_log(__METHOD__);
                 if (session_status() == PHP_SESSION_ACTIVE) {
                         session_write_close();
                 }
@@ -294,7 +278,6 @@ class Session
          */
         private function setup($start)
         {
-                error_log(__METHOD__);
                 if (is_string($start)) {
                         $this->_name = $start;
                 }
@@ -315,7 +298,6 @@ class Session
          */
         private function read()
         {
-                error_log(__METHOD__);
                 if (isset($_SESSION[self::SESSKEY])) {
                         $this->_data = $_SESSION[self::SESSKEY];
                 }
@@ -326,7 +308,6 @@ class Session
          */
         private function write()
         {
-                error_log(__METHOD__);
                 $_SESSION[self::SESSKEY] = $this->_data;
                 session_write_close();
                 $this->_dirty = false;

@@ -70,10 +70,14 @@ class LogonPage extends StandardPage
          */
         protected $_desc;
         /**
-         *
+         * View fragment pages.
          * @var array 
          */
-        private $_pages;
+        private $_pages = array(
+                'select' => 'select.phtml',
+                'normal' => 'normal.phtml',
+                'secure' => 'secure.phtml'
+        );
 
         /**
          * Constructor.
@@ -83,44 +87,21 @@ class LogonPage extends StandardPage
         {
                 parent::__construct(_("Logon"));
 
-                $this->_name = filter_input(INPUT_GET, 'auth');
-                $this->_ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
+                $name = filter_input(INPUT_GET, 'auth');
+                $ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
 
-                if ($this->_ajax) {
+                if ($ajax) {
+                        $this->_ajax = true;
                         $this->setTemplate(null);       // Don't render in template
-                }
-
-                if (!isset($pages)) {
-                        $this->_pages = array('select' => 'select.phtml', 'normal' => 'normal.phtml');
                 } else {
-                        $this->_pages = $pages;
+                        $this->_ajax = false;
                 }
 
-                if ($this->session->authenticated()) {
-                        $this->_step = self::STEP_ALREADY_LOGGED_ON;
-                        $this->_name = $this->session->auth;
-                } elseif ($this->_name) {
-                        $this->_step = self::STEP_METHOD_SELECTED;
+                $this->setPages($pages);
+                $this->setState($name);
+                $this->setMethod($name);
 
-                        $this->auth->activate($this->_name);
-                        $this->auth->login();
-
-                        if ($this->session->return) {
-                                $this->redirect($this->session->return);
-                                $this->session->return = false;
-                        } elseif ($this->config->auth['start']) {
-                                $this->redirect($this->config->auth['start']);
-                        }
-                } else {
-                        $this->_step = self::STEP_SELECT_METHOD;
-                }
-
-                if ($this->_name) {
-                        $this->auth->activate($this->_name);
-
-                        $this->_auth = $this->auth->getAuthenticator();
-                        $this->_desc = $this->auth->getAuthenticator()->description;
-                }
+                $this->process();
         }
 
         public function printContent()
@@ -130,17 +111,112 @@ class LogonPage extends StandardPage
                 }
 
                 if ($this->_step == self::STEP_ALREADY_LOGGED_ON) {
-                        printf("<p><span><i class=\"fa fa-check\" style=\"color: #33cc33\"></i></span> %s</p>\n", sprintf(_("Logged on using %s"), $this->_desc));
-                        printf("<span style=\"margin: 20px\"><input type=\"button\" class=\"w3-btn w3-blue\" onclick=\"window.location='%s'\" value=\"%s\"></span>\n", $this->config->url($this->config->auth['logoff']), _("Logoff"));
-                } elseif ($this->_step == self::STEP_METHOD_SELECTED) {
-                        
+                        include($this->_pages['secure']);
                 } elseif ($this->_step == self::STEP_SELECT_METHOD) {
                         if ($this->_ajax) {
                                 include($this->_pages['select']);
                         } else {
-                                printf("<p>%s</p>\n", _("Choose logon method by clicking one of the buttons:"));
                                 include($this->_pages['normal']);
                         }
+                }
+        }
+
+        /**
+         * Set support page.
+         * @param string $type The identifier (i.e. select).
+         * @param string $page The page name
+         */
+        protected function setPage($type, $page)
+        {
+                $this->_pages[$type] = $page;
+        }
+
+        /**
+         * Set support pages.
+         * @param array $pages The support pages.
+         */
+        protected function setPages($pages)
+        {
+                if (isset($pages)) {
+                        $this->_pages = $pages;
+                }
+        }
+
+        /**
+         * Set login method.
+         * @param string $name The authenticator name.
+         */
+        private function setMethod($name)
+        {
+                if (is_null($name)) {
+                        $this->_name = $this->session->auth;
+                } else {
+                        $this->_name = $name;
+                }
+        }
+
+        /**
+         * Set current login step.
+         * @param string $name The authenticator name.
+         */
+        private function setState($name)
+        {
+                $this->_step = $this->getState($name);
+        }
+
+        /**
+         * Get current login step.
+         * @param string $name The authenticator name.
+         * @return int
+         */
+        private function getState($name)
+        {
+                if ($this->session->authenticated()) {
+                        return self::STEP_ALREADY_LOGGED_ON;
+                } elseif ($name) {
+                        return self::STEP_METHOD_SELECTED;
+                } else {
+                        return self::STEP_SELECT_METHOD;
+                }
+        }
+
+        /**
+         * Trigger login.
+         * 
+         * Calling this method will terminate the script and redirect browser to
+         * current return URL saved in session or the configured start page.
+         */
+        private function login()
+        {
+                if (isset($this->_name)) {
+                        $this->auth->activate($this->_name);
+                        $this->auth->login();
+                }
+
+                $this->validate();
+
+                if ($this->session->return) {
+                        $this->redirect($this->session->return);
+                        $this->session->return = false;
+                } elseif ($this->config->auth['start']) {
+                        $this->redirect($this->config->auth['start']);
+                }
+        }
+
+        /**
+         * Process current request.
+         */
+        private function process()
+        {
+                if ($this->_step == self::STEP_METHOD_SELECTED) {
+                        $this->login();
+                }
+                if (isset($this->_name)) {
+                        $this->auth->activate($this->_name);
+                }
+                if (($auth = $this->auth->getAuthenticator())) {
+                        $this->_auth = $auth;
+                        $this->_desc = $auth->description;
                 }
         }
 
