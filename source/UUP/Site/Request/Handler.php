@@ -68,12 +68,11 @@ abstract class Handler
         public function __destruct()
         {
                 if ($this->config->debug) {
-//                        if (isset($this->config)) {
-//                                error_log(print_r($this->config->data, true));
-//                        }
-                        if (isset($this->session)) {
-                                error_log(print_r($this->session->data, true));
-                        }
+                        error_log(print_r(array(
+                                'config'  => $this->config->data,
+                                'session' => $this->session->data
+                                ), true)
+                        );
                 }
         }
 
