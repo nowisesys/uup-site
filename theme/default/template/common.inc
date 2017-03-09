@@ -98,7 +98,11 @@
             </li>
             <li class="w3-right">
                 <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Open authentication box') ?>" onclick="toggle_logon_open(this)" href="javascript:void(0)">
-                    <i class="fa fa-unlock-alt fa-lg" id="logon-status"></i>
+                    <?php if ($session->authenticated()) : ?>
+                            <i class="fa fa-lock fa-lg" id="logon-status"></i>
+                    <?php else: ?>
+                            <i class="fa fa-unlock-alt fa-lg" id="logon-status"></i>
+                    <?php endif; ?>
                 </a>
             </li>
             <li class="w3-right" id="search-button">
@@ -262,8 +266,6 @@
         // 
         // Authenticate and logon status.
         // 
-        var logon_exists = <?= $this->session->authenticated() ? 1 : 0 ?>;
-
         function toggle_logon_open(obj) {
             var x = document.getElementById("logon-box");
             toggle_panel_display(x);
@@ -315,11 +317,6 @@
                 ts.style.display = "none";
                 sm.style.top = "auto";          // restore default pos
             }
-        });
-
-        window.addEventListener('load', function () {
-                logon_exists = 1;
-            set_logon_status();
         });
 
 </script>
