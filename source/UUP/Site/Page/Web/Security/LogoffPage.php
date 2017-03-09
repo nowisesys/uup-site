@@ -87,16 +87,19 @@ class LogoffPage extends StandardPage
         {
                 parent::__construct(_("Logoff"));
 
-                $this->_name = filter_input(INPUT_GET, 'auth');
-                $this->_ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
+                $name = filter_input(INPUT_GET, 'auth');
+                $ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
 
-                if ($this->_ajax) {
+                if ($ajax) {
                         $this->setTemplate(null);       // Don't render in template
+                        $this->_ajax = true;
+                } else {
+                        $this->_ajax = false;
                 }
 
                 $this->setPages($pages);
-                $this->setState($this->_name);
-                $this->setMethod($this->_name);
+                $this->setState($name);
+                $this->setMethod($name);
 
                 $this->process();
         }
@@ -104,9 +107,14 @@ class LogoffPage extends StandardPage
         public function printContent()
         {
                 if (!$this->_ajax) {
-                        printf("<h1>%s</h1>\n", _("Logoff Page"));
+                        printf("<h1>%s<i class=\"fa fa-shield\" style=\"color: darkorchid; margin-left: 30px\"></i></h1>\n", _("Logoff Page"));
                 }
 
+                $auth = $this->_auth;
+                $ajax = $this->_ajax;
+                $desc = $this->_desc;
+                $name = $this->_name;
+                
                 if ($this->_step == self::STEP_SESSION_DESTROY) {
                         include($this->_pages['destroy']);
                 } elseif ($this->_step == self::STEP_AUTHENT_LOGOUT) {

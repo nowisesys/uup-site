@@ -70,13 +70,19 @@ class LogonPage extends StandardPage
          */
         protected $_desc;
         /**
+         * Show authenticator form.
+         * @var string|boolean 
+         */
+        protected $_form = false;
+        /**
          * View fragment pages.
          * @var array 
          */
         private $_pages = array(
                 'select' => 'select.phtml',
                 'normal' => 'normal.phtml',
-                'secure' => 'secure.phtml'
+                'secure' => 'secure.phtml',
+                'form'   => 'form.phtml'
         );
 
         /**
@@ -87,6 +93,7 @@ class LogonPage extends StandardPage
         {
                 parent::__construct(_("Logon"));
 
+                $form = filter_input(INPUT_GET, 'form');
                 $name = filter_input(INPUT_GET, 'auth');
                 $ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
 
@@ -95,6 +102,9 @@ class LogonPage extends StandardPage
                         $this->setTemplate(null);       // Don't render in template
                 } else {
                         $this->_ajax = false;
+                }
+                if ($form) {
+                        $this->_form = $form;
                 }
 
                 $this->setPages($pages);
@@ -107,14 +117,25 @@ class LogonPage extends StandardPage
         public function printContent()
         {
                 if (!$this->_ajax) {
-                        printf("<h1>%s</h1>\n", _("Logon Page"));
+                        printf("<h1>%s<i class=\"fa fa-shield\" style=\"color: darkorchid; margin-left: 30px\"></i></h1>\n", _("Logon Page"));
                 }
+
+                // 
+                // Inject commonly used variables:
+                // 
+                $auth = $this->_auth;
+                $ajax = $this->_ajax;
+                $desc = $this->_desc;
+                $name = $this->_name;
+                $form = $this->_form;
 
                 if ($this->_step == self::STEP_ALREADY_LOGGED_ON) {
                         include($this->_pages['secure']);
                 } elseif ($this->_step == self::STEP_SELECT_METHOD) {
                         if ($this->_ajax) {
                                 include($this->_pages['select']);
+                        } elseif ($this->_form) {
+                                include($this->_pages['form']);
                         } else {
                                 include($this->_pages['normal']);
                         }
@@ -211,8 +232,11 @@ class LogonPage extends StandardPage
                 if ($this->_step == self::STEP_METHOD_SELECTED) {
                         $this->login();
                 }
-                if (isset($this->_name)) {
+                if ($this->_name) {
                         $this->auth->activate($this->_name);
+                }
+                if ($this->_form) {
+                        $this->auth->activate($this->_form);
                 }
                 if (($auth = $this->auth->getAuthenticator())) {
                         $this->_auth = $auth;
