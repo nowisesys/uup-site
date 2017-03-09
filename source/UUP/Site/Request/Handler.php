@@ -21,6 +21,7 @@ namespace UUP\Site\Request;
 use UUP\Site\Page\Context\Headers;
 use UUP\Site\Utility\Config;
 use UUP\Site\Utility\Locale;
+use UUP\Site\Utility\Profile;
 use UUP\Site\Utility\Security\Authentication;
 use UUP\Site\Utility\Security\Session;
 
@@ -30,6 +31,7 @@ use UUP\Site\Utility\Security\Session;
  * @property-read Session $session The session object.
  * @property-read Authentication $auth The stack of authenticators.
  * @property-read Headers $headers Custom HTTP headers.
+ * @property-read Profile $profile The performance profiler.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -48,6 +50,11 @@ abstract class Handler
          * @var Locale 
          */
         public $locale;
+        /**
+         * Performance profiler.
+         * @var Profile 
+         */
+        public $profile;
 
         /**
          * Constructor.
@@ -55,6 +62,9 @@ abstract class Handler
          */
         public function __construct($config = null)
         {
+                $this->profile = new Profile();
+                $this->profile->start();
+                
                 $this->config = new Config($config);
                 $this->locale = new Locale($this->config);
 
@@ -67,10 +77,13 @@ abstract class Handler
 
         public function __destruct()
         {
+                $this->profile->stop();
+
                 if ($this->config->debug) {
                         error_log(print_r(array(
                                 'config'  => $this->config->data,
-                                'session' => $this->session->data
+                                'session' => $this->session->data,
+                                'profile' => $this->profile->data
                                 ), true)
                         );
                 }
@@ -196,7 +209,6 @@ abstract class Handler
                         return false;
                 }
                 if ($this->auth->accepted()) {
-                        error_log(print_r($this->auth, true));
                         $this->session->create(
                             $this->auth->name, $this->auth->user
                         );
