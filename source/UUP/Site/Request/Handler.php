@@ -64,7 +64,7 @@ abstract class Handler
         {
                 $this->profile = new Profile();
                 $this->profile->start();
-                
+
                 $this->config = new Config($config);
                 $this->locale = new Locale($this->config);
 
@@ -186,36 +186,43 @@ abstract class Handler
          * @return boolean
          */
         protected function validate()
-        {
-                if (!$this->config->session) {
-                        throw new \Exception(_("Session handling is not enabled"));
-                }
-                if ($this->session->started() == false) {
-                        $this->session->start();
-                }
-                if ($this->session->authenticated()) {
-                        $this->session->verify();
-                        return true;
-                }
-                if ($this->session->expiring()) {
-                        $this->session->refresh();
-                        return true;
-                }
-                if ($this->session->expired()) {
-                        $this->session->destroy();
-                }
-                if (!$this->config->auth['sso']) {
-                        $this->session->return = filter_input(INPUT_SERVER, 'REQUEST_URI');
-                        return false;
-                }
-                if ($this->auth->accepted()) {
-                        $this->session->create(
-                            $this->auth->name, $this->auth->user
-                        );
-                        return true;
-                } else {
-                        $this->session->return = filter_input(INPUT_SERVER, 'REQUEST_URI');
-                        return false;
+        {                
+                try {
+                        $this->profile->push('validate');
+                        $this->profile->start();
+
+                        if (!$this->config->session) {
+                                throw new \Exception(_("Session handling is not enabled"));
+                        }
+                        if ($this->session->started() == false) {
+                                $this->session->start();
+                        }
+                        if ($this->session->authenticated()) {
+                                $this->session->verify();
+                                return true;
+                        }
+                        if ($this->session->expiring()) {
+                                $this->session->refresh();
+                                return true;
+                        }
+                        if ($this->session->expired()) {
+                                $this->session->destroy();
+                        }
+                        if (!$this->config->auth['sso']) {
+                                $this->session->return = filter_input(INPUT_SERVER, 'REQUEST_URI');
+                                return false;
+                        }
+                        if ($this->auth->accepted()) {
+                                $this->session->create(
+                                    $this->auth->name, $this->auth->user
+                                );
+                                return true;
+                        } else {
+                                $this->session->return = filter_input(INPUT_SERVER, 'REQUEST_URI');
+                                return false;
+                        }
+                } finally {
+                        $this->profile->stop();
                 }
         }
 
