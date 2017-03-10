@@ -45,4 +45,9 @@ abstract class SecurePage extends StandardPage
                 }
         }
 
+        public static function printTitle($header)
+        {
+                printf("<h1>$header<i class=\"fa fa-shield\" style=\"color: #e6e6ff; float: right; margin-top: 10px\"></i></h1>\n");
+        }
+
 }

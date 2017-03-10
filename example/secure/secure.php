@@ -30,7 +30,8 @@ class SecurePage extends ProtectedPage
 
         public function printContent()
         {
-                echo "<h1>Secure Page</h1>\n";
+                parent::printTitle('Secure Page');
+                
                 echo "<p>This page requires user authentication for access.</p>\n";
 
                 echo "<p><pre><code>\n";

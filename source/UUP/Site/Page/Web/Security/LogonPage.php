@@ -117,7 +117,7 @@ class LogonPage extends StandardPage
         public function printContent()
         {
                 if (!$this->_ajax) {
-                        printf("<h1>%s<i class=\"fa fa-shield\" style=\"color: darkorchid; margin-left: 30px\"></i></h1>\n", _("Logon Page"));
+                        SecurePage::printTitle(_("Logon Page"));
                 }
 
                 // 

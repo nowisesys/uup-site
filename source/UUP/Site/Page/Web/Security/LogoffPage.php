@@ -107,7 +107,7 @@ class LogoffPage extends StandardPage
         public function printContent()
         {
                 if (!$this->_ajax) {
-                        printf("<h1>%s<i class=\"fa fa-shield\" style=\"color: darkorchid; margin-left: 30px\"></i></h1>\n", _("Logoff Page"));
+                        SecurePage::printTitle(_("Logoff Page"));
                 }
 
                 $auth = $this->_auth;
