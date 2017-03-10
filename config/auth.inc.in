@@ -28,9 +28,31 @@ use UUP\Authentication\Validator\LdapBindValidator;
 use UUP\Authentication\Validator\PamValidator;
 
 // 
+// Redirect behavior for request authenticators.
+// 
+abstract class FormAuthenticator extends RequestAuthenticator
+{
+
+        public function __construct($validator, $options)
+        {
+                $options['return'] = false;
+                parent::__construct($validator, $options);
+        }
+
+        public function login()
+        {
+                if (!parent::accepted()) {
+                        parent::login();
+                        exit(0);
+                }
+        }
+
+}
+
+// 
 // Authenticate against LDAP server.
 // 
-class LdapAuthenticator extends RequestAuthenticator
+class LdapAuthenticator extends FormAuthenticator
 {
 
         public function __construct($host, $port = 636)
@@ -38,7 +60,7 @@ class LdapAuthenticator extends RequestAuthenticator
                 parent::__construct(
                     new LdapBindValidator($host, $port), array(
                         'name'  => 'ldap',
-                        'login' => '?auth=ldap',
+                        'login' => '?form=ldap',
                         'user'  => 'user',
                         'pass'  => 'pass'
                     )
@@ -50,7 +72,7 @@ class LdapAuthenticator extends RequestAuthenticator
 // 
 // Authenticate against local PAM-stack (UNIX only).
 // 
-class SystemAuthenticator extends RequestAuthenticator
+class SystemAuthenticator extends FormAuthenticator
 {
 
         public function __construct()
@@ -58,9 +80,10 @@ class SystemAuthenticator extends RequestAuthenticator
                 parent::__construct(
                     new PamValidator(), array(
                         'name'  => 'pam',
-                        'login' => '?auth=pam',
+                        'login' => '?form=pam',
                         'user'  => 'user',
-                        'pass'  => 'pass')
+                        'pass'  => 'pass'
+                    )
                 );
         }
 
