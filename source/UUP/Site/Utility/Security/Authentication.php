@@ -90,7 +90,7 @@ class Authentication extends AuthenticatorStack
         public function accepted()
         {
                 // 
-                // Current authenticator must be valid:
+                // Return true if user is alredy set:
                 // 
                 if (isset($this->_user)) {
                         return true;
@@ -103,6 +103,18 @@ class Authentication extends AuthenticatorStack
                         if ($auth->control === Authenticator::REQUIRED) {
                                 if (!$auth->accepted()) {
                                         throw new AuthenticatorRequiredException($auth);
+                                }
+                        }
+                }
+
+                // 
+                // Make direct call if authenticator has been selected:
+                // 
+                if (isset($this->_name)) {
+                        if (($auth = $this->getAuthenticator())) {
+                                if ($auth->accepted()) {
+                                        $this->_user = $auth->getSubject();
+                                        return true;
                                 }
                         }
                 }
@@ -140,17 +152,15 @@ class Authentication extends AuthenticatorStack
          */
         public function login()
         {
-                parent::activate($this->_name);
-                parent::getAuthenticator()->login();
+                $this->getAuthenticator()->login();
         }
-        
+
         /**
          * Logout using active authenticator.
          */
         public function logout()
         {
-                parent::activate($this->_name);
-                parent::getAuthenticator()->logout();
+                $this->getAuthenticator()->logout();
         }
 
         /**
@@ -162,4 +172,5 @@ class Authentication extends AuthenticatorStack
                 parent::activate($this->_name);
                 return parent::getAuthenticator();
         }
+
 }
