@@ -114,7 +114,7 @@ class LogoffPage extends StandardPage
                 $ajax = $this->_ajax;
                 $desc = $this->_desc;
                 $name = $this->_name;
-                
+
                 if ($this->_step == self::STEP_SESSION_DESTROY) {
                         include($this->_pages['destroy']);
                 } elseif ($this->_step == self::STEP_AUTHENT_LOGOUT) {

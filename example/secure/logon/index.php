@@ -27,7 +27,7 @@ class IndexPage extends LogonPage
         {
                 parent::printContent();
 
-                if (!$this->_ajax) {
+                if ($this->config->debug) {
                         echo "<p><pre><code>\n";
                         print_r($this->session);
                         echo "</code></pre></p>\n";

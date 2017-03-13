@@ -19,6 +19,7 @@
 namespace UUP\Site\Page\Web\Security;
 
 use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Authenticator\RequestAuthenticator;
 use UUP\Site\Page\Web\StandardPage;
 
 /**
@@ -75,6 +76,16 @@ class LogonPage extends StandardPage
          */
         protected $_form = false;
         /**
+         * The authenticator select type.
+         * @var string 
+         */
+        protected $_type = 'normal';
+        /**
+         * Send JSON response.
+         * @var boolean 
+         */
+        protected $_json;
+        /**
          * View fragment pages.
          * @var array 
          */
@@ -95,22 +106,31 @@ class LogonPage extends StandardPage
 
                 $form = filter_input(INPUT_GET, 'form');
                 $name = filter_input(INPUT_GET, 'auth');
+                $type = filter_input(INPUT_GET, 'type');
                 $ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
+                $json = filter_input(INPUT_GET, 'json', FILTER_VALIDATE_BOOLEAN);
 
-                if ($ajax) {
-                        $this->_ajax = true;
+                if ($json) {
                         $this->setTemplate(null);       // Don't render in template
+                        $this->_json = true;
+                }
+                if ($ajax) {
+                        $this->setTemplate(null);       // Don't render in template
+                        $this->_ajax = true;
                 } else {
                         $this->_ajax = false;
                 }
                 if ($form) {
                         $this->_form = $form;
                 }
+                if ($type) {
+                        $this->_type = $type;
+                }
 
                 $this->setPages($pages);
                 $this->setState($name);
                 $this->setMethod($name);
-
+                
                 $this->process();
         }
 
@@ -132,12 +152,10 @@ class LogonPage extends StandardPage
                 if ($this->_step == self::STEP_ALREADY_LOGGED_ON) {
                         include($this->_pages['secure']);
                 } elseif ($this->_step == self::STEP_SELECT_METHOD) {
-                        if ($this->_ajax) {
-                                include($this->_pages['select']);
-                        } elseif ($this->_form) {
+                        if ($this->_form) {
                                 include($this->_pages['form']);
                         } else {
-                                include($this->_pages['normal']);
+                                include($this->_pages[$this->_type]);
                         }
                 }
         }
@@ -231,6 +249,8 @@ class LogonPage extends StandardPage
         {
                 if ($this->_step == self::STEP_METHOD_SELECTED) {
                         $this->login();
+                } elseif ($this->_json) {
+                        $this->send();
                 }
                 if ($this->_name) {
                         $this->auth->activate($this->_name);
@@ -242,6 +262,42 @@ class LogonPage extends StandardPage
                         $this->_auth = $auth;
                         $this->_desc = $auth->description;
                 }
+        }
+
+        /**
+         * Send JSON encoded list of authenticators.
+         */
+        private function send()
+        {
+                $response = array(
+                        'data' => $this->session->data,
+                        'step' => $this->_step,
+                        'auth' => array()
+                );
+
+                foreach ($this->auth->authenticators(true) as $name => $auth) {
+                        if ($auth instanceof RequestAuthenticator) {
+                                $response['auth'][$name] = array(
+                                        'type'  => 'form',
+                                        'name'  => $auth->name,
+                                        'desc'  => $auth->description,
+                                        'fname' => $auth->fname,
+                                        'fuser' => $auth->fuser,
+                                        'fpass' => $auth->fpass
+                                );
+                        } else {
+                                $response['auth'][$name] = array(
+                                        'type' => 'extern',
+                                        'name' => $auth->name,
+                                        'desc' => $auth->description,
+                                );
+                        }
+                }
+
+                header("Content-Type: application/json; charset=utf-8");
+                echo json_encode($response);
+
+                exit(0);
         }
 
 }

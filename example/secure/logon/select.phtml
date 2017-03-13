@@ -17,49 +17,65 @@
 
 ?>
 
-<div>
-    <div id="auth-login">
-        <select id="auth-select" onchange="auth_description()">
-            <?php foreach ($this->auth->authenticators(true) as $name => $auth) : ?>
-                    <option value="<?= $name ?>" desc="<?= $auth->description ?>">
-                        <?= $auth->name ?>
-                    </option>
-            <?php endforeach; ?>
-        </select>
-        <input type="button" class="w3-btn w3-green" style="min-width: 100px" onclick="auth_selected()" value="<?= _("Continue") ?>" >
-        <div id="auth-method-descr"></div>
-    </div>
-</div>
+<script id="runscript">
+        var selected_auth = false;
 
-<script>
-        function auth_description()
+        // 
+        // Show description for authenticator.
+        // 
+        function auth_description(link)
         {
-            var select = document.getElementById('auth-select');
-            var option = select.options[select.selectedIndex];
-
-            document.getElementById('auth-method-descr').innerHTML = option.attributes['desc'].value;
-        }
-
-        function auth_selected()
-        {
-            var select = document.getElementById('auth-select');
-            var option = select.options[select.selectedIndex];
-            var target = '?auth=' + option.value + '&ajax=1';
-
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    document.getElementById("auth-login").innerHTML = this.responseText;
-                }
-            };
-            xhttp.open("GET", target, true);
-            xhttp.send();
-        }
-
-        document.onreadystatechange = function () {
-            if (document.readyState === 'complete') {
-                auth_description();
+            if (!selected_auth) {
+                document.getElementById('auth-method-desc').innerHTML = link.attributes['desc'].value;
             }
         }
 
+        // 
+        // Select authenticator.
+        // 
+        function auth_selected(link)
+        {
+            if (link) {
+                document.getElementById('auth-method-name').innerHTML = link.innerHTML;
+                document.getElementById('auth-method-desc').innerHTML = link.attributes['desc'].value;
+                selected_auth = link.attributes['name'].value;
+            }
+        }
+
+        // 
+        // Continue logon using selected authenticator.
+        // 
+        function auth_continue()
+        {
+            if (!selected_auth) {
+                return false;
+            }
+
+            var logon = "<?= $this->config->url($this->config->auth['logon']) ?>"
+            window.location = logon + '?auth=' + selected_auth;
+        }
+
 </script>
+
+<div>
+    <div id="auth-login">
+        <div id="auth-method-desc" style="padding-bottom: 5px"><?= _("Select authentication method:") ?></div>
+        <div class="w3-dropdown-hover">
+            <button id="auth-method-name" class="w3-btn" style="min-width: 100px">Select</button>
+            <div id="auth-method-select" class="w3-dropdown-content w3-white w3-card-4 w3-animate-zoom">
+                <?php foreach ($this->auth->authenticators(true) as $name => $auth) : ?>
+                        <a href="#" 
+                           class="auth-method"
+                           name="<?= $name ?>"
+                           desc="<?= $auth->description ?>"
+                           onmouseover="auth_description(this)"
+                           onclick="auth_selected(this)"
+                           >
+                               <?= $auth->name ?>
+                        </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <input type="button" class="w3-btn w3-green" style="min-width: 100px" onclick="auth_continue()" value="<?= _("Continue") ?>" >
+    </div>
+</div>

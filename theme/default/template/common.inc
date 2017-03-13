@@ -121,11 +121,14 @@
 
 <!-- Logon status box -->
 <div id="logon-box" class="panel w3-row-padding w3-padding-16 w3-white" style="display: none">
-    <div class="w3-twothird w3-margin-bottom">
-        <div class="w3-input w3-border" id="logon_status_element"></div>
-    </div>
-    <div class="w3-third">
-        <input class="w3-btn w3-orange w3-large" type="button" onclick="#" value="<?= _('Authenticate') ?>">
+    <div class="w3-container w3-right-align">
+        <div class="w3-input w3-border-0" id="logon_status_element"></div>
+        <?php if ($session->authenticated()) : ?>
+                <input class="w3-btn w3-blue w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Details') ?>">
+                <input class="w3-btn w3-red w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logoff']) ?>'" value="<?= _('Logoff') ?>">
+        <?php else: ?>
+                <input class="w3-btn w3-orange w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Logon') ?>">
+        <?php endif; ?>
     </div>
 </div>
 
@@ -182,7 +185,7 @@
             x.className += " w3-show";
         }
 
-        function toggle_panel_display(x) {
+        function toggle_panel_display(x, func) {
             var open = (x.style.display === 'none');
 
             if (x.className.indexOf("w3-right")) {
@@ -203,6 +206,10 @@
                 open_panel(x);
             } else {
                 close_panels();
+            }
+
+            if (open && func !== undefined) {
+                func(x);
             }
         }
 
@@ -268,17 +275,37 @@
         // 
         function toggle_logon_open(obj) {
             var x = document.getElementById("logon-box");
-            toggle_panel_display(x);
-        }
+            // 
+            // Only display panel on open:
+            // 
+            toggle_panel_display(x, function (elem) {
 
-        function set_logon_status() {
-            if (logon_exists) {
-                var x = document.getElementById("logon-status");
-                x.setAttribute("class", "fa fa-lock fa-lg");
-            } else {
-                var x = document.getElementById("logon-status");
-                x.setAttribute("class", "fa fa-unlock-alt fa-lg");
-            }
+                var target = "<?= $config->url($config->auth['logon'] . '?json=1') ?>";
+                var xhr = new XMLHttpRequest();
+
+                xhr.onreadystatechange = function (x) {
+                    if (this.readyState === 4 && this.status === 200) {
+                        var json = JSON.parse(this.responseText);
+                        var stat = document.getElementById('logon_status_element');
+                        var text = "";
+                        
+                        switch (json.step) {
+                            case 1:
+                                text = 'You are not logged on';
+                                break;
+                            case 3:
+                                text = 'Logged on as <b>' + json.data.user + '</b> using ' + json.auth[json.data.auth].desc;
+                                break;
+                                if (json.step === 3) {
+                                }
+                        }
+                        stat.innerHTML = text;
+                    }
+                };
+
+                xhr.open("GET", target, true);
+                xhr.send();
+            });
         }
 
         // 
@@ -305,7 +332,6 @@
             var tt = document.getElementById("topbar-tools");
             var ts = document.getElementById("topbar-sitehome");
             var sm = document.getElementById("sidenav-menu");
-
             if (scrolling) {
                 tm.className += " w3-top";
                 tt.style.display = "none";
@@ -315,10 +341,8 @@
                 tm.className = tm.className.replace(" w3-top", "");
                 tt.style.display = "";
                 ts.style.display = "none";
-                sm.style.top = "auto";          // restore default pos
+                sm.style.top = "auto"; // restore default pos
             }
-        });
-
-</script>
+        });</script>
 
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>

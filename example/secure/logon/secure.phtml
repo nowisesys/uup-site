@@ -26,3 +26,13 @@
         <input type="button" class="w3-btn w3-blue" onclick="window.location = '<?= $this->config->url($this->config->auth['logoff']) ?>'" value="<?= _("Logoff") ?>">
     </span>
 </p>
+
+<span><i class="fa fa-info-circle" style="color: #3366ff"></i></span>
+<?= _("Session details:") ?>
+<div style="margin: 20px">
+    <?= sprintf(_("Logged on as %s from %s (%s)"), $this->session->user, gethostbyaddr($this->session->peer), $this->session->peer) ?>
+    <br>
+    <?= sprintf(_("Expires %s"), strftime("%x %X", $this->session->expires)) ?>
+    <br>
+    <?= sprintf(_("Renew at %s"), strftime("%x %X", $this->session->refresh)) ?>
+</div>    
