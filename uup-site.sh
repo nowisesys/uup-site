@@ -41,6 +41,15 @@ function setup_themes()
     fi
 }
 
+function setup_login()
+{
+    for dir in logon logoff; do
+        if ! [ -e public/$dir ]; then
+            cp -a $srcdir/example/secure/$dir public/$dir
+        fi
+    done
+}
+
 function setup_dispatcher()
 {
     srcdir="$1"
@@ -58,6 +67,7 @@ function setup_package()
     echo "Setup in package mode"
     setup_config vendor/bmc/uup-site
     setup_themes
+    setup_login
     setup_dispatcher vendor/bmc/uup-site
 }
 
@@ -66,6 +76,7 @@ function setup_standalone()
     echo "Setup in standalone mode"
     setup_config .
     setup_themes
+    setup_login
     setup_dispatcher .
 }
 
