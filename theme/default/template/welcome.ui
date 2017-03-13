@@ -28,11 +28,19 @@ $output = new format($this);
                 background-size: cover;
                 background-position: 50%;
             }
+            .panel {
+                background: rgba(0,0,0,0.2); 
+                backdrop-filter: blur(2px);    
+            }
+            #sidenav-menu {
+                background: rgba(0,0,0,0.6);
+                color: white;
+            }
         </style>
 
         <!-- Side bar navigation -->
         <?php include('common.inc') ?>
-        <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-white w3-card-2" style="display: none; z-index: 5">
+        <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-card-2" style="display: none; z-index: 5;">
             <?php $output->navmenu() ?>
             <?php $output->sidebar() ?>
         </nav>
