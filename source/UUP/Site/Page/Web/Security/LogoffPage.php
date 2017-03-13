@@ -19,6 +19,7 @@
 namespace UUP\Site\Page\Web\Security;
 
 use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Authenticator\RequestAuthenticator;
 use UUP\Site\Page\Web\StandardPage;
 
 /**
@@ -49,11 +50,6 @@ class LogoffPage extends StandardPage
          * @var string 
          */
         protected $_name;
-        /**
-         * Called as AJAX request?
-         * @var boolean 
-         */
-        protected $_ajax;
         /**
          * The currently used authenticator.
          * @var Authenticator
@@ -88,14 +84,6 @@ class LogoffPage extends StandardPage
                 parent::__construct(_("Logoff"));
 
                 $name = filter_input(INPUT_GET, 'auth');
-                $ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
-
-                if ($ajax) {
-                        $this->setTemplate(null);       // Don't render in template
-                        $this->_ajax = true;
-                } else {
-                        $this->_ajax = false;
-                }
 
                 $this->setPages($pages);
                 $this->setState($name);
@@ -106,12 +94,9 @@ class LogoffPage extends StandardPage
 
         public function printContent()
         {
-                if (!$this->_ajax) {
-                        SecurePage::printTitle(_("Logoff Page"));
-                }
+                SecurePage::printTitle(_("Logoff Page"));
 
                 $auth = $this->_auth;
-                $ajax = $this->_ajax;
                 $desc = $this->_desc;
                 $name = $this->_name;
 
@@ -218,6 +203,9 @@ class LogoffPage extends StandardPage
                 if (($auth = $this->auth->getAuthenticator())) {
                         $this->_auth = $auth;
                         $this->_desc = $auth->description;
+                }
+                if ($this->_auth instanceof RequestAuthenticator) {
+                        $this->_auth = null;
                 }
         }
 

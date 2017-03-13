@@ -56,11 +56,6 @@ class LogonPage extends StandardPage
          */
         protected $_auth;
         /**
-         * Called as AJAX request?
-         * @var boolean 
-         */
-        protected $_ajax;
-        /**
          * The current step.
          * @var int 
          */
@@ -107,18 +102,11 @@ class LogonPage extends StandardPage
                 $form = filter_input(INPUT_GET, 'form');
                 $name = filter_input(INPUT_GET, 'auth');
                 $type = filter_input(INPUT_GET, 'type');
-                $ajax = filter_input(INPUT_GET, 'ajax', FILTER_VALIDATE_BOOLEAN);
                 $json = filter_input(INPUT_GET, 'json', FILTER_VALIDATE_BOOLEAN);
 
                 if ($json) {
                         $this->setTemplate(null);       // Don't render in template
                         $this->_json = true;
-                }
-                if ($ajax) {
-                        $this->setTemplate(null);       // Don't render in template
-                        $this->_ajax = true;
-                } else {
-                        $this->_ajax = false;
                 }
                 if ($form) {
                         $this->_form = $form;
@@ -130,21 +118,18 @@ class LogonPage extends StandardPage
                 $this->setPages($pages);
                 $this->setState($name);
                 $this->setMethod($name);
-                
+
                 $this->process();
         }
 
         public function printContent()
         {
-                if (!$this->_ajax) {
-                        SecurePage::printTitle(_("Logon Page"));
-                }
+                SecurePage::printTitle(_("Logon Page"));
 
                 // 
                 // Inject commonly used variables:
                 // 
                 $auth = $this->_auth;
-                $ajax = $this->_ajax;
                 $desc = $this->_desc;
                 $name = $this->_name;
                 $form = $this->_form;

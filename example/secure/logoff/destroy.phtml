@@ -17,10 +17,8 @@
 
 ?>
 
-<?php if (!$ajax) : ?>
-        <span><i class="fa fa-check" style="color: #33cc33; min-width: 20px"></i></span> 
-        <?= ("Your logon session has been destroyed.") ?>
-<?php endif; ?>
+<span><i class="fa fa-check" style="color: #33cc33; min-width: 20px"></i></span> 
+<?= ("Your logon session has been destroyed.") ?>
 
 <?php if ($auth) : ?>
         <br>
@@ -28,6 +26,12 @@
         <p>
             <span style="margin: 20px">
                 <input type="button" class="w3-btn w3-blue" onclick="window.location = '?auth=<?= $name ?>'" value="<?= sprintf(_("Logout from %s"), $auth->name) ?>">
+            </span>
+        </p>
+<?php else: ?>
+        <p>
+            <span style="margin: 20px">
+                <input type="button" class="w3-btn w3-blue" onclick="window.location = '<?= $this->config->url($this->config->auth['logon']) ?>'" value="<?= _("Logon") ?>">
             </span>
         </p>
 <?php endif; ?>
