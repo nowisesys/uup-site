@@ -96,57 +96,69 @@
                     <i class="fa fa-ellipsis-v fa-lg"></i>
                 </a>
             </li>
-            <li class="w3-right">
-                <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Open authentication box') ?>" onclick="toggle_logon_open(this)" href="javascript:void(0)">
-                    <?php if ($session->authenticated()) : ?>
-                            <i class="fa fa-lock fa-lg" id="logon-status"></i>
-                    <?php else: ?>
-                            <i class="fa fa-unlock-alt fa-lg" id="logon-status"></i>
-                    <?php endif; ?>
-                </a>
-            </li>
-            <li class="w3-right" id="search-button">
-                <a class="w3-opennav w3-right w3-hover-white w3-padding-16 w3-large" title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
-                    <i class="fa fa-search fa-lg"></i>
-                </a>
-            </li>
-            <li class="w3-right">
-                <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
-                    <i class="fa fa-globe fa-lg"></i>
-                </a>
-            </li>
+            <?php if ($config->tools['auth']) : ?>
+                    <li class="w3-right">
+                        <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Open authentication box') ?>" onclick="toggle_logon_open(this)" href="javascript:void(0)">
+                            <?php if ($session->authenticated()) : ?>
+                                    <i class="fa fa-lock fa-lg" id="logon-status"></i>
+                            <?php else: ?>
+                                    <i class="fa fa-unlock-alt fa-lg" id="logon-status"></i>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+            <?php endif; ?>
+            <?php if ($config->tools['search']) : ?>
+                    <li class="w3-right" id="search-button">
+                        <a class="w3-opennav w3-right w3-hover-white w3-padding-16 w3-large" title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
+                            <i class="fa fa-search fa-lg"></i>
+                        </a>
+                    </li>
+            <?php endif; ?>
+            <?php if ($config->tools['translate']) : ?>
+                    <li class="w3-right">
+                        <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
+                            <i class="fa fa-globe fa-lg"></i>
+                        </a>
+                    </li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>
 
-<!-- Logon status box -->
-<div id="logon-box" class="panel w3-row-padding w3-padding-16" style="display: none;">
-    <div class="w3-container w3-right-align">
-        <div class="w3-input w3-border-0" id="logon_status_element"></div>
-        <?php if ($session->authenticated()) : ?>
-                <input class="w3-btn w3-blue w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Details') ?>">
-                <input class="w3-btn w3-red w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logoff']) ?>'" value="<?= _('Logoff') ?>">
-        <?php else: ?>
-                <input class="w3-btn w3-orange w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Logon') ?>">
-        <?php endif; ?>
-    </div>
-</div>
+<?php if ($config->tools['auth']) : ?>
+        <!-- Logon status box -->
+        <div id="logon-box" class="panel w3-row-padding w3-padding-16" style="display: none;">
+            <div class="w3-container w3-right-align">
+                <div class="w3-input w3-border-0" id="logon_status_element"></div>
+                <?php if ($session->authenticated()) : ?>
+                        <input class="w3-btn w3-blue w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Details') ?>">
+                        <input class="w3-btn w3-red w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logoff']) ?>'" value="<?= _('Logoff') ?>">
+                <?php else: ?>
+                        <input class="w3-btn w3-orange w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Logon') ?>">
+                <?php endif; ?>
+            </div>
+        </div>
+<?php endif; ?>
 
-<!-- Language selection and translation -->
-<div id="language-box" class="panel w3-row-padding w3-padding-16" style="display: none">
-    <div class="w3-container w3-right-align">
-        <div class="w3-input w3-border" id="google_translate_element"></div>
-        <input class="w3-btn w3-blue w3-large" type="button" onclick="#" value="<?= _('Google Translate') ?>">
-    </div>
-</div>
+<?php if ($config->tools['translate']) : ?>
+        <!-- Language selection and translation -->
+        <div id="language-box" class="panel w3-row-padding w3-padding-16" style="display: none">
+            <div class="w3-container w3-right-align">
+                <div class="w3-input w3-border" id="google_translate_element"></div>
+                <input class="w3-btn w3-blue w3-large" type="button" onclick="#" value="<?= _('Google Translate') ?>">
+            </div>
+        </div>
+<?php endif; ?>
 
-<!-- Content search box -->
-<div id="search-box" class="panel w3-row-padding w3-padding-16" style="display: none">
-    <div class="w3-container w3-right-align">
-        <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type search text..">
-        <input class="w3-btn w3-green w3-large search" type="button" onclick="send_search('<?= $config->site ?>')" value="<?= _('Search Site') ?>">
-    </div>
-</div>
+<?php if ($config->tools['search']) : ?>
+        <!-- Content search box -->
+        <div id="search-box" class="panel w3-row-padding w3-padding-16" style="display: none">
+            <div class="w3-container w3-right-align">
+                <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type search text..">
+                <input class="w3-btn w3-green w3-large search" type="button" onclick="send_search('<?= $config->site ?>')" value="<?= _('Search Site') ?>">
+            </div>
+        </div>
+<?php endif; ?>
 
 <!-- Navigation menu (for small devices) -->
 <div id="navbar-menu" class="panel no-print w3-container w3-center w3-white" style="display: none;">
@@ -341,4 +353,6 @@
             }
         });</script>
 
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>
+<?php if ($config->tools['translate']) : ?>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>
+<?php endif; ?>

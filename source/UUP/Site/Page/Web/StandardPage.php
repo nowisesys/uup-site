@@ -25,6 +25,7 @@ use UUP\Site\Page\Context\Menu\TopMenu;
 use UUP\Site\Page\Context\Menus;
 use UUP\Site\Page\Context\Publisher;
 use UUP\Site\Request\Handler as RequestHandler;
+use UUP\Site\Utility\Fortune;
 
 /**
  * Standard page for this site.
@@ -32,6 +33,7 @@ use UUP\Site\Request\Handler as RequestHandler;
  * @property-read Publisher $publisher Page publisher information.
  * @property-read Menus $menus Page menus.
  * @property-read Content $content Page content specification.
+ * @property-read Fortune $fortune The fortune cookie.
  * 
  * @property-read TopMenu $topmenu The top menu.
  * @property-read StandardMenu $navmenu The navigation (standard) menu.
@@ -89,6 +91,9 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                         case 'content':
                                 $this->content = $this->getContent();
                                 return $this->content;
+                        case 'fortune':
+                                $this->fortune = $this->getFortune();
+                                return $this->fortune;
                         case 'topmenu':
                                 return $this->menus->top;
                         case 'navmenu':
@@ -113,6 +118,9 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                                 break;
                         case 'content':
                                 $this->content = $value;
+                                break;
+                        case 'fortune':
+                                $this->fortune = $value;
                                 break;
                         default:
                                 parent::__set($name, $value);
@@ -210,4 +218,8 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                 return new Content($this->config->template, $this->config->content);
         }
 
+        public function getFortune()
+        {
+                return new Fortune($this->config->fortune);
+        }
 }

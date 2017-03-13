@@ -79,6 +79,10 @@ return array(
 //         */
 //        'location' => '/uup-site',
 //        /**
+//         * The fortune cookie (use string for static message).
+//         */
+//         'fortune' => true,
+//        /**
 //         * The CSS location or sub directory name.
 //         */
 //        'css' => 'css',

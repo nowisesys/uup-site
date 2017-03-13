@@ -83,6 +83,7 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
  * @property boolean|array $headers Optional HTTP headers.
  * @property boolean|array $content Optional content specification.
  * @property boolean|string $footer Optional footer file.
+ * @property boolean|string $fortune Optional fortune cookie.
  * 
  * @property int $exception The exception reporting mode.
  * 
@@ -321,7 +322,7 @@ class Config
                 if (!isset($config['sidebar'])) {
                         $config['sidebar'] = true;      // enabled by default
                 }
-                foreach (array('topmenu', 'publish', 'headers', 'content', 'session', 'debug') as $key) {
+                foreach (array('topmenu', 'publish', 'headers', 'content', 'session', 'debug', 'fortune') as $key) {
                         if (!isset($config[$key])) {
                                 $config[$key] = false;
                         }
