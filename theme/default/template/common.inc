@@ -120,7 +120,7 @@
 </div>
 
 <!-- Logon status box -->
-<div id="logon-box" class="panel w3-row-padding w3-padding-16 w3-white" style="display: none">
+<div id="logon-box" class="panel w3-row-padding w3-padding-16" style="display: none;">
     <div class="w3-container w3-right-align">
         <div class="w3-input w3-border-0" id="logon_status_element"></div>
         <?php if ($session->authenticated()) : ?>
@@ -133,27 +133,23 @@
 </div>
 
 <!-- Language selection and translation -->
-<div id="language-box" class="panel w3-row-padding w3-padding-16 w3-white" style="display: none">
-    <div class="w3-twothird w3-margin-bottom">
+<div id="language-box" class="panel w3-row-padding w3-padding-16" style="display: none">
+    <div class="w3-container w3-right-align">
         <div class="w3-input w3-border" id="google_translate_element"></div>
-    </div>
-    <div class="w3-third">
         <input class="w3-btn w3-blue w3-large" type="button" onclick="#" value="<?= _('Google Translate') ?>">
     </div>
 </div>
 
 <!-- Content search box -->
-<div id="search-box" class="panel w3-row-padding w3-padding-16 w3-white" style="display: none">
-    <div class="w3-twothird w3-margin-bottom">
+<div id="search-box" class="panel w3-row-padding w3-padding-16" style="display: none">
+    <div class="w3-container w3-right-align">
         <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type search text..">
-    </div>
-    <div class="w3-third">
         <input class="w3-btn w3-green w3-large search" type="button" onclick="send_search('<?= $config->site ?>')" value="<?= _('Search Site') ?>">
     </div>
 </div>
 
 <!-- Navigation menu (for small devices) -->
-<div id="navbar-menu" class="panel no-print w3-container w3-center w3-white" style="display: none">
+<div id="navbar-menu" class="panel no-print w3-container w3-center w3-white" style="display: none;">
     <ul class="w3-navbar w3-large w3-hide-medium w3-hide-large w3-theme w3-wide">
         <?php $output->topmenu(true) ?>            
     </ul> 
@@ -288,7 +284,7 @@
                         var json = JSON.parse(this.responseText);
                         var stat = document.getElementById('logon_status_element');
                         var text = "";
-                        
+
                         switch (json.step) {
                             case 1:
                                 text = 'You are not logged on';
