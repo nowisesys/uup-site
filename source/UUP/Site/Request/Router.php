@@ -152,13 +152,13 @@ class Router extends Handler
 
                 if (class_exists($this->_name)) {
                         $page = new $this->_name();
-                        $page->render();
+                        $this->routed($page);
                 } elseif (function_exists('print_body')) {
                         $page = new TransitionalPage($this->_page);
-                        $page->render();
+                        $this->routed($page);
                 } else {
                         $page = new StandardView($this->_name, $this->_page);
-                        $page->render();
+                        $this->routed($page);
                 }
         }
 
@@ -225,6 +225,18 @@ class Router extends Handler
         public function render()
         {
                 $this->handle();
+        }
+
+        /**
+         * Route page request to page.
+         * @param Handler $page The target request handler.
+         */
+        private function routed($page)
+        {
+                $page->params = new Params();
+                $page->params->setFile($this->_page);
+                
+                $page->render();
         }
 
 }

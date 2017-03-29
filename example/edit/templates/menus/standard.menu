@@ -1,0 +1,18 @@
+<?php
+
+// 
+// The standard menu appears normally on left hand side. Menus from parent directory 
+// gets merged in. The standard menus are available for an page in the $this->navmenu
+// member variable.
+// 
+// Author: @author@
+// Date:   @datetime@
+// 
+
+return array(
+    'head' => _('Header'),
+    'data' => array(
+        _('Page 1') => 'page1',
+        _('Page 2') => 'page2'
+    )
+);

@@ -31,7 +31,6 @@ use UUP\Site\Utility\Security\Session;
  * @property-read Session $session The session object.
  * @property-read Authentication $auth The stack of authenticators.
  * @property-read Headers $headers Custom HTTP headers.
- * @property-read Profile $profile The performance profiler.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -55,6 +54,11 @@ abstract class Handler
          * @var Profile 
          */
         public $profile;
+        /**
+         * The request parameters.
+         * @var Params 
+         */
+        public $params;
 
         /**
          * Constructor.
@@ -67,6 +71,7 @@ abstract class Handler
 
                 $this->config = new Config($config);
                 $this->locale = new Locale($this->config);
+                $this->params = new Params();
 
                 if ($this->config->session) {
                         if (!$this->session->started()) {
@@ -83,7 +88,8 @@ abstract class Handler
                         error_log(print_r(array(
                                 'config'  => $this->config->data,
                                 'session' => $this->session->data,
-                                'profile' => $this->profile->data
+                                'profile' => $this->profile->data,
+                                'params'  => $this->params->data
                                 ), true)
                         );
                 }
@@ -182,11 +188,20 @@ abstract class Handler
         }
 
         /**
+         * Content is editable.
+         * @return boolean
+         */
+        public function isEditable()
+        {
+                return false;
+        }
+
+        /**
          * Validate request is secured (authenticated).
          * @return boolean
          */
         protected function validate()
-        {                
+        {
                 try {
                         $this->profile->push('validate');
                         $this->profile->start();

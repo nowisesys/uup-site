@@ -1,0 +1,55 @@
+<?php
+/*
+ * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// 
+// Directory content listing.
+// 
+
+?>
+
+<div class="w3-container w3-margin-top">
+    <div class="w3-bar">
+        <button class="w3-bar-item w3-btn tablink w3-red" onclick="open_section(event, 'files')">Files</button>
+        <button class="w3-bar-item w3-btn tablink" onclick="open_section(event, 'menus')">Menus</button>
+        <button class="w3-bar-item w3-btn tablink" onclick="open_section(event, 'context')">Context</button>
+    </div>
+
+    <div id="files" class="w3-container section">
+    </div>
+
+    <div id="menus" class="w3-container section" style="display:none">
+    </div>
+
+    <div id="context" class="w3-container section" style="display:none">
+    </div>
+</div>
+
+<script>
+        function open_section(evt, sect) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("section");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+            }
+            document.getElementById(sect).style.display = "block";
+            evt.currentTarget.className += " w3-red";
+        }
+</script>

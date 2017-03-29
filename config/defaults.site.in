@@ -99,12 +99,27 @@ return array(
 //         */
 //        'fonts' => 'fonts',
 //        /**
-//         * The plugins to expose. Theme can choose to show them or not.
+//         * Enable session management. Use boolean (enable/disable) or string (session name).
 //         */
-//        'plugins' => array(
-//                'auth'      => true,    // Enable authentication (see auth.inc).
+//        'session' => true,
+//        /**
+//         * The authentication options. Enables session and suggests config->tools->auth.
+//         */
+//        'auth'      => array(
+//                'start'  => '/',                      // Start page after logon
+//                'logon'  => '/logon',                 // The logon page
+//                'logoff' => '/logoff',                // The logoff page
+//                'config' => __DIR__ . '/auth.inc',    // Authenticator config file
+//                'sso'    => true                      // Enable SSO login
+//        ),
+//        /**
+//         * The toolbox plugins to expose. Themes can choose whether to show them or not.
+//         */
+//        'tools' => array(
+//                'auth'      => true,    // Enable authentication box.
 //                'search'    => true,    // Enable Google search box.
-//                'translate' => true     // Enable Google translate box.
+//                'translate' => true,    // Enable Google translate box.
+//                'edit'      => true     // Enable online page/site editor.
 //        ),
 //        /**
 //         * Locale support (gettext). Comment to disable locale support.

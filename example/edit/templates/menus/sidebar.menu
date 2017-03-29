@@ -1,0 +1,20 @@
+<?php
+
+// 
+// The sidebar menu might occure on right hand side or merged with the standard menu.
+// An page can programmatically access the $this->sidebar member variable.
+// 
+// Author: @author@
+// Date:   @datetime@
+// 
+
+return array(
+    _('Sect1') => array(
+            _('Link 1') => 'link1',
+            _('Link 2') => 'link2'
+    ),
+    _('Sect2') => array(
+            _('Link 3') => 'link3',
+            _('Link 4') => 'link4'
+        )
+);

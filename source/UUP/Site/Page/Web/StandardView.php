@@ -66,4 +66,8 @@ class StandardView extends StandardPage
                 }
         }
 
+        public function isEditable()
+        {
+                return true;
+        }
 }

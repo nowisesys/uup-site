@@ -55,7 +55,7 @@
     }
     @media (min-width: 650px) {
         .panel {
-            min-width: 550px;
+            min-width: 400px;
         }
     }
     .goog-te-gadget-simple {
@@ -70,6 +70,8 @@
         max-width: 200px;
     }
 </style>
+
+
 
 <!-- Navigation bar -->
 <div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-black">
@@ -121,6 +123,13 @@
                         </a>
                     </li>
             <?php endif; ?>
+            <?php if ($config->tools['edit'] && $session->authenticated()) : ?>
+                    <li class="w3-right">
+                        <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Open page editor') ?>" onclick="toggle_edit_open('<?= $config->edit['host'] ?>')" href="javascript:void(0)">
+                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                        </a>
+                    </li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>
@@ -156,6 +165,17 @@
             <div class="w3-container w3-right-align">
                 <input class="w3-input w3-border" type="text" onchange="save_search(this)" placeholder="Type search text..">
                 <input class="w3-btn w3-green w3-large search" type="button" onclick="send_search('<?= $config->site ?>')" value="<?= _('Search Site') ?>">
+            </div>
+        </div>
+<?php endif; ?>
+
+<?php if ($config->tools['edit'] && $session->authenticated()) : ?>
+        <!-- Page edit box -->
+        <div id="edit-box" class="panel w3-row-padding w3-padding-16" style="display: none">
+            <div class="w3-container w3-right-align">
+                <div class="w3-input w3-border-0"><?= _("Edit page content in inline mode") ?></div>                
+                <input class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(this)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
+                <input class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_open(this)" value="<?= _('Open') ?>" title="<?php _("Open this page in editor") ?>">
             </div>
         </div>
 <?php endif; ?>
@@ -243,7 +263,60 @@
         }
 
         // 
-        // Translation
+        // Page and site editor.
+        // 
+        function toggle_edit_open(host) {
+            // 
+            // Redirect to editing host if required:
+            // 
+            if (window.location.host !== host) {
+                window.location.host = host;
+                return false;
+            }
+
+            var x = document.getElementById("edit-box");
+            toggle_panel_display(x);
+
+            var edit = (x.style.display !== 'none');
+            var page = document.getElementById("page-content");
+
+            page.setAttribute("contenteditable", edit);
+            page.focus();
+        }
+
+        function edit_save(elem) {
+            console.log(document.location);
+
+            var html = document.getElementById("page-content");
+            var form = new FormData();
+
+            form.append("file", '<?= $this->params->file ?>');
+            form.append("page", '<?= $this->params->page ?>');
+            form.append("html", html.innerHTML);
+
+            var target = "<?= $config->url($config->edit['save']) ?>";
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function (x) {
+                if (this.readyState === 4 && this.status === 200) {
+                    var json = JSON.parse(this.responseText);
+                    if (json.status === 'failed') {
+                        alert(json.reason);
+                    }
+                }
+            }
+
+            xhr.open("POST", target);
+            xhr.send(form);
+        }
+
+        function edit_open(elem) {
+            console.log(document.location);
+            window.location = "<?= $config->url($config->edit['open']) ?>"
+        }
+
+        // 
+        // Translation.
         // 
         function toggle_translate_open(obj) {
             var x = document.getElementById("language-box");
@@ -340,6 +413,7 @@
             var tt = document.getElementById("topbar-tools");
             var ts = document.getElementById("topbar-sitehome");
             var sm = document.getElementById("sidenav-menu");
+
             if (scrolling) {
                 tm.className += " w3-top";
                 tt.style.display = "none";

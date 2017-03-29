@@ -39,7 +39,7 @@ $output = new format($this);
         </nav>
 
         <div class="main-content w3-main">
-            <div class="w3-container">
+            <div id="page-content" class="w3-container">
                 <?php $output->content(); ?>                                            
             </div>
 
