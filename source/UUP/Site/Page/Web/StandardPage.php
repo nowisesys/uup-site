@@ -67,8 +67,6 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
          */
         public function __construct($title, $template = "standard", $config = null)
         {
-                set_exception_handler(array($this, 'onException'));
-
                 if (ob_get_level() == 0) {
                         ob_start();
                 } else {
@@ -221,6 +219,10 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                 return new Content($this->config->template, $this->config->content);
         }
 
+        /**
+         * Get fortune cookie (message of the day) object.
+         * @return Fortune
+         */
         public function getFortune()
         {
                 return new Fortune($this->config->fortune);

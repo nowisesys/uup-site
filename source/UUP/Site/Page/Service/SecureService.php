@@ -18,6 +18,8 @@
 
 namespace UUP\Site\Page\Service;
 
+use UUP\Authentication\Exception as LogonException;
+
 /**
  * Secured web service.
  *
@@ -33,7 +35,7 @@ abstract class SecureService extends StandardService
                 parent::__construct($config);
 
                 if (!$this->validate()) {
-                        throw new Exception("Authentication is required");
+                        throw new LogonException(_("Authentication is required"));
                 }
         }
 

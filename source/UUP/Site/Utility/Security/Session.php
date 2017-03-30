@@ -18,6 +18,10 @@
 
 namespace UUP\Site\Utility\Security;
 
+use DomainException;
+use LogicException;
+use RuntimeException;
+
 /**
  * Provides session management and verification of user authentication.
  * 
@@ -82,7 +86,7 @@ class Session
         /**
          * Constructor.
          * @param string|boolean $start The session name.
-         * @throws \Exception
+         * @throws \LogicException
          */
         public function __construct($start = false)
         {
@@ -136,24 +140,24 @@ class Session
 
         /**
          * Verify session data.
-         * @throws \Exception
+         * @throws \DomainException|RuntimeException
          */
         public function verify()
         {
                 if (!$this->auth) {
-                        throw new \Exception(_("Logon method is unset"));
+                        throw new DomainException(_("Logon method is unset"));
                 }
                 if (!$this->user) {
-                        throw new \Exception(_("User is not authenticated"));
+                        throw new RuntimeException(_("User is not authenticated"));
                 }
                 if ($this->peer != filter_input(INPUT_SERVER, 'REMOTE_ADDR')) {
-                        throw new \Exception(_("Remote address missmatch"));
+                        throw new RuntimeException(_("Remote address missmatch"));
                 }
                 if ($this->refresh < time()) {
                         $this->refresh();
                 }
                 if ($this->expires < time()) {
-                        throw new \Exception(_("Session has expired"));
+                        throw new RuntimeException(_("Session has expired"));
                 }
         }
 
@@ -249,7 +253,7 @@ class Session
 
         /**
          * Start session.
-         * @throws \Exception
+         * @throws RuntimeException
          */
         public function start()
         {
@@ -257,7 +261,7 @@ class Session
                         session_name($this->_name);
                 }
                 if (!session_start()) {
-                        throw new \Exception(_("Failed start session. Please check log files for the reason."));
+                        throw new RuntimeException(_("Failed start session. Please check log files for the reason."));
                 }
         }
 
@@ -273,8 +277,8 @@ class Session
 
         /**
          * Setup session.
-         * @param string|boolean $start Description
-         * @throws \Exception
+         * @param string|boolean $start Either true or session name.
+         * @throws LogicException
          */
         private function setup($start)
         {
@@ -283,7 +287,7 @@ class Session
                 }
 
                 if (session_status() == PHP_SESSION_DISABLED) {
-                        throw new \Exception(_("Session are disabled. Please enable or disable authentication support."));
+                        throw new LogicException(_("Session are disabled. Please enable or disable authentication support."));
                 }
                 if (session_status() == PHP_SESSION_NONE) {
                         $this->start();

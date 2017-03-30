@@ -36,8 +36,6 @@ abstract class StandardService extends RequestHandler
          */
         public function __construct($config = null)
         {
-                set_exception_handler(array($this, 'exception'));
-
                 if (ob_get_level() == 0) {
                         ob_start();
                 }
@@ -45,9 +43,4 @@ abstract class StandardService extends RequestHandler
                 parent::__construct($config);
         }
 
-        /**
-         * The exception handler.
-         * @param \Exception $exception The exception to report.
-         */
-        abstract public function exception($exception);
 }

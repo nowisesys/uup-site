@@ -18,6 +18,8 @@
 
 namespace UUP\Site\Request;
 
+use Exception;
+use RuntimeException;
 use UUP\Site\Page\Web\Migration\TransitionalPage;
 use UUP\Site\Page\Web\StandardView;
 
@@ -132,14 +134,14 @@ class Router extends Handler
 
         /**
          * Handle the route request.
-         * @throws \Exception
+         * @throws Exception
          */
         public function handle()
         {
                 set_include_path(get_include_path() . PATH_SEPARATOR . sprintf("%s/admin", $this->config->proj));
 
                 if (!file_exists($this->_page)) {
-                        throw new \Exception(_("Requested page don't exist"));
+                        throw new RuntimeException(_("Requested page don't exist"));
                 } else {
                         ob_start();
                         require($this->_page);
@@ -235,7 +237,7 @@ class Router extends Handler
         {
                 $page->params = new Params();
                 $page->params->setFile($this->_page);
-                
+
                 $page->render();
         }
 
