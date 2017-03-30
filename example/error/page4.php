@@ -40,4 +40,4 @@ class SimplePage extends StandardPage
 // 
 
 $page = new SimplePage();
-$page->exception(new Exception('The exception message', 4758, new Exception('The inner exception', 9288)));
+$page->onException(new Exception('The exception message', 4758, new Exception('The inner exception', 9288)));

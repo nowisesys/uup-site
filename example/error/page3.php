@@ -40,4 +40,4 @@ class SimplePage extends StandardPage
 // 
 
 $page = new SimplePage();
-$page->exception(new Exception());
+$page->onException(new Exception());

@@ -25,4 +25,4 @@ use UUP\Site\Page\Web\ErrorPage;
 // 
 
 $page = new ErrorPage(new Exception(__LINE__)); // unused exception
-$page->exception(new Exception(__LINE__));      // rendered exception
+$page->onException(new Exception(__LINE__));      // rendered exception
