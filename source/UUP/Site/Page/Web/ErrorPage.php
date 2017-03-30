@@ -46,9 +46,12 @@ class ErrorPage extends StandardPage
          */
         public function __construct($exception)
         {
+                if (ob_get_level() != 0) {
+                        ob_end_clean();
+                }
+
                 parent::__construct(_("Error"));
                 $this->_exception = $exception;
-                ob_clean();
         }
 
         public function printContent()

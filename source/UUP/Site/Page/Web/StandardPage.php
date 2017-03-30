@@ -67,9 +67,12 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
          */
         public function __construct($title, $template = "standard", $config = null)
         {
-                set_exception_handler(array($this, 'exception'));
+                set_exception_handler(array($this, 'onException'));
 
                 if (ob_get_level() == 0) {
+                        ob_start();
+                } else {
+                        ob_end_clean();
                         ob_start();
                 }
 
@@ -146,7 +149,7 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                         // Set site name for translation:
                         // 
                         $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
-                        
+
                         // 
                         // Load template for UI rendering:
                         // 
@@ -171,7 +174,7 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
          * The exception handler.
          * @param \Exception $exception The exception to report.
          */
-        public function exception($exception)
+        public function onException($exception)
         {
                 $page = new ErrorPage($exception);
                 $page->render();
@@ -222,4 +225,5 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
         {
                 return new Fortune($this->config->fortune);
         }
+
 }
