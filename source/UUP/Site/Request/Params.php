@@ -18,6 +18,8 @@
 
 namespace UUP\Site\Request;
 
+use InvalidArgumentException;
+
 /**
  * Request and page dispatch parameters.
  * 
@@ -70,7 +72,7 @@ class Params
                                         'file' => $this->_file
                                 );
                         default:
-                                return $this->param($name);
+                                return $this->getParam($name);
                 }
         }
 
@@ -127,6 +129,30 @@ class Params
         }
 
         /**
+         * Check if parameter is set.
+         * 
+         * @param string $name The parameter name.
+         * @param mixed $default The default value.
+         * @param int $method The request method (GET and POST).
+         * @return boolean 
+         */
+        public function hasParam($name, $method = INPUT_GET | INPUT_POST)
+        {
+                if ($method & INPUT_GET) {
+                        if (filter_has_var(INPUT_GET, $name)) {
+                                return true;
+                        }
+                }
+                if ($method & INPUT_POST) {
+                        if (filter_has_var(INPUT_POST, $name)) {
+                                return true;
+                        }
+                }
+
+                return false;
+        }
+
+        /**
          * Get input parameter value.
          * 
          * @param string $name The parameter name.
@@ -142,10 +168,52 @@ class Params
                         return $value;
                 }
                 if (!preg_match($this->_filter[$name], $value)) {
-                        throw new \Exception("Request parameter $name don't match input filter");
+                        throw new InvalidArgumentException(_("Request parameter $name don't match input filter"));
                 } else {
                         return $value;
                 }
+        }
+
+        /**
+         * Get all request parameters.
+         * 
+         * If $names is null (default), then all request parameters are returned. The
+         * $method is a bitmask of INPUT_GET and/or INPUT_POST. The defaults for missing
+         * request parameters can be passed in the names argument:
+         * 
+         * <code>
+         * $names = array(
+         *      'name' => 'Anders',
+         *      'work' => false
+         * );
+         * $request->getParams($names);
+         * </code>
+         * 
+         * @param array $names The 
+         * @param int $method The request method (GET and POST).
+         */
+        public function getParams($names = null, $method = INPUT_GET | INPUT_POST)
+        {
+                $result = array();
+
+                if (!isset($names)) {
+                        $names = array();
+
+                        if ($method & INPUT_GET) {
+                                $names = array_merge($names, array_keys($_GET));
+                        }
+                        if ($method & INPUT_GET) {
+                                $names = array_merge($names, array_keys($_POST));
+                        }
+
+                        $names = array_fill_keys($names, false);
+                }
+
+                foreach ($names as $key => $val) {
+                        $result[$key] = $this->getParam($key, $val, $method);
+                }
+
+                return $result;
         }
 
         /**
