@@ -18,6 +18,9 @@
 
 namespace UUP\Site\Utility;
 
+use DomainException;
+use Exception;
+
 if (!defined('UUP_SITE_EXCEPT_LOG')) {
         /**
          * Log exception to error log.
@@ -36,7 +39,7 @@ if (!defined('UUP_SITE_EXCEPT_DUMP')) {
          */
         define('UUP_SITE_EXCEPT_DUMP', 4);
 }
-if (!defined('UUP_SITE_EXCEPT_BRIEF')) {
+if (!defined('UUP_SITE_EXCEPT_STACK')) {
         /**
          * Display brief exception message.
          */
@@ -47,6 +50,12 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
          * Include stack in output (not for production mode).
          */
         define('UUP_SITE_EXCEPT_STACK', 16);
+}
+if (!defined('UUP_SITE_EXCEPT_DEVELOP')) {
+        /**
+         * Development mode error reporting (not for production mode).
+         */
+        define('UUP_SITE_EXCEPT_DEVELOP', UUP_SITE_EXCEPT_DUMP | UUP_SITE_EXCEPT_STACK | UUP_SITE_EXCEPT_BRIEF);
 }
 
 /**
@@ -219,7 +228,7 @@ class Config
          * Detect configuration.
          * 
          * @param array|string $config Configuration options array or path to file.
-         * @throws \Exception
+         * @throws Exception
          */
         private function detect($config)
         {
@@ -322,20 +331,41 @@ class Config
                 if (!isset($config['sidebar'])) {
                         $config['sidebar'] = true;      // enabled by default
                 }
-                foreach (array('topmenu', 'publish', 'headers', 'content', 'session', 'debug', 'fortune') as $key) {
+                foreach (array('topmenu', 'publish', 'headers', 'content', 'session', 'debug', 'fortune', 'tools', 'auth', 'edit') as $key) {
                         if (!isset($config[$key])) {
                                 $config[$key] = false;
                         }
                 }
 
-                if (!isset($config['tools'])) {
+                if (!$config['tools']) {
                         $config['tools'] = array(
                                 'auth'      => false,
+                                'edit'      => false,
                                 'search'    => false,
                                 'translate' => false
                         );
                 }
-                if ($config['auth']) {
+
+                if (!$config['auth']) {
+                        $config['auth'] = array(
+                                'start'  => '/',
+                                'logon'  => '/secure/logon',
+                                'logoff' => '/secure/logoff',
+                                'config' => $config['proj'] . '/config/auth.inc',
+                                'sso'    => true
+                        );
+                }
+
+                if (!$config['edit']) {
+                        $config['edit'] = array(
+                                'save' => '/edit/save',
+                                'open' => '/edit/open',
+                                'user' => array('webmaster'),
+                                'host' => $config['site']
+                        );
+                }
+
+                if ($config['tools']['auth'] || $config['tools']['edit']) {
                         $config['session'] = true;      // requires session support
                 }
 
@@ -363,7 +393,7 @@ class Config
 
         /**
          * Verify current config.
-         * @throws \Exception
+         * @throws Exception
          */
         private function verify()
         {
@@ -452,12 +482,12 @@ class Config
          * 
          * @param string $dest The target URL (relative, absolute or extern).
          * @return string
-         * @throws \Exception
+         * @throws DomainException
          */
         public function getUrl($dest)
         {
                 if (!($comp = parse_url($dest))) {
-                        throw new \Exception(_("Invalid URL $dest for redirect"));
+                        throw new DomainException(_("Invalid URL $dest for redirect"));
                 } elseif (isset($comp['scheme'])) {
                         return sprintf("%s", $dest);
                 } elseif ($comp['path'][0] == '/') {
