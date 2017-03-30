@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,17 @@
 
 use UUP\Site\Page\Web\StandardPage;
 
-class IndexPage extends StandardPage
-{
 
+class ErrorPage extends StandardPage
+{
         public function __construct()
         {
-                parent::__construct("Index");
+                parent::__construct("About");
         }
 
         public function printContent()
         {
-                echo "<h1>Index view for router test</h1>\n";
-                
-                echo "<ul>Some example links:\n";
-                echo "<li><a href=\"welcome\">welcome</a></li>\n";
-                echo "<li><a href=\"about\">about</a></li>\n";
-                echo "<li><a href=\"test/\">index</a></li>\n";
-                echo "<li><a href=\"test/getting-started\">getting-started</a></li>\n";
-                echo "<li><a href=\"test/view\">view</a></li>\n";
-                echo "<li><a href=\"error\">error</a></li>\n";
-                echo "</ul>\n";
+                throw new Exception("Test error in render");
         }
 
 }

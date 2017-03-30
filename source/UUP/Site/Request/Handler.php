@@ -18,7 +18,9 @@
 
 namespace UUP\Site\Request;
 
+use DomainException;
 use UUP\Site\Page\Context\Headers;
+use UUP\Site\Page\Web\ErrorPage;
 use UUP\Site\Utility\Config;
 use UUP\Site\Utility\Locale;
 use UUP\Site\Utility\Profile;
@@ -31,6 +33,8 @@ use UUP\Site\Utility\Security\Session;
  * @property-read Session $session The session object.
  * @property-read Authentication $auth The stack of authenticators.
  * @property-read Headers $headers Custom HTTP headers.
+ * 
+ * @property Error $error The error handler.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -66,6 +70,8 @@ abstract class Handler
          */
         public function __construct($config = null)
         {
+                set_exception_handler(array($this, 'onException'));
+
                 $this->profile = new Profile();
                 $this->profile->start();
 
@@ -107,6 +113,9 @@ abstract class Handler
                         case 'headers':
                                 $this->headers = $this->getHeaders();
                                 return $this->headers;
+                        case 'error':
+                                $this->error = $this->getErrorhandler();
+                                return $this->error;
                 }
         }
 
@@ -121,6 +130,9 @@ abstract class Handler
                                 break;
                         case 'headers':
                                 $this->headers = $value;
+                                break;
+                        case 'error':
+                                $this->error = $value;
                                 break;
                 }
         }
@@ -150,6 +162,15 @@ abstract class Handler
         private function getAuthentication()
         {
                 return new Authentication($this->config->auth['config']);
+        }
+
+        /**
+         * Get error handler object.
+         * @return Error
+         */
+        private function getErrorhandler()
+        {
+                return new Error($this->config->exception['handler']);
         }
 
         /**
@@ -199,6 +220,7 @@ abstract class Handler
         /**
          * Validate request is secured (authenticated).
          * @return boolean
+         * @throws DomainException
          */
         protected function validate()
         {
@@ -207,7 +229,7 @@ abstract class Handler
                         $this->profile->start();
 
                         if (!$this->config->session) {
-                                throw new \Exception(_("Session handling is not enabled"));
+                                throw new DomainException(_("Session handling is not enabled"));
                         }
                         if ($this->session->started() == false) {
                                 $this->session->start();
@@ -239,6 +261,16 @@ abstract class Handler
                 } finally {
                         $this->profile->stop();
                 }
+        }
+
+        /**
+         * The exception handler.
+         * @param \Exception $exception The exception to report.
+         */
+        public function onException($exception)
+        {
+                $this->error->addHandler('*', true);
+                $this->error->handle($this->config->uri, $exception);
         }
 
         /**

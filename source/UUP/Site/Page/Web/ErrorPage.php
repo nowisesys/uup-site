@@ -18,6 +18,8 @@
 
 namespace UUP\Site\Page\Web;
 
+use Exception;
+use UUP\Site\Page\Web\StandardPage;
 use const UUP_SITE_EXCEPT_BRIEF;
 use const UUP_SITE_EXCEPT_DUMP;
 use const UUP_SITE_EXCEPT_LOG;
@@ -36,13 +38,13 @@ class ErrorPage extends StandardPage
 
         /**
          * The trapped exception.
-         * @var \Exception 
+         * @var Exception 
          */
         private $_exception;
 
         /**
          * Constructor.
-         * @param \Exception $exception The exception object.
+         * @param Exception $exception The exception object.
          */
         public function __construct($exception)
         {
@@ -51,6 +53,7 @@ class ErrorPage extends StandardPage
                 }
 
                 parent::__construct(_("Error"));
+
                 $this->_exception = $exception;
         }
 
@@ -61,7 +64,6 @@ class ErrorPage extends StandardPage
                 if ($this->config->exception & UUP_SITE_EXCEPT_LOG) {
                         error_log(print_r($this->_exception, true));
                 }
-
                 if ($this->config->exception & UUP_SITE_EXCEPT_SILENT) {
                         printf(_("An exception occured, but error reporing has been suppressed by the system manager."));
                         return;
@@ -78,6 +80,16 @@ class ErrorPage extends StandardPage
                         print_r($this->_exception);
                         printf("</code></pre></p>\n");
                 }
+        }
+
+        /**
+         * Display exception on error page.
+         * @param Exception $exception The exception object.
+         */
+        public final static function show($exception)
+        {
+                $page = new ErrorPage($exception);
+                $page->render();
         }
 
 }
