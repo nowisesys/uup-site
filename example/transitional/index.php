@@ -17,6 +17,12 @@
  */
 
 // 
+// Need custom include path:
+// 
+set_include_path(get_include_path() . PATH_SEPARATOR . "../../admin");
+
+
+// 
 // Include required library functions:
 // 
 include "include/ui.inc";
