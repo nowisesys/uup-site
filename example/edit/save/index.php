@@ -18,72 +18,77 @@
 
 require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
 
-use UUP\Site\Page\Web\Security\SecurePage;
+use UUP\Site\Page\Service\SecureService;
 
 /**
- * Save edited page.
+ * Content management handler.
+ * 
+ * This class is responsible for create, read, update and delete (CRUD) of
+ * web content (files and folders). The response is JSON encoded except for
+ * when reading files.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
  */
-class IndexPage extends SecurePage
+class IndexPage extends SecureService
 {
 
         /**
-         * The page content.
+         * The requested action.
          * @var string 
          */
-        private $_html;
+        private $_action;
         /**
-         * The target page (URI).
+         * The source file.
          * @var string 
          */
-        private $_page;
+        private $_source;
         /**
-         * The target file.
+         * The target directory.
          * @var string 
          */
-        private $_file;
+        private $_path;
 
         public function __construct()
         {
-                parent::__construct(__CLASS__, null);
+                parent::__construct();
 
-                if (!in_array($this->session->user, $this->config->edit['user'])) {
-                        throw new Exception('Caller is not an page/site editor');
-                }
-                if (!($this->_html = filter_input(INPUT_POST, 'html', FILTER_SANITIZE_STRING))) {
-                        throw new Exception('Required parameter html is empty');
-                }
-                if (!($this->_page = filter_input(INPUT_POST, 'page', FILTER_SANITIZE_STRING))) {
-                        throw new Exception('Required parameter page is empty');
-                }
-                if (!($this->_file = filter_input(INPUT_POST, 'file', FILTER_SANITIZE_STRING))) {
-                        throw new Exception('Required parameter file is empty');
-                }
-                if (!file_exists($this->_file)) {
-                        throw new Exception("Target file do not exist");
-                }
+                $this->params->setFilter(array(
+                        'action' => '/^(create|read|update|delete)$/'
+                ));
 
-                error_log(print_r($this, true));
+                $this->_action = $this->params->getParam('action');
+                $this->_source = $this->params->getParam('source');
+                $this->_path = $this->params->getParam('path');
+
+                if (!$this->_path) {
+                        throw new RuntimeException(_("Required target directory parameter is missing"));
+                }
+                if (!$this->_action) {
+                        throw new RuntimeException(_("Required action parameter (create, read, update or delete) is missing"));
+                }
         }
 
-        public function printContent()
+        /**
+         * Exception handler.
+         * @param Exception $exception The exception to report.
+         */
+        public function onException($exception)
         {
-                error_log(print_r($_POST, true));
+                echo json_encode(array(
+                        'status'  => 'failed',
+                        'message' => $exception->getMessage(),
+                        'code'    => $exception->getCode()
+                ));
+        }
 
-                echo json_encode(array('status' => 'success'));
+        public function render()
+        {
+                
         }
 
 }
 
-try {
-        $page = new IndexPage();
-        $page->render();
-} catch (Exception $exception) {
-        echo json_encode(array(
-                'status' => 'failed',
-                'reason' => $exception->getMessage()
-        ));
-}
+$page = new IndexPage();
+$page->render();
