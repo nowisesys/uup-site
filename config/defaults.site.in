@@ -113,6 +113,15 @@ return array(
 //                'sso'    => true                      // Enable SSO login
 //        ),
 //        /**
+//         * The page/site edit options. Enables session and suggests config->tools->auth.
+//         */
+//        'edit' => array(
+//                'save' => '/edit/save',               // The save handler page
+//                'open' => '/edit/open',               // The site/page editor
+//                'user' => array('webmaster'),         // Allowed editors
+//                'host' => 'localhost'                 // The edit host
+//        ),
+//        /**
 //         * The toolbox plugins to expose. Themes can choose whether to show them or not.
 //         */
 //        'tools' => array(
