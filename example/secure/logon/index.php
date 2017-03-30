@@ -18,10 +18,20 @@
 
 require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
 
+use UUP\Authentication\Exception as LogonException;
 use UUP\Site\Page\Web\Security\LogonPage;
 
 class IndexPage extends LogonPage
 {
+
+        public function __construct()
+        {
+                parent::__construct();
+
+                if (!$this->config->tools['auth']) {
+                        throw new LogonException(_("Logon has been disabled by system config"));
+                }
+        }
 
         public function printContent()
         {
