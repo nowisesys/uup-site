@@ -358,8 +358,8 @@ class Config
 
                 if (!$config['edit']) {
                         $config['edit'] = array(
-                                'save' => '/edit/save',
-                                'open' => '/edit/open',
+                                'view' => '/edit/view',
+                                'ajax' => '/edit/ajax',
                                 'user' => array('webmaster'),
                                 'host' => $config['site']
                         );

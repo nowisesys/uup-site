@@ -294,7 +294,7 @@
             form.append("page", '<?= $this->params->page ?>');
             form.append("html", html.innerHTML);
 
-            var target = "<?= $config->url($config->edit['save']) ?>";
+            var target = "<?= $config->url($config->edit['ajax']) ?>";
             var xhr = new XMLHttpRequest();
 
             xhr.onreadystatechange = function (x) {
@@ -312,7 +312,7 @@
 
         function edit_open(elem) {
             console.log(document.location);
-            window.location = "<?= $config->url($config->edit['open']) ?>"
+            window.location = "<?= $config->url($config->edit['view']) ?>"
         }
 
         // 
