@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Utility\Content;
+namespace UUP\Site\Utility\Content\Iterator;
 
 use DirectoryIterator;
 use FilesystemIterator;
@@ -29,7 +29,7 @@ use FilterIterator;
  * @package UUP
  * @subpackage Site
  */
-class FilesIterator extends FilterIterator
+class Files extends FilterIterator
 {
 
         /**

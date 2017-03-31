@@ -19,9 +19,9 @@
 require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
 
 use UUP\Site\Page\Service\SecureService;
-use UUP\Site\Utility\Content\ContextIterator;
-use UUP\Site\Utility\Content\FilesIterator;
-use UUP\Site\Utility\Content\MenusIterator;
+use UUP\Site\Utility\Content\Iterator\Context as ContextIterator;
+use UUP\Site\Utility\Content\Iterator\Files as FilesIterator;
+use UUP\Site\Utility\Content\Iterator\Menus as MenusIterator;
 
 /**
  * The index AJAX service.
@@ -143,7 +143,7 @@ class IndexPage extends SecureService
         {
                 $this->send(new ContextIterator($path));
         }
-        
+
         /**
          * Send content from iterator.
          * @param FilterIterator $iterator The directory iterator.
