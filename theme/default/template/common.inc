@@ -312,7 +312,7 @@
 
         function edit_open(elem) {
             console.log(document.location);
-            window.location = "<?= $config->url($config->edit['view']) ?>"
+            window.location = "<?= $config->url($config->edit['view']) ?>?path=<?= $this->params->path ?>"
         }
 
         // 

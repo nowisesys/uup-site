@@ -23,6 +23,7 @@ use InvalidArgumentException;
 /**
  * Request and page dispatch parameters.
  * 
+ * @property-read string $path The file path (relative).
  * @property-read string $page The requested page (location).
  * @property-read string $file The requested file (filename).
  * @property-read array $data The request data.
@@ -34,6 +35,11 @@ use InvalidArgumentException;
 class Params
 {
 
+        /**
+         * The path relative to project.
+         * @var string 
+         */
+        private $_path;
         /**
          * The requested page.
          * @var string 
@@ -52,22 +58,27 @@ class Params
 
         /**
          * Constructor.
+         * @param string $proj The project path.
          */
-        public function __construct()
+        public function __construct($proj)
         {
                 $this->_page = filter_input(INPUT_SERVER, 'SCRIPT_NAME');
                 $this->_file = filter_input(INPUT_SERVER, 'SCRIPT_FILENAME');
+                $this->_path = dirname(substr($this->_file, strlen($proj) - 1));
         }
 
         public function __get($name)
         {
                 switch ($name) {
+                        case 'path':
+                                return $this->_path;
                         case 'page':
                                 return $this->_page;
                         case 'file':
                                 return $this->_file;
                         case 'data':
                                 return array(
+                                        'path' => $this->_path,
                                         'page' => $this->_page,
                                         'file' => $this->_file
                                 );

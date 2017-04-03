@@ -25,6 +25,7 @@ use UUP\Site\Page\Context\Menu\TopMenu;
 use UUP\Site\Page\Context\Menus;
 use UUP\Site\Page\Context\Publisher;
 use UUP\Site\Request\Handler as RequestHandler;
+use UUP\Site\Utility\Content\Navigator;
 use UUP\Site\Utility\Fortune;
 
 /**
@@ -34,6 +35,7 @@ use UUP\Site\Utility\Fortune;
  * @property-read Menus $menus Page menus.
  * @property-read Content $content Page content specification.
  * @property-read Fortune $fortune The fortune cookie.
+ * @property-read Navigator $navigator The page/path navigator.
  * 
  * @property-read TopMenu $topmenu The top menu.
  * @property-read StandardMenu $navmenu The navigation (standard) menu.
@@ -95,6 +97,9 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                         case 'fortune':
                                 $this->fortune = $this->getFortune();
                                 return $this->fortune;
+                        case 'navigator':
+                                $this->navigator = $this->getNavigator();
+                                return $this->navigator;
                         case 'topmenu':
                                 return $this->menus->top;
                         case 'navmenu':
@@ -122,6 +127,9 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                                 break;
                         case 'fortune':
                                 $this->fortune = $value;
+                                break;
+                        case 'navigator':
+                                $this->navigator = $value;
                                 break;
                         default:
                                 parent::__set($name, $value);
@@ -226,6 +234,15 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
         public function getFortune()
         {
                 return new Fortune($this->config->fortune);
+        }
+
+        /**
+         * Get navigator for this page path.
+         * @return Navigator
+         */
+        public function getNavigator()
+        {
+                return new Navigator($this->params->path, $this->config->url(""));
         }
 
 }

@@ -233,6 +233,7 @@ class IndexPage extends SecureService
                 }
 
                 // TODO: implement
+                die("Not yet implemented");
         }
 
         /**
