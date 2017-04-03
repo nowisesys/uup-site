@@ -81,6 +81,9 @@ if (!defined('UUP_SITE_EXCEPT_DEVELOP')) {
  * @property string $img The image location.
  * @property string $font The font location.
  * 
+ * @property-read array $edit The edit options.
+ * @property-read array $auth The auth options.
+ * 
  * @property array $tools The toolbox options.
  * @property array $locale Options for locale and gettext.
  * @property string $theme The default theme.
@@ -486,7 +489,9 @@ class Config
          */
         public function getUrl($dest)
         {
-                if (!($comp = parse_url($dest))) {
+                if (empty($dest)) {
+                        return $this->location;
+                } elseif (!($comp = parse_url($dest))) {
                         throw new DomainException(_("Invalid URL $dest for redirect"));
                 } elseif (isset($comp['scheme'])) {
                         return sprintf("%s", $dest);
