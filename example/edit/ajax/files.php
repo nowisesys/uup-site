@@ -21,7 +21,7 @@
  * 
  * The AJAX method API: 
  * ---------------------
- * o) action=create&source=template&target=file                 // Create new file.
+ * o) action=create&source=template&target=file                 // Create new file or directory.
  * o) action={read|update|delete}&target=file                   // Read, update or delete file.
  * o) action={rename|move|link}&source=from&target=dest         // Rename or move a file.
  * 

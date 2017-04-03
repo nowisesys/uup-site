@@ -19,6 +19,12 @@
 /**
  * The menus section AJAX service.
  *
+ * The AJAX method API: 
+ * ---------------------
+ * o) action=create&source=template&target=file                 // Create new menu.
+ * o) action={read|update|delete}&target=file                   // Read, update or delete file.
+ * o) action={rename|move|link}&source=from&target=dest         // Rename or move a file.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
@@ -31,13 +37,47 @@ class MenusPage extends IndexPage
                 parent::__construct();
 
                 $this->params->setFilter(array(
-                        'action' => '/^(create|read|update|delete|add|remove)$/'
+                        'action' => '/^(create|read|update|delete|add|remove)$/',
+                        'source' => '/^(sidebar|standard|topbar)$/'
                 ));
+
+                $this->_action = $this->params->getParam('action');
         }
 
         public function render()
         {
-                
+                switch ($this->_action) {
+                        case 'add':
+                                $this->add($this->_target, $this->_source, $this->_name);
+                                break;
+                        case 'remove':
+                                $this->remove($this->_target, $this->_source);
+                                break;
+                        default:
+                                parent::render();
+                                break;
+                }
+        }
+
+        /**
+         * Add file to menu.
+         * @param string $menu The target menu.
+         * @param string $file The filename.
+         * @param string $name The link name.
+         */
+        private function add($menu, $file, $name)
+        {
+                // TODO implement
+        }
+
+        /**
+         * Remove file from menu.
+         * @param string $menu The target menu.
+         * @param string $file The filename.
+         */
+        private function remove($menu, $file)
+        {
+                // TODO implement                
         }
 
 }

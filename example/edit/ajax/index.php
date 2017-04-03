@@ -123,7 +123,8 @@ class IndexPage extends SecureService
          */
         private function files($path)
         {
-                $this->send(new FilesIterator($path));
+                $result = $this->collect(new FilesIterator($path));
+                $this->send($result);
         }
 
         /**
@@ -132,7 +133,8 @@ class IndexPage extends SecureService
          */
         private function menus($path)
         {
-                $this->send(new MenusIterator($path));
+                $result = $this->collect(new MenusIterator($path));
+                $this->send($result);
         }
 
         /**
@@ -141,14 +143,15 @@ class IndexPage extends SecureService
          */
         private function context($path)
         {
-                $this->send(new ContextIterator($path));
+                $result = $this->collect(new ContextIterator($path));
+                $this->send($result);
         }
 
         /**
-         * Send content from iterator.
+         * Collect content from iterator.
          * @param FilterIterator $iterator The directory iterator.
          */
-        private function send($iterator)
+        private function collect($iterator)
         {
                 $result = array('dir' => array(), 'file' => array());
 
@@ -177,7 +180,19 @@ class IndexPage extends SecureService
                         }
                 }
 
-                echo json_encode($result);
+                return $result;
+        }
+
+        /**
+         * Send result.
+         * @param mixed $result The result.
+         */
+        protected function send($result = false)
+        {
+                echo json_encode(array(
+                        'status' => 'success',
+                        'result' => $result
+                ));
         }
 
         /**

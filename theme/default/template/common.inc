@@ -425,7 +425,9 @@
                 ts.style.display = "none";
                 sm.style.top = "auto"; // restore default pos
             }
-        });</script>
+        });
+
+</script>
 
 <?php if ($config->tools['translate']) : ?>
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>
