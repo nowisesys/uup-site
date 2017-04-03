@@ -52,7 +52,7 @@ $output = new format($this);
             <button class="no-print w3-btn w3-padding-16 w3-large w3-margin-top">Get Started</button>
         </header>
 
-        <div class='w3-container w3-padding-32 w3-margin-left'>
+        <div id="page-content" class='w3-container w3-padding-32 w3-margin-left'>
             <?php $output->content(); ?>                                        
         </div>
         <div class='w3-container w3-light-grey w3-padding-32'>
