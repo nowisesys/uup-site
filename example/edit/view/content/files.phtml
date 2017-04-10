@@ -15,24 +15,20 @@
  * limitations under the License.
  */
 
-// 
-// Set config for navigator:
-// 
-$this->navigator->format = "<a href=\"@base@?path=@path@\">@name@</a>";
-$this->navigator->path = $this->_path;
-$this->navigator->base = $this->config->url($this->config->edit['view']);
-
 ?>
 
-<style>
-    div.navigator a {
-        text-decoration: none;
-    }
-    div.navigator span {
-        color: #BBBBBB;
-    }
-</style>
+<div id="content-files">
+    <h1>Files</h1>
+    <div id="files-listing">
 
-<div class="navigator">
-    <span><?= _("Location:") ?></span> <?= $this->navigator->render() ?>
+    </div>
+    <div id="files-menu">
+
+    </div>
 </div>
+
+<script>
+        function open_files_content(evt) {
+            open_content_section(evt, 'files');
+        }
+</script>

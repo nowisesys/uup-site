@@ -51,9 +51,7 @@ class IndexPage extends SecurePage
 
         public function printContent()
         {
-                require_once('navigator.phtml');
-                require_once('editor.phtml');
-                require_once('listing.phtml');
+                require_once('index.phtml');
         }
 
 }

@@ -90,6 +90,9 @@ function install_ckeditor()
         custom)
             install_ckeditor_custom
             ;;
+        *)
+            install_ckeditor_git
+            ;;
     esac
 }
 
@@ -106,6 +109,9 @@ function install_codemirror()
             ;;
         zip)
             install_codemirror_zip
+            ;;
+        *)
+            install_codemirror_git
             ;;
     esac
 }
@@ -145,4 +151,3 @@ else
     backup $pack
     install $pack $mode
 fi
-

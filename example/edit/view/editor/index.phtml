@@ -16,32 +16,38 @@
  */
 
 // 
-// Directory content listing.
+// File content editor.
 // 
 
 ?>
 
-<div class="w3-container w3-margin-top">
-    <div class="w3-bar">
-        <button class="w3-bar-item w3-btn tablink w3-red" onclick="open_section(event, 'files')">Files</button>
-        <button class="w3-bar-item w3-btn tablink" onclick="open_section(event, 'menus')">Menus</button>
-        <button class="w3-bar-item w3-btn tablink" onclick="open_section(event, 'context')">Context</button>
-    </div>
+<div class="editor" style="display: none">
+    <h1>Editor</h1>
+    <div class="w3-container w3-margin-top">
+        <div class="w3-bar">
+            <button class="w3-bar-item w3-btn tablink" onclick="open_inline_editor(event)"><?= _("Inline") ?></button>
+            <button class="w3-bar-item w3-btn tablink" onclick="open_source_editor(event)"><?= _("Source") ?></button>
+            <button class="w3-bar-item w3-btn tablink" onclick="open_default_editor(event)"><?= _("Default") ?></button>
+        </div>
 
-    <div id="files" class="w3-container section">
-    </div>
+        <div id="inline" class="w3-container editor-section" style="display:none">
+            <?php require_once('inline.phtml'); ?>
+        </div>
 
-    <div id="menus" class="w3-container section" style="display:none">
-    </div>
-
-    <div id="context" class="w3-container section" style="display:none">
+        <div id="source" class="w3-container editor-section" style="display:none">
+            <?php require_once('source.phtml'); ?>
+        </div>
+        
+        <div id="default" class="w3-container editor-section" style="display:none">
+            <?php require_once('default.phtml'); ?>
+        </div>
     </div>
 </div>
 
 <script>
-        function open_section(evt, sect) {
+        function open_editor_section(evt, sect) {
             var i, x, tablinks;
-            x = document.getElementsByClassName("section");
+            x = document.getElementsByClassName("editor-section");
             for (i = 0; i < x.length; i++) {
                 x[i].style.display = "none";
             }
@@ -52,4 +58,9 @@
             document.getElementById(sect).style.display = "block";
             evt.currentTarget.className += " w3-red";
         }
+
+        function open_editor(file) {
+
+        }
+
 </script>

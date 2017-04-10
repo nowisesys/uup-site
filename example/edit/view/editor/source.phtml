@@ -15,24 +15,14 @@
  * limitations under the License.
  */
 
-// 
-// Set config for navigator:
-// 
-$this->navigator->format = "<a href=\"@base@?path=@path@\">@name@</a>";
-$this->navigator->path = $this->_path;
-$this->navigator->base = $this->config->url($this->config->edit['view']);
-
 ?>
 
-<style>
-    div.navigator a {
-        text-decoration: none;
-    }
-    div.navigator span {
-        color: #BBBBBB;
-    }
-</style>
-
-<div class="navigator">
-    <span><?= _("Location:") ?></span> <?= $this->navigator->render() ?>
+<div id="editor-source">
+    <h1>Source</h1>
 </div>
+
+<script>
+        function open_source_editor(evt) {
+            open_editor_section(evt, 'source');
+        }
+</script>
