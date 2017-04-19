@@ -57,8 +57,6 @@ class Files extends FilterIterator
          */
         private function matched($file)
         {
-                return true;
-                
                 $exclude = array(
                         'sidebar.menu', 'standard.menu', 'topbar.menu',
                         'content.spec', 'headers.inc', 'publish.inc'

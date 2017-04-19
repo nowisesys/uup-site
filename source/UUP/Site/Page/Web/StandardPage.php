@@ -144,24 +144,13 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
          */
         final public function render()
         {
-                if (isset($this->_template)) {
-                        // 
-                        // Inject commonly used variables:
-                        // 
-                        $config = $this->config;
-                        $session = $this->session;
 
-                        // 
-                        // Set site name for translation:
-                        // 
-                        $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
-
-                        // 
-                        // Load template for UI rendering:
-                        // 
-                        include(sprintf("%s/%s/%s.ui", $this->config->template, $this->config->theme, $this->_template));
-                } else {
+                if ($this->params->hasParam('ajax')) {
                         $this->printContent();
+                } elseif (is_null($this->_template)) {
+                        $this->printContent();
+                } else {
+                        $this->printTemplate();
                 }
         }
 
@@ -243,6 +232,28 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
         public function getNavigator()
         {
                 return new Navigator($this->params->path, $this->config->url(""));
+        }
+
+        /**
+         * Print page using selected template.
+         */
+        private function printTemplate()
+        {
+                // 
+                // Inject commonly used variables:
+                // 
+                $config = $this->config;
+                $session = $this->session;
+
+                // 
+                // Set site name for translation:
+                // 
+                $config->site = filter_input(INPUT_SERVER, 'SERVER_NAME');
+
+                // 
+                // Load template for UI rendering:
+                // 
+                include(sprintf("%s/%s/%s.ui", $this->config->template, $this->config->theme, $this->_template));
         }
 
 }

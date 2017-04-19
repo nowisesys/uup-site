@@ -1,5 +1,6 @@
 <?php
 
+use UUP\Site\Page\Web\Component\Links;
 use UUP\Site\Page\Web\StandardPage;
 
 /*
@@ -63,16 +64,8 @@ class format
         public function navmenu()
         {
                 foreach ($this->page->navmenu as $menu) {
-                        if (isset($menu)) {
-                                if (isset($menu->name)) {
-                                        printf("<h3>%s</h3>\n", $menu->name);
-                                }
-                                if (isset($menu->data)) {
-                                        foreach ($menu->data as $name => $link) {
-                                                printf("<a id=\"%s\" href=\"%s\">%s</a>\n", md5(basename($link)), $link, $name);
-                                        }
-                                }
-                        }
+                        $links = new Links($menu);
+                        $links->render();
                 }
         }
 

@@ -30,7 +30,8 @@ use UUP\Site\Utility\Content\Iterator\Menus as MenusIterator;
  * ---------------------
  * o) action=read&source={files|menus|context}  // Read files, menus or context content.
  * 
- * This class also provides common files and directory actions for sub-classes.
+ * This class also provides common files and directory actions for sub-classes. The path 
+ * parameter is mandatory and should be relative to project root.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -63,9 +64,9 @@ class IndexPage extends SecureService
         public function __construct()
         {
                 parent::__construct();
-
+                
                 if (!in_array($this->session->user, $this->config->edit['user'])) {
-                        throw new Exception('Caller is not an page/site editor');
+                        throw new RuntimeException('Caller is not an page/site editor');
                 }
 
                 $this->params->setFilter(array(
@@ -85,16 +86,24 @@ class IndexPage extends SecureService
                 if (!$this->_action) {
                         throw new RuntimeException(_("Required action parameter is missing"));
                 }
+                if ($this->_path[0] == '/') {
+                        throw new RuntimeException(_("Absolute pathes is not allowed"));
+                }
+                if (strstr($this->_path, '..')) {
+                        throw new RuntimeException(_("Directory navigation is not allowed"));
+                }
+                
+                $this->_path = realpath($this->config->proj . '/' . $this->_path);
         }
 
         /**
-         * Exception handler.
-         * @param Exception $exception The exception to report.
+         * RuntimeException handler.
+         * @param RuntimeException $exception The exception to report.
          */
         public function onException($exception)
         {
                 echo json_encode(array(
-                        'status'  => 'failed',
+                        'status'  => 'failure',
                         'message' => $exception->getMessage(),
                         'code'    => $exception->getCode()
                 ));
@@ -202,19 +211,19 @@ class IndexPage extends SecureService
         protected function read($file)
         {
                 if (!$file) {
-                        throw new Exception(_("The target file is unset"));
+                        throw new RuntimeException(_("The target file is unset"));
                 }
                 if (!file_exists($file)) {
-                        throw new Exception(_("The target file is missing"));
+                        throw new RuntimeException(_("The target file is missing"));
                 }
                 if (is_dir($file)) {
-                        throw new Exception(_("The target file is a directory"));
+                        throw new RuntimeException(_("The target file is a directory"));
                 }
                 if (!is_readable($file)) {
-                        throw new Exception(_("The target file is not readable"));
+                        throw new RuntimeException(_("The target file is not readable"));
                 }
                 if (!readfile($file)) {
-                        throw new Exception(_("Failed read file"));
+                        throw new RuntimeException(_("Failed read file"));
                 }
         }
 
@@ -226,10 +235,10 @@ class IndexPage extends SecureService
         protected function create($file, $type)
         {
                 if (!$file) {
-                        throw new Exception(_("The target file is unset"));
+                        throw new RuntimeException(_("The target file is unset"));
                 }
                 if (file_exists($file)) {
-                        throw new Exception(_("The target file already exists"));
+                        throw new RuntimeException(_("The target file already exists"));
                 }
 
                 // TODO: implement
@@ -244,22 +253,22 @@ class IndexPage extends SecureService
         protected function update($file, $content = null)
         {
                 if (!$file) {
-                        throw new Exception(_("The target file is unset"));
+                        throw new RuntimeException(_("The target file is unset"));
                 }
                 if (!file_exists($file)) {
-                        throw new Exception(_("The target file is missing"));
+                        throw new RuntimeException(_("The target file is missing"));
                 }
                 if (is_dir($file)) {
-                        throw new Exception(_("The target file is a directory"));
+                        throw new RuntimeException(_("The target file is a directory"));
                 }
                 if (!is_writable($file)) {
-                        throw new Exception(_("The target file is not writable"));
+                        throw new RuntimeException(_("The target file is not writable"));
                 }
                 if (!isset($content)) {
                         $content = file_get_contents("php://stdin");
                 }
                 if (!file_put_contents($file, $content)) {
-                        throw new Exception(_("Failed write file"));
+                        throw new RuntimeException(_("Failed write file"));
                 }
         }
 
@@ -270,21 +279,21 @@ class IndexPage extends SecureService
         protected function delete($file)
         {
                 if (!$file) {
-                        throw new Exception(_("The target file is unset"));
+                        throw new RuntimeException(_("The target file is unset"));
                 }
                 if (!file_exists($file)) {
-                        throw new Exception(_("The target file is missing"));
+                        throw new RuntimeException(_("The target file is missing"));
                 }
                 if (!is_writable($file)) {
-                        throw new Exception(_("The target file is not deletable"));
+                        throw new RuntimeException(_("The target file is not deletable"));
                 }
                 if (is_dir($file)) {
                         if (!rmdir($file)) {
-                                throw new Exception(_("Failed remove directory"));
+                                throw new RuntimeException(_("Failed remove directory"));
                         }
                 } else {
                         if (!unlink($file)) {
-                                throw new Exception(_("Failed unlink file"));
+                                throw new RuntimeException(_("Failed unlink file"));
                         }
                 }
         }
@@ -297,19 +306,19 @@ class IndexPage extends SecureService
         protected function rename($source, $target)
         {
                 if (!$source) {
-                        throw new Exception(_("The source file is unset"));
+                        throw new RuntimeException(_("The source file is unset"));
                 }
                 if (!$target) {
-                        throw new Exception(_("The target file is unset"));
+                        throw new RuntimeException(_("The target file is unset"));
                 }
                 if (!file_exists($source)) {
-                        throw new Exception(_("The source file is missing"));
+                        throw new RuntimeException(_("The source file is missing"));
                 }
                 if (file_exists($target)) {
-                        throw new Exception(_("The target file exists"));
+                        throw new RuntimeException(_("The target file exists"));
                 }
                 if (!rename($source, $target)) {
-                        throw new Exception(_("Failed rename file or directory"));
+                        throw new RuntimeException(_("Failed rename file or directory"));
                 }
         }
 
@@ -321,22 +330,22 @@ class IndexPage extends SecureService
         protected function move($source, $target)
         {
                 if (!$source) {
-                        throw new Exception(_("The source file is unset"));
+                        throw new RuntimeException(_("The source file is unset"));
                 }
                 if (!$target) {
-                        throw new Exception(_("The target file is unset"));
+                        throw new RuntimeException(_("The target file is unset"));
                 }
                 if (!file_exists($source)) {
-                        throw new Exception(_("The source file is missing"));
+                        throw new RuntimeException(_("The source file is missing"));
                 }
                 if (!file_exists($target)) {
-                        throw new Exception(_("The target directory is missing"));
+                        throw new RuntimeException(_("The target directory is missing"));
                 }
                 if (!is_dir($target)) {
-                        throw new Exception(_("The target is not a directory"));
+                        throw new RuntimeException(_("The target is not a directory"));
                 }
                 if (!rename($source, sprintf("%s/%s", $target, $source))) {
-                        throw new Exception(_("Failed move file to directory"));
+                        throw new RuntimeException(_("Failed move file to directory"));
                 }
         }
 
@@ -348,19 +357,19 @@ class IndexPage extends SecureService
         protected function link($source, $target)
         {
                 if (!$source) {
-                        throw new Exception(_("The source file is unset"));
+                        throw new RuntimeException(_("The source file is unset"));
                 }
                 if (!$target) {
-                        throw new Exception(_("The target file is unset"));
+                        throw new RuntimeException(_("The target file is unset"));
                 }
                 if (!file_exists($source)) {
-                        throw new Exception(_("The source file is missing"));
+                        throw new RuntimeException(_("The source file is missing"));
                 }
                 if (file_exists($target)) {
-                        throw new Exception(_("The target file exists"));
+                        throw new RuntimeException(_("The target file exists"));
                 }
                 if (!symlink($source, $target)) {
-                        throw new Exception(_("Failed create link"));
+                        throw new RuntimeException(_("Failed create link"));
                 }
         }
 

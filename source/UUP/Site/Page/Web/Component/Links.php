@@ -16,31 +16,45 @@
  * limitations under the License.
  */
 
-namespace UUP\Site\Page\Service;
+namespace UUP\Site\Page\Web\Component;
 
-use UUP\Site\Request\Handler as RequestHandler;
+use UUP\Site\Page\Context\Menu\MenuData;
 
 /**
- * Standard web service.
- *
+ * HTML links component.
+ * 
+ * @property MenuData $menu The menu data.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
  */
-abstract class StandardService extends RequestHandler
+class Links
 {
 
         /**
          * Constructor.
-         * @param string $config The defaults.site configuration file.
+         * @param MenuData $menu The menu data.
          */
-        public function __construct($config = null)
+        public function __construct($menu)
         {
-                if (ob_get_level() == 0) {
-                        ob_start();
+                $this->menu = $menu;
+        }
+
+        /**
+         * Render all links.
+         */
+        public function render()
+        {
+                if (isset($this->menu->name)) {
+                        printf("<h3>%s</h3>\n", $this->menu->name);
                 }
-                
-                parent::__construct($config);
+                if (isset($this->menu->data)) {
+                        foreach ($this->menu->data as $name => $attr) {
+                                $link = new Link($name, $attr);
+                                $link->render();
+                        }
+                }
         }
 
 }

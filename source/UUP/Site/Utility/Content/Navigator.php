@@ -72,7 +72,7 @@ class Navigator
                         case 'format':
                                 return $this->_format;
                         case 'path':
-                                return $this->path;
+                                return $this->_path;
                         case 'base':
                                 return $this->_base;
                         case 'data':

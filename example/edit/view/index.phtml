@@ -18,26 +18,91 @@
 ?>
 
 <div id="edit-area">
-    <?php require_once('navigator.phtml') ?>
-    <?php require_once('content/index.phtml') ?>
-    <?php require_once('editor/index.phtml') ?>
+    <div id="content-editor" class="w3-animate-zoom">
+        <div style="float: right; position: relative; z-index: 1000">
+            <?php require_once('navigator.phtml') ?>                
+        </div>
+        <div id="section-content" style="display: none">
+            <?php require_once('content/index.phtml') ?>            
+        </div>
+        <div id="section-editor" style="display: none">
+            <?php require_once('editor/index.phtml') ?>
+        </div>
+    </div>
 </div>
 
 <script>
-//        function open_section(name) {
-//                if(name == 'content') {
-//                        open_files_section();
-//                } else {
-//                        open_editor_section()
-//                }
-//        }
+        // 
+        // Current editor settings.
+        // 
+        var editor = {
+            section: 'content',
+            content: 'files',
+            location: '<?= $this->_path ?>',
+            backend: '<?= $this->config->url($this->config->edit['ajax']) ?>',
+            request: function (uri, data, func) {
+                var xhr = new XMLHttpRequest();
+                var url = this.backend + '/' + uri;
 
-        document.getElementById("edit-area").addEventListener('DOMContentLoaded', function () {
-            console.log("HERE");
-            open_files_content();
-        }, false);
-//        document.onload = function() {
-//                console.log("HERE");
-//                open_files_content();
-//        }
+                xhr.onreadystatechange = function (x) {
+                    if (this.readyState === 4 && this.status === 200) {
+                        func(xhr);
+                    }
+                }
+
+                if (data !== null) {
+                    xhr.open("POST", url);
+                    xhr.send(data);
+                } else {
+                    xhr.open("GET", url);
+                    xhr.send();
+                }
+            },
+            url: function (uri) {
+                    return this.location + '/' + uri
+            }
+        };
+
+        /**
+         * Open top level section.
+         * @param {String} section The section name (content|editor).
+         * @return {undefined}
+         */
+        function open_section(section) {
+            switch (section) {
+                case 'content':
+                    open_section_content();
+                    break;
+                case 'editor':
+                    open_section_editor();
+                    break;
+            }
+        }
+
+        /**
+         * Open content section.
+         * @return {undefined}
+         */
+        function open_section_content() {
+            document.getElementById('section-content').style.display = 'block';
+            document.getElementById('section-editor').style.display = 'none';
+        }
+
+        /**
+         * Open editor section.
+         * @return {undefined}
+         */
+        function open_section_editor() {
+            document.getElementById('section-content').style.display = 'none';
+            document.getElementById('section-editor').style.display = 'block';
+        }
+
+        // 
+        // Wait for DOM to be ready:
+        // 
+        document.onreadystatechange = function () {
+            if (document.readyState === "interactive") {
+                open_content(undefined, 'files');
+            }
+        }
 </script>

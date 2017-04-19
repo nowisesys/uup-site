@@ -21,49 +21,195 @@
 
 ?>
 
-<div class="content" style="display: none">
-    <h1>Content</h1>
-    <div class="w3-container w3-margin-top">
-        <div class="w3-bar">
-            <button class="w3-bar-item w3-btn tablink" onclick="open_files_content(event)"><?= _("Files") ?></button>
-            <button class="w3-bar-item w3-btn tablink" onclick="open_menus_content(event)"><?= _("Menus") ?></button>
-            <button class="w3-bar-item w3-btn tablink" onclick="open_context_content(event)"><?= _("Context") ?></button>
-        </div>
+<div style="display: none">        
+    <table class="w3-table-all" id="content-table-template">
+        <thead>
+            <tr class="w3-green">
+                <th><?= (_('Name')) ?></th>
+                <th><?= (_('Link')) ?></th>
+                <th><?= (_('Owner')) ?></th>
+                <th><?= (_('Size')) ?></th>
+            </tr>                
+        </thead>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
 
-        <div id="files" class="w3-container content-section" style="display:none">
-            <?php require_once('files.phtml'); ?>
-        </div>
+<div class="w3-container w3-margin-top">
+    <div id="files-content" class="w3-container content-section w3-animate-opacity w3-animate-left w3-padding-12" style="display:none">
+        <?php require_once('files.phtml'); ?>
+    </div>
 
-        <div id="menus" class="w3-container content-section" style="display:none">
-            <?php require_once('menus.phtml'); ?>
-        </div>
+    <div id="menus-content" class="w3-container content-section w3-animate-opacity w3-animate-left w3-padding-12" style="display:none">
+        <?php require_once('menus.phtml'); ?>
+    </div>
 
-        <div id="context" class="w3-container content-section" style="display:none">
-            <?php require_once('context.phtml'); ?>
-        </div>
+    <div id="context-content" class="w3-container content-section w3-animate-opacity w3-animate-left w3-padding-12" style="display:none">
+        <?php require_once('context.phtml'); ?>
     </div>
 </div>
 
 <script>
-        function open_content_section(evt, sect) {
-            var i, x, tablinks;
+        /**
+         * Open content section and load content.
+         * @param {event} event The click event.
+         * @param {String} content The content type (files|menus|context).
+         * @return {undefined}
+         */
+        function open_content(event, content) {
+            switch (content) {
+                case 'files':
+                    load_content_section('files-listing', content);
+                    open_content_section('files-content');
+                    break;
+                case 'menus':
+                    load_content_section('menus-listing', content);
+                    open_content_section('menus-content');
+                    break;
+                case 'context':
+                    load_content_section('context-listing', content);
+                    open_content_section('context-content');
+                    break;
+            }
+
+            if (event !== undefined) {
+                event.preventDefault();
+            }
+
+            close_overlay();
+        }
+
+        /**
+         * Open content section. This also unhides the parent container.
+         * @param {String} sect The section ID.
+         * @return {undefined}
+         */
+        function open_content_section(sect) {
+            var i, x;
 
             x = document.getElementsByClassName("content-section");
             for (i = 0; i < x.length; i++) {
                 x[i].style.display = "none";
             }
-            tablinks = document.getElementsByClassName("tablink");
-            for (i = 0; i < x.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
-            }
             document.getElementById(sect).style.display = "block";
 
-            if (evt === undefined) {
-                tablinks[0].className += " w3-red";
-            } else {
-                evt.currentTarget.className += " w3-red";
-
-            }
+            open_section('content');    // unhide parent container.
         }
 
+        /**
+         * Load content for section.
+         * @param {String} target The DOM target ID. 
+         * @param {String} source The content source (files|menus|context).
+         * @return {undefined}
+         */
+        function load_content_section(target, source) {
+            load_content(source, function (result) {
+                show_content(result, target);
+            });
+        }
+
+        /**
+         * Load content files listing (using AJAX request).
+         * @param {String} source The content source (files|menus|context).
+         * @param {Function} func The result callback.
+         * @return {undefined}
+         */
+        function load_content(source, func) {
+            editor.request("?path=" + editor.location + '&action=read&source=' + source, null, function (xhr) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status === 'success') {
+                    func(response.result);
+                } else if (response.status === 'failure') {
+                    alert(response.message);
+                }
+            })
+        }
+
+        /**
+         * Show content result.
+         * @param {String} result The AJAX response.
+         * @param {String} target The DOM target ID. 
+         * @return {undefined}
+         */
+        function show_content(result, target) {
+            // 
+            // Clone template table:
+            // 
+            var table = document.getElementById('content-table-template').cloneNode(true);
+
+            // 
+            // Append files and directories to table:
+            // 
+            for (i = 0; i < result.dir.length; ++i) {
+                add_directory(table, result.dir[i]);
+            }
+            for (i = 0; i < result.file.length; ++i) {
+                add_file(table, result.file[i]);
+            }
+
+            // 
+            // Remove the empty table row (inside tbody):
+            // 
+            table.childNodes[3].removeChild(table.childNodes[3].firstChild);
+
+            // 
+            // Clean target DOM element:
+            // 
+            var dest = document.getElementById(target);
+            while (dest.firstChild) {
+                dest.removeChild(dest.firstChild);
+            }
+
+            // 
+            // Append table as single child element:
+            // 
+            dest.appendChild(table);
+        }
+
+        function add_directory(table, data) {
+            var row = add_entry(table, data, false);
+        }
+
+        function add_file(table, data) {
+            var row = add_entry(table, data, true);
+        }
+
+        function add_entry(table, data, file) {
+            var tbody = table.lastChild;
+            var row = tbody.firstChild.cloneNode(true);
+
+            if (data.name !== null && data.name.length !== 0) {
+                row.children[0].appendChild(create_link(data.name, file));
+            }
+            if (data.link !== null && data.link.length !== 0) {
+                row.children[1].appendChild(create_link(data.link, true));
+            }
+            if (data.owner !== null && data.owner.length !== 0) {
+                row.children[2].innerHTML = data.owner;
+            }
+            if (data.size !== null && data.size > 0) {
+                row.children[3].innerHTML = data.size;
+            }
+
+            tbody.insertBefore(row, tbody.lastChild);
+            return row;
+        }
+
+        function create_link(name, file)
+        {
+            var a = document.createElement('a');
+            if (file) {
+                a.href = editor.url(name);
+                a.innerHTML = name;
+            } else {
+                a.href = '?path=' + editor.location + '/' + name;
+                a.innerHTML = name + '/';                    
+            }
+            return a;
+        }
 </script>

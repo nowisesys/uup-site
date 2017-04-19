@@ -192,6 +192,22 @@
 
 <script>
 
+        function content_replace(event, id, source) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function (x) {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById(id).innerHTML = this.responseText;
+                }
+            }
+
+            xhr.open("GET", source, true);
+            xhr.send();
+
+            event.preventDefault();
+            close_overlay();
+        }
+
         function close_overlay() {
             var xm = document.getElementById("sidenav-menu");
             var xo = document.getElementById("page-overlay");
@@ -300,7 +316,7 @@
             xhr.onreadystatechange = function (x) {
                 if (this.readyState === 4 && this.status === 200) {
                     var json = JSON.parse(this.responseText);
-                    if (json.status === 'failed') {
+                    if (json.status === 'failure') {
                         alert(json.reason);
                     }
                 }
@@ -311,8 +327,7 @@
         }
 
         function edit_open(elem) {
-            console.log(document.location);
-            window.location = "<?= $config->url($config->edit['view']) ?>?path=<?= $this->params->path ?>"
+            window.location = "<?= $config->url($config->edit['view']) ?>?path=<?= $this->params->path ?>";
         }
 
         // 
