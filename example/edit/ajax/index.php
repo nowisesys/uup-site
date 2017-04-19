@@ -19,6 +19,7 @@
 require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
 
 use UUP\Site\Page\Service\SecureService;
+use UUP\Site\Utility\Content\Iterator\Collector;
 use UUP\Site\Utility\Content\Iterator\Context as ContextIterator;
 use UUP\Site\Utility\Content\Iterator\Files as FilesIterator;
 use UUP\Site\Utility\Content\Iterator\Menus as MenusIterator;
@@ -64,7 +65,7 @@ class IndexPage extends SecureService
         public function __construct()
         {
                 parent::__construct();
-                
+
                 if (!in_array($this->session->user, $this->config->edit['user'])) {
                         throw new RuntimeException('Caller is not an page/site editor');
                 }
@@ -92,7 +93,7 @@ class IndexPage extends SecureService
                 if (strstr($this->_path, '..')) {
                         throw new RuntimeException(_("Directory navigation is not allowed"));
                 }
-                
+
                 $this->_path = realpath($this->config->proj . '/' . $this->_path);
         }
 
@@ -159,37 +160,12 @@ class IndexPage extends SecureService
         /**
          * Collect content from iterator.
          * @param FilterIterator $iterator The directory iterator.
+         * @return array 
          */
         private function collect($iterator)
         {
-                $result = array('dir' => array(), 'file' => array());
-
-                foreach ($iterator as $fileinfo) {
-                        if ($fileinfo->isDir()) {
-                                $result['dir'][] = array(
-                                        'name'  => $fileinfo->getFilename(),
-                                        'link'  => null,
-                                        'owner' => posix_getpwuid($fileinfo->getOwner())['name'],
-                                        'size'  => 0
-                                );
-                        } elseif ($fileinfo->isLink()) {
-                                $result['file'][] = array(
-                                        'name'  => $fileinfo->getFilename(),
-                                        'link'  => $fileinfo->getLinkTarget(),
-                                        'owner' => posix_getpwuid($fileinfo->getOwner())['name'],
-                                        'size'  => 0
-                                );
-                        } else {
-                                $result['file'][] = array(
-                                        'name'  => $fileinfo->getFilename(),
-                                        'link'  => null,
-                                        'owner' => posix_getpwuid($fileinfo->getOwner())['name'],
-                                        'size'  => $fileinfo->getSize()
-                                );
-                        }
-                }
-
-                return $result;
+                $collector = new Collector($iterator);
+                return $collector->getContent();
         }
 
         /**
