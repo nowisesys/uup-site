@@ -21,46 +21,97 @@
 
 ?>
 
-<div class="editor" style="display: none">
-    <h1>Editor</h1>
-    <div class="w3-container w3-margin-top">
-        <div class="w3-bar">
-            <button class="w3-bar-item w3-btn tablink" onclick="open_inline_editor(event)"><?= _("Inline") ?></button>
-            <button class="w3-bar-item w3-btn tablink" onclick="open_source_editor(event)"><?= _("Source") ?></button>
-            <button class="w3-bar-item w3-btn tablink" onclick="open_default_editor(event)"><?= _("Default") ?></button>
+<div class="w3-container w3-margin-top w3-padding-12">
+    <h1><?= _("Editor") ?></h1>
+    <div class=" w3-border">
+
+        <div class="w3-bar w3-green">
+            <button class="w3-bar-item w3-button tablink" onclick="open_editor_inline(event)"><?= _("Inline") ?></button>
+            <button class="w3-bar-item w3-button tablink" onclick="open_editor_source(event)"><?= _("Source") ?></button>
+            <button class="w3-bar-item w3-button tablink" onclick="open_editor_normal(event)"><?= _("Normal") ?></button>
+            <button class="w3-bar-item w3-button w3-right" onclick="close_editor()">X</button>
         </div>
 
-        <div id="inline" class="w3-container editor-section" style="display:none">
-            <?php require_once('inline.phtml'); ?>
-        </div>
+        <div class="w3-row w3-margin-top">
+            <div class="w3-col w3-right" style="width:100px">
+                <p><input style="min-width: 80px" class="w3-btn w3-large w3-deep-orange" type="button" onclick="save_file(this)" value="<?= _("Save") ?>"></p>
+                <p><input style="min-width: 80px" class="w3-btn w3-large w3-blue-gray" type="button" onclick="close_editor(this)" value="<?= _("Close") ?>"></p>
+            </div>
 
-        <div id="source" class="w3-container editor-section" style="display:none">
-            <?php require_once('source.phtml'); ?>
-        </div>
-        
-        <div id="default" class="w3-container editor-section" style="display:none">
-            <?php require_once('default.phtml'); ?>
+            <div class="w3-rest">
+                <div id="inline-editor" class="w3-container editor-section" style="display:none">
+                    <?php require_once('inline.phtml'); ?>
+                </div>
+
+                <div id="source-editor" class="w3-container editor-section" style="display:none">
+                    <?php require_once('source.phtml'); ?>
+                </div>
+
+                <div id="normal-editor" class="w3-container editor-section" style="display:none">
+                    <?php require_once('normal.phtml'); ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-        function open_editor_section(evt, sect) {
+        function open_editor(event, editor, file) {
+            console.log("FILE: " + file);
+
+            if (file !== undefined) {
+                open_file(file);
+            }
+
+            switch (editor) {
+                case 'inline':
+                    open_editor_section(undefined, 'inline-editor');
+                    break;
+                case 'source':
+                    open_editor_section(undefined, 'source-editor');
+                    break;
+                case 'normal':
+                    open_editor_section(undefined, 'normal-editor');
+                    break;
+            }
+
+            if (event !== undefined) {
+                event.preventDefault();
+            }
+        }
+
+        function close_editor() {
+            open_section('content');
+        }
+
+        function open_editor_section(event, sect) {
             var i, x, tablinks;
+
             x = document.getElementsByClassName("editor-section");
             for (i = 0; i < x.length; i++) {
                 x[i].style.display = "none";
             }
+
             tablinks = document.getElementsByClassName("tablink");
             for (i = 0; i < x.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+                tablinks[i].className = tablinks[i].className.replace(" w3-white", "");
             }
+
             document.getElementById(sect).style.display = "block";
-            evt.currentTarget.className += " w3-red";
+
+            if (event !== undefined) {
+                event.currentTarget.className += " w3-white";
+            }
+
+            open_section('editor');    // unhide parent container.
+        }
+        
+        function open_file(file) {
+                
         }
 
-        function open_editor(file) {
-
+        function save_file(file) {
+                
         }
 
 </script>

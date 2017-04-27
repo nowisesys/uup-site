@@ -5,8 +5,6 @@ return array(
     'data' => array(
         _('Files')   => array('onclick' => "open_content(event, 'files')"),
         _('Menus')   => array('onclick' => "open_content(event, 'menus')"),
-        _('Context') => array('onclick' => "open_content(event, 'context')"),
-            _('Test1') => ':target-id:page1',
-            _('Test2') => '::page2',
+        _('Context') => array('onclick' => "open_content(event, 'context')")
     )
 );

@@ -200,7 +200,7 @@ class Params
          * $request->getParams($names);
          * </code>
          * 
-         * @param array $names The 
+         * @param array $names The parameter names.
          * @param int $method The request method (GET and POST).
          */
         public function getParams($names = null, $method = INPUT_GET | INPUT_POST)

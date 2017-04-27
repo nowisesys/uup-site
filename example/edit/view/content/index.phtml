@@ -120,7 +120,7 @@
          * @return {undefined}
          */
         function load_content(source, func) {
-            editor.request("?path=" + editor.location + '&action=read&source=' + source, null, function (xhr) {
+            api.list(source, function (xhr) {
                 var response = JSON.parse(xhr.responseText);
                 if (response.status === 'success') {
                     func(response.result);
@@ -202,14 +202,19 @@
 
         function create_link(name, file)
         {
-            var a = document.createElement('a');
+            var link = document.createElement('a');
+            var path = editor.path + '/' + name;
+
             if (file) {
-                a.href = editor.url(name);
-                a.innerHTML = name;
+                link.href = '#';
+                link.onclick = function (event) {
+                    open_editor(event, 'source', path)
+                };
+                link.innerHTML = name;
             } else {
-                a.href = '?path=' + editor.location + '/' + name;
-                a.innerHTML = name + '/';                    
+                link.href = '?path=' + path;
+                link.innerHTML = name + '/';
             }
-            return a;
+            return link;
         }
 </script>

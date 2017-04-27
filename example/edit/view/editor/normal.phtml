@@ -1,7 +1,6 @@
 <?php
-
 /*
- * Copyright (C) 2017 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +15,18 @@
  * limitations under the License.
  */
 
-/**
- * The context section AJAX service.
- *
- * @author Anders Lövgren (QNET/BMC CompDept)
- * @package UUP
- * @subpackage Site
- */
-class ContextPage extends IndexPage
-{
+?>
 
-        public function __construct()
-        {
-                parent::__construct();
+<div id="editor-normal">
+    <textarea id="file-editor-content"></textarea>
+</div>
 
-                $this->params->setFilter(array(
-                        'action' => '/^(create|read|update|delete)$/'
-                ));
+<script>
+        function open_editor_normal(event) {
+            open_editor_section(event, 'normal-editor');
         }
-
-        public function render()
-        {
+        
+        function close_editor_normal() {
                 
         }
-
-}
+</script>

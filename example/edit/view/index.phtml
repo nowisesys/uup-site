@@ -33,17 +33,19 @@
 
 <script>
         // 
-        // Current editor settings.
+        // The editor object:
         // 
         var editor = {
             section: 'content',
             content: 'files',
-            location: '<?= $this->_path ?>',
-            backend: '<?= $this->config->url($this->config->edit['ajax']) ?>',
+            location: '<?= $this->config->location ?>',
+            path: '<?= $this->_path ?>',
+            ajax: '<?= $this->config->url($this->config->edit['ajax']) ?>',
+            view: '<?= $this->config->url($this->config->edit['view']) ?>',
+            file: null,
             request: function (uri, data, func) {
                 var xhr = new XMLHttpRequest();
-                var url = this.backend + '/' + uri;
-
+                var url = this.ajax + '/' + uri;
                 xhr.onreadystatechange = function (x) {
                     if (this.readyState === 4 && this.status === 200) {
                         func(xhr);
@@ -59,9 +61,80 @@
                 }
             },
             url: function (uri) {
-                    return this.location + '/' + uri
+                return this.location + '/' + this.path + '/' + uri;
             }
         };
+
+        // 
+        // The AJAX API object.
+        // 
+        var api = (function () {
+
+            // 
+            // Encode request parameters:
+            // 
+            this.encode = function (params) {
+                let result = [];
+                for (let name in params) {
+                    result.push(encodeURIComponent(name) + '=' + encodeURIComponent(params[name]));
+                }
+
+                return result.join('&');
+            }
+
+            // 
+            // Send request and call func:
+            // 
+            this.send = function (params, data, func) {
+                params.path = editor.path;
+                editor.request('?' + encode(params), data, func);
+            }
+
+            // 
+            // Return public API:
+            // 
+            return {
+                // 
+                // Common methods:
+                // 
+                list: function (handler, func) {
+                    send({'handler': handler, 'action': 'list'}, null, func);
+                },
+                create: function (handler, source, target, func) {
+                    send({'handler': handler, 'action': 'create', 'source': source, 'target': target}, null, func);
+                },
+                read: function (handler, source, func) {
+                    send({'handler': handler, 'action': 'read', 'source': source}, null, func);
+                },
+                update: function (handler, target, data, func) {
+                    send({'handler': handler, 'action': 'update', 'target': target}, data, func);
+                },
+                delete: function (handler, target, func) {
+                    send({'handler': handler, 'action': 'delete', 'target': target}, null, func);
+                },
+                rename: function (handler, source, target, func) {
+                    send({'handler': handler, 'action': 'rename', 'source': source, 'target': target}, null, func);
+                },
+                move: function (handler, source, target, func) {
+                    send({'handler': handler, 'action': 'move', 'source': source, 'target': target}, null, func);
+                },
+                link: function (handler, source, target, func) {
+                    send({'handler': handler, 'action': 'link', 'source': source, 'target': target}, null, func);
+                },
+                copy: function (handler, source, target, func) {
+                    send({'handler': handler, 'action': 'copy', 'source': source, 'target': target}, null, func);
+                },
+                // 
+                // Menu specific:
+                // 
+                add: function (target, link, name, func) {
+                    send({'handler': 'menus', 'action': 'add', 'target': target}, {'link': link, 'name': name}, func);
+                },
+                remove: function (target, link, func) {
+                    send({'handler': 'menus', 'action': 'remove', 'target': target}, {'link': link}, func);
+                }
+            }
+        }());
 
         /**
          * Open top level section.
@@ -98,7 +171,7 @@
         }
 
         // 
-        // Wait for DOM to be ready:
+        // Wait for DOM to become ready:
         // 
         document.onreadystatechange = function () {
             if (document.readyState === "interactive") {
