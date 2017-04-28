@@ -84,27 +84,18 @@ class IndexPage extends SecureService
 
                 switch ($this->params->getParam('handler')) {
                         case 'files':
-                                $handler = new FilesHandler($this->path());
+                                $handler = new FilesHandler($this->config->docs, $this->params->getParam('path'));
                                 $handler->process($this->params);
                                 break;
                         case 'menus':
-                                $handler = new MenusHandler($this->path());
+                                $handler = new MenusHandler($this->config->docs, $this->params->getParam('path'));
                                 $handler->process($this->params);
                                 break;
                         case 'context':
-                                $handler = new ContextHandler($this->path());
+                                $handler = new ContextHandler($this->config->docs, $this->params->getParam('path'));
                                 $handler->process($this->params);
                                 break;
                 }
-        }
-
-        /**
-         * Get absolute path.
-         * @return string
-         */
-        private function path()
-        {
-                return realpath($this->config->proj . '/' . $this->params->getParam('path'));
         }
 
 }

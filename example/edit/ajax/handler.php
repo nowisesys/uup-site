@@ -30,17 +30,24 @@ abstract class HandlerBase
 {
 
         /**
-         * The target directory.
+         * The public docs directory.
          * @var string 
          */
-        protected $_path;
+        private $_docs;
+        /**
+         * The current working path (relative public docs).
+         * @var string 
+         */
+        private $_path;
 
         /**
          * Constructor.
-         * @param string $path The target directory.
+         * @param string $docs The public docs directory.
+         * @param string $path The current working path.
          */
-        public function __construct($path)
+        public function __construct($docs, $path)
         {
+                $this->_docs = $docs;
                 $this->_path = $path;
         }
 
@@ -75,22 +82,6 @@ abstract class HandlerBase
                         'status' => 'success',
                         'result' => $result
                 ));
-        }
-
-        /**
-         * Create absolute path.
-         * @param string $target The target file or directory.
-         * @return string
-         */
-        protected function path($target)
-        {
-                if ($target === false) {
-                        return $target;
-                } elseif ($target[0] == '/') {
-                        return $target;
-                } else {
-                        return sprintf("%s/%s", $this->_path, $target);
-                }
         }
 
         /**
@@ -297,7 +288,7 @@ abstract class HandlerBase
         {
                 switch ($request->getParam('action')) {
                         case 'read':
-                                $this->read($request->getParam('source'));
+                                $this->read($this->path($request->getParam('source')));
                                 break;
                         case 'update':
                                 $this->update($request->getParam('target'), $request->getParam('content'));
@@ -320,6 +311,20 @@ abstract class HandlerBase
                 }
         }
 
+        /**
+         * Get absolute path.
+         * @param string $target The target file or directory.
+         * @return string
+         */
+        protected function path($target = null)
+        {
+                if (isset($target)) {
+                        return sprintf("%s/%s", $this->_docs, $target);
+                } else {
+                        return sprintf("%s/%s", $this->_docs, $this->_path);
+                }
+        }
+
 }
 
 class FilesHandler extends HandlerBase
@@ -332,20 +337,20 @@ class FilesHandler extends HandlerBase
         public function process($request)
         {
                 $request->setFilter(array(
-                        'action' => '/^(create|read|update|delete|rename|move|link|copy|list)$/'
+                        'action' => '/^(create|read|update|delete|rename|move|link|copy|list)$/',
+                        'source' => '/^(secure-page|secure-view|standard-page|standard-view|router|directory|file)$/'
                 ));
 
                 switch ($request->getParam('action')) {
                         case 'list':
-                                parent::listing(new FilesIterator($this->_path));
+                                $iterator = new FilesIterator(parent::path());
+                                $this->listing($iterator);
                                 break;
                         case 'create':
-                                $request->addFilter(
-                                    'source', '/^(secure-page|secure-view|standard-page|standard-view|router|directory)$/'
-                                );
                                 $this->create($request->getParam('source'), $request->getParam('target'));
                                 break;
                         default:
+                                $request->removeFilter('source');
                                 parent::process($request);
                 }
         }
@@ -357,13 +362,16 @@ class FilesHandler extends HandlerBase
          */
         protected function create($source, $target)
         {
-                $source = $this->template($source);
-                $target = $this->path($target);
-
-                if (isset($source)) {
-                        parent::create($source, $target);
-                } else {
-                        $this->mkdir($target);
+                switch ($source) {
+                        case 'directory':
+                                $this->mkdir($target);
+                                break;
+                        case 'file':
+                                $this->touch($target);
+                                break;
+                        default:
+                                $template = $this->template($source);
+                                parent::create($template, $target);
                 }
         }
 
@@ -375,12 +383,11 @@ class FilesHandler extends HandlerBase
         private function template($source)
         {
                 $sources = array(
-                        'secure-page'   => __DIR__ . '../templates/files/secure/page.phpt',
-                        'secure-view'   => __DIR__ . '../templates/files/secure/view.phpt',
-                        'standard-page' => __DIR__ . '../templates/files/standard/page.phpt',
-                        'standard-view' => __DIR__ . '../templates/files/standard/view.phpt',
-                        'router'        => __DIR__ . '../templates/files/standard/router.phpt',
-                        'directory'     => null
+                        'secure-page'   => 'files/secure/page.phpt',
+                        'secure-view'   => 'files/secure/view.phpt',
+                        'standard-page' => 'files/standard/page.phpt',
+                        'standard-view' => 'files/standard/view.phpt',
+                        'router'        => 'files/standard/router.phpt'
                 );
 
                 return $sources[$source];
@@ -400,6 +407,17 @@ class FilesHandler extends HandlerBase
                 }
         }
 
+        /**
+         * Create empty file.
+         * @param string $target The target file.
+         */
+        private function touch($target)
+        {
+                if (!touch($target)) {
+                        throw new RuntimeException(_("Failed create file"));
+                }
+        }
+
 }
 
 class MenusHandler extends HandlerBase
@@ -412,17 +430,16 @@ class MenusHandler extends HandlerBase
         public function process($request)
         {
                 $request->setFilter(array(
-                        'action' => '/^(create|read|update|delete|move|link|copy|list|add|remove)$/'
+                        'action' => '/^(create|read|update|delete|move|link|copy|list|add|remove)$/',
+                        'source' => '/^(sidebar|standard|topbar)$/'
                 ));
 
                 switch ($request->getParam('action')) {
                         case 'list':
-                                parent::listing(new MenusIterator($this->_path));
+                                $iterator = new MenusIterator(parent::path());
+                                $this->listing($iterator);
                                 break;
                         case 'create':
-                                $request->addFilter(
-                                    'source', '/^(sidebar|standard|topbar)$/'
-                                );
                                 $this->create($request->getParam('source'), $request->getParam('target'));
                                 break;
                         case 'add':
@@ -430,6 +447,7 @@ class MenusHandler extends HandlerBase
                         case 'remove':
                                 break;
                         default:
+                                $request->removeFilter('source');
                                 parent::process($request);
                 }
         }
@@ -441,10 +459,8 @@ class MenusHandler extends HandlerBase
          */
         protected function create($source, $target)
         {
-                $source = $this->template($source);
-                $target = $this->path($target);
-
-                parent::create($source, $target);
+                $template = $this->template($source);
+                parent::create($template, $target);
         }
 
         /**
@@ -455,9 +471,9 @@ class MenusHandler extends HandlerBase
         private function template($source)
         {
                 $sources = array(
-                        'sidebar'  => __DIR__ . '../templates/menus/sidebar.menu',
-                        'standard' => __DIR__ . '../templates/menus/standard.menu',
-                        'topbar'   => __DIR__ . '../templates/menus/topbar.menu'
+                        'sidebar'  => 'menus/sidebar.menu',
+                        'standard' => 'menus/standard.menu',
+                        'topbar'   => 'menus/topbar.menu'
                 );
 
                 return $sources[$source];
@@ -475,20 +491,20 @@ class ContextHandler extends HandlerBase
         public function process($request)
         {
                 $request->setFilter(array(
-                        'action' => '/^(create|read|update|delete|move|link|copy|list)$/'
+                        'action' => '/^(create|read|update|delete|move|link|copy|list)$/',
+                        'source' => '/^(content|headers|publish)$/'
                 ));
 
                 switch ($request->getParam('action')) {
                         case 'list':
-                                parent::listing(new ContextIterator($this->_path));
+                                $iterator = new ContextIterator(parent::path());
+                                $this->listing($iterator);
                                 break;
                         case 'create':
-                                $request->addFilter(
-                                    'source', '/^(content|headers|publish)$/'
-                                );
                                 $this->create($request->getParam('source'), $request->getParam('target'));
                                 break;
                         default:
+                                $request->removeFilter('source');
                                 parent::process($request);
                 }
         }
@@ -500,10 +516,8 @@ class ContextHandler extends HandlerBase
          */
         protected function create($source, $target)
         {
-                $source = $this->template($source);
-                $target = $this->path($target);
-
-                parent::create($source, $target);
+                $template = $this->template($source);
+                parent::create($template, $target);
         }
 
         /**
@@ -514,9 +528,9 @@ class ContextHandler extends HandlerBase
         private function template($source)
         {
                 $sources = array(
-                        'content' => __DIR__ . '../templates/context/content.spec',
-                        'headers' => __DIR__ . '../templates/context/headers.inc',
-                        'publish' => __DIR__ . '../templates/context/publish.inc'
+                        'content' => 'context/content.spec',
+                        'headers' => 'context/headers.inc',
+                        'publish' => 'context/publish.inc'
                 );
 
                 return $sources[$source];

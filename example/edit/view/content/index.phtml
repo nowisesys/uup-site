@@ -80,6 +80,9 @@
             if (event !== undefined) {
                 event.preventDefault();
             }
+            if (content !== undefined) {
+                uup.editor.content = content;
+            }
 
             close_overlay();
         }
@@ -127,7 +130,7 @@
                 } else if (response.status === 'failure') {
                     alert(response.message);
                 }
-            })
+            });
         }
 
         /**
@@ -145,10 +148,10 @@
             // 
             // Append files and directories to table:
             // 
-            for (i = 0; i < result.dir.length; ++i) {
+            for (var i = 0; i < result.dir.length; ++i) {
                 add_directory(table, result.dir[i]);
             }
-            for (i = 0; i < result.file.length; ++i) {
+            for (var i = 0; i < result.file.length; ++i) {
                 add_file(table, result.file[i]);
             }
 
@@ -171,14 +174,34 @@
             dest.appendChild(table);
         }
 
+        /**
+         * Add directory in table.
+         * 
+         * @param {DOM.Element} table The HTML table element.
+         * @param {Object} data The directory object.
+         */
         function add_directory(table, data) {
-            var row = add_entry(table, data, false);
+            add_entry(table, data, false);
         }
 
+        /**
+         * Add file in table.
+         * 
+         * @param {DOM.Element} table The HTML table element.
+         * @param {Object} data The directory object.
+         */
         function add_file(table, data) {
-            var row = add_entry(table, data, true);
+            add_entry(table, data, true);
         }
 
+        /**
+         * Add table entry.
+         * 
+         * @param {DOM.Element} table The HTML table element.
+         * @param {Object} data The directory object.
+         * @param {Boolean} file Create file link.
+         * @return {DOM.Element}
+         */
         function add_entry(table, data, file) {
             var tbody = table.lastChild;
             var row = tbody.firstChild.cloneNode(true);
@@ -200,10 +223,17 @@
             return row;
         }
 
+        /**
+         * Create links opening editor.
+         * 
+         * @param {String} name The file name.
+         * @param {Boolean} file Create file link.
+         * @return {DOM.Element}
+         */
         function create_link(name, file)
         {
             var link = document.createElement('a');
-            var path = editor.path + '/' + name;
+            var path = uup.editor.path + '/' + name;
 
             if (file) {
                 link.href = '#';
