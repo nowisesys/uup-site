@@ -35,17 +35,32 @@
         // 
         // The editor object:
         // 
-        var editor = {
-            section: 'content',
-            content: 'files',
-            location: '<?= $this->config->location ?>',
-            path: '<?= $this->_path ?>',
-            ajax: '<?= $this->config->url($this->config->edit['ajax']) ?>',
-            view: '<?= $this->config->url($this->config->edit['view']) ?>',
-            file: null,
-            request: function (uri, data, func) {
+        var uup = {
+            editor: {
+                section: 'content',
+                content: 'files',
+                location: '<?= $this->config->location ?>',
+                path: '<?= $this->_path ?>',
+                ajax: '<?= $this->config->url($this->config->edit['ajax']) ?>',
+                view: '<?= $this->config->url($this->config->edit['view']) ?>',
+                file: null,
+                url: function (uri) {
+                    return this.location + '/' + this.path + '/' + uri;
+                }
+            }
+        };
+
+        // 
+        // The AJAX API object.
+        // 
+        var api = (function () {
+
+            // 
+            // Send AJAX request:
+            // 
+            this.request = function (uri, data, func) {
                 var xhr = new XMLHttpRequest();
-                var url = this.ajax + '/' + uri;
+                var url = uup.editor.ajax + '/' + uri;
                 xhr.onreadystatechange = function (x) {
                     if (this.readyState === 4 && this.status === 200) {
                         func(xhr);
@@ -59,16 +74,7 @@
                     xhr.open("GET", url);
                     xhr.send();
                 }
-            },
-            url: function (uri) {
-                return this.location + '/' + this.path + '/' + uri;
             }
-        };
-
-        // 
-        // The AJAX API object.
-        // 
-        var api = (function () {
 
             // 
             // Encode request parameters:
@@ -86,8 +92,13 @@
             // Send request and call func:
             // 
             this.send = function (params, data, func) {
-                params.path = editor.path;
-                editor.request('?' + encode(params), data, func);
+                if (params.path === undefined) {
+                    params.path = uup.editor.path;
+                }
+                if (params.handler === undefined) {
+                    params.handler = uup.editor.content;
+                }
+                request('?' + encode(params), data, func);
             }
 
             // 
@@ -97,41 +108,41 @@
                 // 
                 // Common methods:
                 // 
-                list: function (handler, func) {
-                    send({'handler': handler, 'action': 'list'}, null, func);
+                list: function (source, func) {
+                    send({handler: source, action: 'list'}, null, func);
                 },
-                create: function (handler, source, target, func) {
-                    send({'handler': handler, 'action': 'create', 'source': source, 'target': target}, null, func);
+                create: function (source, target, func) {
+                    send({action: 'create', source: source, target: target}, null, func);
                 },
-                read: function (handler, source, func) {
-                    send({'handler': handler, 'action': 'read', 'source': source}, null, func);
+                read: function (source, func) {
+                    send({action: 'read', source: source}, null, func);
                 },
-                update: function (handler, target, data, func) {
-                    send({'handler': handler, 'action': 'update', 'target': target}, data, func);
+                update: function (target, data, func) {
+                    send({action: 'update', target: target}, data, func);
                 },
-                delete: function (handler, target, func) {
-                    send({'handler': handler, 'action': 'delete', 'target': target}, null, func);
+                delete: function (target, func) {
+                    send({action: 'delete', target: target}, null, func);
                 },
-                rename: function (handler, source, target, func) {
-                    send({'handler': handler, 'action': 'rename', 'source': source, 'target': target}, null, func);
+                rename: function (source, target, func) {
+                    send({action: 'rename', source: source, target: target}, null, func);
                 },
-                move: function (handler, source, target, func) {
-                    send({'handler': handler, 'action': 'move', 'source': source, 'target': target}, null, func);
+                move: function (source, target, func) {
+                    send({action: 'move', source: source, target: target}, null, func);
                 },
-                link: function (handler, source, target, func) {
-                    send({'handler': handler, 'action': 'link', 'source': source, 'target': target}, null, func);
+                link: function (source, target, func) {
+                    send({action: 'link', source: source, target: target}, null, func);
                 },
-                copy: function (handler, source, target, func) {
-                    send({'handler': handler, 'action': 'copy', 'source': source, 'target': target}, null, func);
+                copy: function (source, target, func) {
+                    send({action: 'copy', source: source, target: target}, null, func);
                 },
                 // 
                 // Menu specific:
                 // 
                 add: function (target, link, name, func) {
-                    send({'handler': 'menus', 'action': 'add', 'target': target}, {'link': link, 'name': name}, func);
+                    send({handler: 'menus', action: 'add', target: target}, {link: link, name: name}, func);
                 },
                 remove: function (target, link, func) {
-                    send({'handler': 'menus', 'action': 'remove', 'target': target}, {'link': link}, func);
+                    send({handler: 'menus', action: 'remove', target: target}, {link: link}, func);
                 }
             }
         }());
