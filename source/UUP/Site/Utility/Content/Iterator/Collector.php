@@ -82,9 +82,11 @@ class Collector
 
         /**
          * Get file info.
+         * 
+         * @param boolean $sorted Sort files and directories by name.
          * @return array
          */
-        public function getContent()
+        public function getContent($sorted = true)
         {
                 $result = array(
                         'dir'  => array(),
@@ -97,6 +99,15 @@ class Collector
                         } else {
                                 $result['file'][] = $this->getEntry($fileinfo);
                         }
+                }
+
+                if ($sorted) {
+                        usort($result['dir'], function($a, $b) {
+                                return strcmp($a['name'], $b['name']);
+                        });
+                        usort($result['file'], function($a, $b) {
+                                return strcmp($a['name'], $b['name']);
+                        });
                 }
 
                 return $result;
