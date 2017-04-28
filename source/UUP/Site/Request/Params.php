@@ -58,13 +58,13 @@ class Params
 
         /**
          * Constructor.
-         * @param string $proj The project path.
+         * @param string $docs The public document path.
          */
-        public function __construct($proj)
+        public function __construct($docs)
         {
                 $this->_page = filter_input(INPUT_SERVER, 'SCRIPT_NAME');
                 $this->_file = filter_input(INPUT_SERVER, 'SCRIPT_FILENAME');
-                $this->_path = dirname(substr($this->_file, strlen($proj) - 1));
+                $this->_path = dirname(substr($this->_file, strlen($docs) + 1));
         }
 
         public function __get($name)
@@ -108,7 +108,7 @@ class Params
         }
 
         /**
-         * Set input parameter filter.
+         * Set request parameter filter.
          * 
          * <code>
          * // 
@@ -129,9 +129,9 @@ class Params
         }
 
         /**
-         * Add input parameter filter.
+         * Add request parameter filter.
          * 
-         * @param string $name The parameter name.
+         * @param string $name The input parameter name.
          * @param string $regex The regex pattern.
          */
         public function addFilter($name, $regex)
@@ -140,9 +140,18 @@ class Params
         }
 
         /**
-         * Check if parameter is set.
+         * Remove request parameter filter. 
+         * @param string $name The input parameter name.
+         */
+        public function removeFilter($name)
+        {
+                unset($this->_filter[$name]);
+        }
+
+        /**
+         * Check if request parameter exist.
          * 
-         * @param string $name The parameter name.
+         * @param string $name The input parameter name.
          * @param mixed $default The default value.
          * @param int $method The request method (GET and POST).
          * @return boolean 
@@ -164,9 +173,9 @@ class Params
         }
 
         /**
-         * Get input parameter value.
+         * Get request parameter value.
          * 
-         * @param string $name The parameter name.
+         * @param string $name The input parameter name.
          * @param mixed $default The default value.
          * @param int $method The request method (GET and POST).
          */
@@ -200,7 +209,7 @@ class Params
          * $request->getParams($names);
          * </code>
          * 
-         * @param array $names The parameter names.
+         * @param array $names The input parameter names.
          * @param int $method The request method (GET and POST).
          */
         public function getParams($names = null, $method = INPUT_GET | INPUT_POST)
@@ -228,9 +237,9 @@ class Params
         }
 
         /**
-         * Get input parameter value.
+         * Get request parameter value.
          * 
-         * @param string $name The parameter name.
+         * @param string $name The input parameter name.
          * @param int $method The request method (GET and POST).
          * @return boolean
          */

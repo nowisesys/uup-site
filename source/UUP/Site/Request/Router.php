@@ -235,7 +235,7 @@ class Router extends Handler
          */
         private function routed($page)
         {
-                $page->params = new Params($this->config->proj);
+                $page->params = new Params($this->config->docs);
                 $page->params->setFile($this->_page);
 
                 $page->render();

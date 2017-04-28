@@ -77,7 +77,7 @@ abstract class Handler
 
                 $this->config = new Config($config);
                 $this->locale = new Locale($this->config);
-                $this->params = new Params($this->config->proj);
+                $this->params = new Params($this->config->docs);
 
                 if ($this->config->session) {
                         if (!$this->session->started()) {
