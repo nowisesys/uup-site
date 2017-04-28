@@ -57,7 +57,6 @@
 
 <script>
         function open_editor(event, editor, file) {
-            console.log("FILE: " + file);
 
             if (file !== undefined) {
                 open_file(file);
@@ -105,13 +104,16 @@
 
             open_section('editor');    // unhide parent container.
         }
-        
-        function open_file(file) {
-                
+
+        function open_file(source) {
+            api.read(source, function (xhr) {
+                var textarea = document.getElementById('file-editor-content');
+                textarea.value = xhr.response;
+            });
         }
 
         function save_file(file) {
-                
+
         }
 
 </script>
