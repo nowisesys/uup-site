@@ -22,7 +22,7 @@
 ?>
 
 <div class="w3-container w3-margin-top w3-padding-12  w3-animate-bottom">
-    <h1><?= _("Editor") ?></h1>
+    <h1><?= _("Editor") ?> (<span id="editor-filename"></span>)</h1>
     <div class=" w3-border">
 
         <div class="w3-bar w3-green">
@@ -69,6 +69,13 @@
         function open_file(path, event) {
             api.stat(path, function (stat) {
                 var response = JSON.parse(stat.responseText);
+
+                if (response.result.mime !== 'text/html') {
+                    hide_editor('inline', true);
+                } else {
+                    hide_editor('inline', false);
+                }
+
                 api.read(path, function (xhr) {
                     uup.editor.file.name = path;
                     uup.editor.file.mime = response.result.mime;
@@ -77,6 +84,8 @@
 
                     load_editor(uup.editor.curr.gettype());
                     open_section('editor');    // unhide parent container.
+                    
+                    document.getElementById('editor-filename').innerHTML = uup.editor.file.name.split('/').pop();
                 });
             });
 
@@ -144,6 +153,9 @@
             uup.editor.curr.close();
         }
 
+        // 
+        // Make editor of type the current.
+        // 
         function show_editor(type, event) {
             var i, x, tablinks, tabitem;
 
@@ -168,6 +180,17 @@
             }
 
             document.getElementById(type + '-editor').style.display = 'block';
+        }
+
+        function hide_editor(type, hidden) {
+            if (uup.editor.curr.gettype() === type) {
+                uup.editor.curr = uup.editor.back['source'];
+            }
+            if (hidden) {
+                document.getElementById(type + '-editor-tab').style.display = 'none';
+            } else {
+                document.getElementById(type + '-editor-tab').style.display = 'block';
+            }
         }
 
 </script>
