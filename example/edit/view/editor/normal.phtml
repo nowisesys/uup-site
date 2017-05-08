@@ -18,7 +18,7 @@
 ?>
 
 <style>
-    #file-editor-content {
+    #editor-normal-content {
         height: 100%;
         width: 100%;
         min-height: 300px;
@@ -27,15 +27,33 @@
 </style>
 
 <div id="editor-normal">
-    <textarea id="file-editor-content"></textarea>
+    <textarea id="editor-normal-content"></textarea>
 </div>
 
 <script>
-        function open_editor_normal(event) {
-            open_editor_section(event, 'normal-editor');
-        }
+        // 
+        // The normal editor object.
+        // 
+        var normal_editor = (function () {
+            var target = document.getElementById('editor-normal-content');
 
-        function close_editor_normal() {
-
-        }
+            return {
+                open: function (source, mime) {
+                    target.value = source;
+                },
+                close: function () {
+                    target.value = "";
+                    target.style.display = "none";
+                },
+                value: function () {
+                    return target.value;
+                },
+                show: function () {
+                    target.style.display = "block";
+                },
+                gettype: function() {
+                        return 'normal';
+                }
+            };
+        }());
 </script>

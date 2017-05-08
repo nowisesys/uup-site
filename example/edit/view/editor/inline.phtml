@@ -21,11 +21,29 @@
 </div>
 
 <script>
-        function open_editor_inline(event) {
-            open_editor_section(event, 'inline-editor');
-        }
+        // 
+        // The inline editor object.
+        // 
+        var inline_editor = (function () {
+            var editor;
 
-        function close_editor_inline() {
-
-        }
+            return {
+                open: function (source, mime) {
+                    console.log("inline_editor->open(" + mime + ")");
+                },
+                close: function () {
+                    console.log("inline_editor->close()");
+                },
+                value: function () {
+                    console.log("inline_editor->value()");
+                },
+                show: function () {
+                    console.log("inline_editor->show()");
+                    document.getElementById('editor-inline').style.display = "block";
+                },
+                gettype: function() {
+                        return 'inline';
+                }
+            };
+        }());
 </script>

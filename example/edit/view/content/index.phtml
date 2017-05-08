@@ -238,7 +238,7 @@
             if (file) {
                 link.href = '#';
                 link.onclick = function (event) {
-                    open_editor(event, 'source', path)
+                    open_file(path, event);
                 };
                 link.innerHTML = name;
             } else {

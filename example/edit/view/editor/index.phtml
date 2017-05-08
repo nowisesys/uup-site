@@ -21,21 +21,21 @@
 
 ?>
 
-<div class="w3-container w3-margin-top w3-padding-12">
+<div class="w3-container w3-margin-top w3-padding-12  w3-animate-bottom">
     <h1><?= _("Editor") ?></h1>
     <div class=" w3-border">
 
         <div class="w3-bar w3-green">
-            <button class="w3-bar-item w3-button tablink" onclick="open_editor_inline(event)"><?= _("Inline") ?></button>
-            <button class="w3-bar-item w3-button tablink" onclick="open_editor_source(event)"><?= _("Source") ?></button>
-            <button class="w3-bar-item w3-button tablink" onclick="open_editor_normal(event)"><?= _("Normal") ?></button>
-            <button class="w3-bar-item w3-button w3-right w3-hide-small" onclick="close_editor()">X</button>
+            <button class="w3-bar-item w3-button tablink" id="inline-editor-tab" onclick="open_editor('inline', event)"><?= _("Inline") ?></button>
+            <button class="w3-bar-item w3-button tablink" id="source-editor-tab" onclick="open_editor('source', event)"><?= _("Source") ?></button>
+            <button class="w3-bar-item w3-button tablink" id="normal-editor-tab" onclick="open_editor('normal', event)"><?= _("Normal") ?></button>
+            <button class="w3-bar-item w3-button w3-right w3-hide-small" onclick="close_file()">X</button>
         </div>
 
         <div class="w3-row w3-margin-top">
             <div class="w3-col w3-right w3-hide-small" style="width:100px">
                 <p><input style="min-width: 80px" class="w3-btn w3-large w3-deep-orange" type="button" onclick="save_file(this)" value="<?= _("Save") ?>"></p>
-                <p><input style="min-width: 80px" class="w3-btn w3-large w3-blue-gray" type="button" onclick="close_editor(this)" value="<?= _("Close") ?>"></p>
+                <p><input style="min-width: 80px" class="w3-btn w3-large w3-blue-gray" type="button" onclick="close_file(this)" value="<?= _("Close") ?>"></p>
             </div>
 
             <div class="w3-rest">
@@ -55,44 +55,97 @@
 
         <div class="w3-padding-left w3-padding-16 w3-hide-medium w3-hide-large">
             <input style="min-width: 80px" class="w3-btn w3-large w3-deep-orange" type="button" onclick="save_file(this)" value="<?= _("Save") ?>">
-            <input style="min-width: 80px" class="w3-btn w3-large w3-blue-gray" type="button" onclick="close_editor(this)" value="<?= _("Close") ?>">
+            <input style="min-width: 80px" class="w3-btn w3-large w3-blue-gray" type="button" onclick="close_file(this)" value="<?= _("Close") ?>">
         </div>
 
     </div>
 </div>
 
 <script>
-        function open_editor(event, editor, file) {
 
-            console.log("open_editor: editor -> " + editor + ", file -> " + file);
+        // 
+        // Open file for editing.
+        // 
+        function open_file(path, event) {
+            api.stat(path, function (stat) {
+                var response = JSON.parse(stat.responseText);
+                api.read(path, function (xhr) {
+                    uup.editor.file.name = path;
+                    uup.editor.file.mime = response.result.mime;
+                    uup.editor.file.stat = response.result;
+                    uup.editor.text = xhr.response;
 
-            if (file !== undefined) {
-                open_file(file);
-            }
+                    load_editor(uup.editor.curr.gettype());
+                    open_section('editor');    // unhide parent container.
+                });
+            });
 
-            switch (editor) {
-                case 'inline':
-                    open_editor_section(undefined, 'inline-editor');
-                    break;
-                case 'source':
-                    open_editor_section(undefined, 'source-editor');
-                    break;
-                case 'normal':
-                    open_editor_section(undefined, 'normal-editor');
-                    break;
-            }
-
-            if (event !== undefined) {
-                event.preventDefault();
-            }
+            event.preventDefault();
         }
 
-        function close_editor() {
+        // 
+        // Save edited file.
+        // 
+        function save_file(event) {
+            api.update(uup.editor.file.name, uup.editor.curr.value(), function (xhr) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status === 'success') {
+                    func(response.result);
+                } else if (response.status === 'failure') {
+                    alert(response.message);
+                }
+
+                console.log("save_file(" + uup.editor.file.name + ")");
+            });
+        }
+
+        // 
+        // Close edited file.
+        // 
+        function close_file(event) {
+            uup.editor.curr.close();
             open_section('content');
         }
 
-        function open_editor_section(event, sect) {
-            var i, x, tablinks;
+        // 
+        // Load editor.
+        //
+        function load_editor(type) {
+            console.log(uup.editor);
+            show_editor(type);
+
+            uup.editor.curr.open(uup.editor.text, uup.editor.file.mime);
+            uup.editor.curr.show();
+
+        }
+
+        // 
+        // Open editor.
+        // 
+        function open_editor(type, event) {
+            console.log(uup.editor);
+
+            uup.editor.text = uup.editor.curr.value();
+            uup.editor.curr.close();
+
+            uup.editor.curr = uup.editor.back[type];
+            uup.editor.curr.open(uup.editor.text, uup.editor.file.mime);
+            uup.editor.curr.show();
+
+            show_editor(type, event);
+            console.log(uup.editor);
+        }
+
+        // 
+        // Close editor.
+        // 
+        function close_editor(event) {
+            uup.editor.text = uup.editor.curr.value();
+            uup.editor.curr.close();
+        }
+
+        function show_editor(type, event) {
+            var i, x, tablinks, tabitem;
 
             x = document.getElementsByClassName("editor-section");
             for (i = 0; i < x.length; i++) {
@@ -104,24 +157,17 @@
                 tablinks[i].className = tablinks[i].className.replace(" w3-white", "");
             }
 
-            document.getElementById(sect).style.display = "block";
-
             if (event !== undefined) {
-                event.currentTarget.className += " w3-white";
+                tabitem = event.currentTarget;
+            }
+            if (type !== undefined) {
+                tabitem = document.getElementById(type + '-editor-tab');
+            }
+            if (tabitem !== undefined) {
+                tabitem.className += " w3-white";
             }
 
-            open_section('editor');    // unhide parent container.
-        }
-
-        function open_file(source) {
-            api.read(source, function (xhr) {
-                var textarea = document.getElementById('file-editor-content');
-                textarea.value = xhr.response;
-            });
-        }
-
-        function save_file(file) {
-
+            document.getElementById(type + '-editor').style.display = 'block';
         }
 
 </script>

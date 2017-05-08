@@ -85,6 +85,34 @@ abstract class HandlerBase
         }
 
         /**
+         * Stat the file or directory content.
+         * @param string $source The filename or directory.
+         */
+        private function stat($source)
+        {
+                if (!$source) {
+                        throw new RuntimeException(_("The target file is unset"));
+                }
+                if (!file_exists($source)) {
+                        throw new RuntimeException(_("The target file is missing"));
+                }
+                if (!is_readable($source)) {
+                        throw new RuntimeException(_("The target file is not readable"));
+                }
+                if (($stat = stat($source))) {
+                        $result = array(
+                                'mime'  => mime_content_type($source),
+                                'nlink' => $stat['nlink'],
+                                'uid'   => $stat['uid'],
+                                'gid'   => $stat['gid'],
+                                'size'  => $stat['size'],
+                                'mtime' => $stat['mtime']
+                        );
+                        $this->send($result);
+                }
+        }
+
+        /**
          * Read the file content.
          * @param string $source The filename.
          */
@@ -131,7 +159,7 @@ abstract class HandlerBase
          * @param string $content The file content.
          */
         private function update($target, $content = false)
-        {
+        {                
                 if (!$target) {
                         throw new RuntimeException(_("The target file is unset"));
                 }
@@ -145,7 +173,7 @@ abstract class HandlerBase
                         throw new RuntimeException(_("The target file is not writable"));
                 }
                 if (!$content) {
-                        $content = file_get_contents("php://stdin");
+                        $content = file_get_contents("php://input");
                 }
                 if (!$content) {
                         throw new RuntimeException(_("Refuse to truncate existing file (content input is empty)"));
@@ -287,26 +315,29 @@ abstract class HandlerBase
         protected function process($request)
         {
                 switch ($request->getParam('action')) {
+                        case 'stat':
+                                $this->stat($this->path($request->getParam('source')));
+                                break;
                         case 'read':
                                 $this->read($this->path($request->getParam('source')));
                                 break;
                         case 'update':
-                                $this->update($request->getParam('target'), $request->getParam('content'));
+                                $this->update($this->path($request->getParam('target')), $request->getParam('content'));
                                 break;
                         case 'delete':
-                                $this->delete($request->getParam('delete'));
+                                $this->delete($this->path($request->getParam('target')));
                                 break;
                         case 'rename':
-                                $this->rename($request->getParam('source'), $request->getParam('target'));
+                                $this->rename($this->path($request->getParam('source')), $this->path($request->getParam('target')));
                                 break;
                         case 'move':
-                                $this->move($request->getParam('source'), $request->getParam('target'));
+                                $this->move($this->path($request->getParam('source')), $this->path($request->getParam('target')));
                                 break;
                         case 'link':
-                                $this->link($request->getParam('source'), $request->getParam('target'));
+                                $this->link($this->path($request->getParam('source')), $this->path($request->getParam('target')));
                                 break;
                         case 'copy':
-                                $this->copy($request->getParam('source'), $request->getParam('target'));
+                                $this->copy($this->path($request->getParam('source')), $this->path($request->getParam('target')));
                                 break;
                 }
         }
@@ -337,7 +368,7 @@ class FilesHandler extends HandlerBase
         public function process($request)
         {
                 $request->setFilter(array(
-                        'action' => '/^(create|read|update|delete|rename|move|link|copy|list)$/',
+                        'action' => '/^(stat|create|read|update|delete|rename|move|link|copy|list)$/',
                         'source' => '/^(secure-page|secure-view|standard-page|standard-view|router|directory|file)$/'
                 ));
 
@@ -347,7 +378,7 @@ class FilesHandler extends HandlerBase
                                 $this->listing($iterator);
                                 break;
                         case 'create':
-                                $this->create($request->getParam('source'), $request->getParam('target'));
+                                $this->create($request->getParam('source'), $this->path($request->getParam('target')));
                                 break;
                         default:
                                 $request->removeFilter('source');
@@ -430,7 +461,7 @@ class MenusHandler extends HandlerBase
         public function process($request)
         {
                 $request->setFilter(array(
-                        'action' => '/^(create|read|update|delete|move|link|copy|list|add|remove)$/',
+                        'action' => '/^(stat|create|read|update|delete|move|link|copy|list|add|remove)$/',
                         'source' => '/^(sidebar|standard|topbar)$/'
                 ));
 
@@ -440,7 +471,7 @@ class MenusHandler extends HandlerBase
                                 $this->listing($iterator);
                                 break;
                         case 'create':
-                                $this->create($request->getParam('source'), $request->getParam('target'));
+                                $this->create($request->getParam('source'), $this->path($request->getParam('target')));
                                 break;
                         case 'add':
                                 break;
@@ -491,7 +522,7 @@ class ContextHandler extends HandlerBase
         public function process($request)
         {
                 $request->setFilter(array(
-                        'action' => '/^(create|read|update|delete|move|link|copy|list)$/',
+                        'action' => '/^(stat|create|read|update|delete|move|link|copy|list)$/',
                         'source' => '/^(content|headers|publish)$/'
                 ));
 
@@ -501,7 +532,7 @@ class ContextHandler extends HandlerBase
                                 $this->listing($iterator);
                                 break;
                         case 'create':
-                                $this->create($request->getParam('source'), $request->getParam('target'));
+                                $this->create($request->getParam('source'), $this->path($request->getParam('target')));
                                 break;
                         default:
                                 $request->removeFilter('source');
