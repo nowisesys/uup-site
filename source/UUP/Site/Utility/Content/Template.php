@@ -20,7 +20,13 @@ namespace UUP\Site\Utility\Content;
 
 /**
  * Template file class.
- *
+ * 
+ * @property string $source The source template.
+ * @property string $target The target file.
+ * @property string $author The page author.
+ * @property string $suffix The class suffix.
+ * @property string $name The page name.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Site
@@ -43,6 +49,16 @@ class Template
          * @var string 
          */
         private $_author;
+        /**
+         * The class suffix.
+         * @var string 
+         */
+        private $_suffix;
+        /**
+         * The page name.
+         * @var string 
+         */
+        private $_name;
 
         /**
          * Constructor.
@@ -50,42 +66,110 @@ class Template
          * @param string $target The target file.
          * @param string $author The page author.
          */
-        public function __construct($source, $target, $author)
+        public function __construct($source = null, $target = null, $author = null)
         {
                 $this->_source = $source;
                 $this->_target = $target;
                 $this->_author = $author;
+                $this->_suffix = 'Page';
+                $this->_name = $this->camelize($target);
+        }
+
+        public function __get($name)
+        {
+                switch ($name) {
+                        case 'source':
+                                return $this->_source;
+                        case 'target':
+                                return $this->_target;
+                        case 'author':
+                                return $this->_author;
+                        case 'suffix':
+                                return $this->_suffix;
+                        case 'name':
+                                return $this->_name;
+                }
+        }
+
+        public function __set($name, $value)
+        {
+                switch ($name) {
+                        case 'source':
+                                $this->_source = (string) $value;
+                                break;
+                        case 'target':
+                                $this->_target = (string) $value;
+                                break;
+                        case 'author':
+                                $this->_author = (string) $value;
+                                break;
+                        case 'suffix':
+                                $this->_suffix = (string) $value;
+                                break;
+                        case 'name':
+                                $this->_name = (string) $value;
+                }
         }
 
         /**
-         * Create the page.
+         * Output new file based on template.
          * 
-         * @param string $name The class name
-         * @throws Exception
+         * @param string $name The class name.
+         * @throws \RuntimeException
          */
-        public function create($name, $suffix = 'Page')
+        public function output($name = null)
         {
-                if (!file_exists($this->source)) {
-                        throw new Exception("The source file don't exist");
+                if (!file_exists($this->_source)) {
+                        throw new \RuntimeException("The source file don't exist");
                 }
-                if (file_exists($this->target)) {
-                        throw new Exception("The target file already exist");
+                if (file_exists($this->_target)) {
+                        throw new \RuntimeException("The target file already exist");
+                }
+                if (!isset($name)) {
+                        $name = $this->_name;
                 }
 
                 $subst = array(
                         '@year@'     => date('Y'),
-                        '@author@'   => $this->author,
+                        '@author@'   => $this->_author,
                         '@datetime@' => strftime("%x %X"),
-                        '@name@'     => sprintf("%s%s", ucfirst($name), $suffix),
+                        '@name@'     => sprintf("%s%s", ucfirst($name), $this->_suffix),
                         '@title@'    => ucfirst($name)
                 );
 
-                $content = file_get_contents($this->source);
+                $content = file_get_contents($this->_source);
                 $content = str_replace(array_keys($subst), $subst, $content);
 
-                if (!file_put_contents($this->target, $content)) {
-                        throw new Exception("Failed create target file");
+                if (!file_put_contents($this->_target, $content)) {
+                        throw new \RuntimeException("Failed create target file");
                 }
+        }
+
+        /**
+         * Get camelized name.
+         * @param string $target The target file.
+         */
+        public function camelize($target)
+        {
+                if (empty($target)) {
+                        return null;
+                }
+
+                if (($pos = strpos($target, '/')) !== false) {
+                        $target = basename($target);
+                }
+                if (($pos = strpos($target, '.')) !== false) {
+                        $target = substr($target, 0, $pos);
+                }
+                if (($pos = strpos($target, '-')) === false) {
+                        $target = ucfirst($target);
+                } else {
+                        $pieces = explode('-', $target);
+                        $pieces = array_map('ucfirst', $pieces);
+                        $target = implode("", $pieces);
+                }
+
+                return $target;
         }
 
 }

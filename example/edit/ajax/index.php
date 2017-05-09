@@ -59,8 +59,8 @@ class IndexPage extends SecureService
         }
 
         /**
-         * RuntimeException handler.
-         * @param RuntimeException $exception The exception to report.
+         * Exception handler.
+         * @param Exception $exception The exception to report.
          */
         public function onException($exception)
         {
@@ -85,14 +85,17 @@ class IndexPage extends SecureService
                 switch ($this->params->getParam('handler')) {
                         case 'files':
                                 $handler = new FilesHandler($this->config->docs, $this->params->getParam('path'));
+                                $handler->setUser($this->session->user);
                                 $handler->process($this->params);
                                 break;
                         case 'menus':
                                 $handler = new MenusHandler($this->config->docs, $this->params->getParam('path'));
+                                $handler->setUser($this->session->user);
                                 $handler->process($this->params);
                                 break;
                         case 'context':
                                 $handler = new ContextHandler($this->config->docs, $this->params->getParam('path'));
+                                $handler->setUser($this->session->user);
                                 $handler->process($this->params);
                                 break;
                 }

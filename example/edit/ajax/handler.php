@@ -21,6 +21,7 @@ use UUP\Site\Utility\Content\Iterator\Collector;
 use UUP\Site\Utility\Content\Iterator\Context as ContextIterator;
 use UUP\Site\Utility\Content\Iterator\Files as FilesIterator;
 use UUP\Site\Utility\Content\Iterator\Menus as MenusIterator;
+use UUP\Site\Utility\Content\Template;
 
 // 
 // Site editor API backend classes.
@@ -39,6 +40,11 @@ abstract class HandlerBase
          * @var string 
          */
         private $_path;
+        /**
+         * The calling user.
+         * @var string 
+         */
+        private $_user;
 
         /**
          * Constructor.
@@ -49,6 +55,15 @@ abstract class HandlerBase
         {
                 $this->_docs = $docs;
                 $this->_path = $path;
+        }
+
+        /**
+         * Set calling user.
+         * @param string $user The username.
+         */
+        public function setUser($user)
+        {
+                $this->_user = $user;
         }
 
         /**
@@ -145,12 +160,18 @@ abstract class HandlerBase
                 if (!$source) {
                         throw new RuntimeException(_("The target file is unset"));
                 }
-                if (file_exists($source)) {
+                if (file_exists($target)) {
                         throw new RuntimeException(_("The target file already exists"));
                 }
 
-                // TODO: implement
-                throw new BadMethodCallException("Not yet implemented");
+                $template = new Template();
+                $template->target = $target;
+                $template->source = $source;
+                $template->author = $this->_user;
+                $template->name = $template->camelize($target);
+                $template->output();
+
+                $this->send();
         }
 
         /**
@@ -430,14 +451,16 @@ class FilesHandler extends HandlerBase
         private function template($source)
         {
                 $sources = array(
-                        'secure-page'   => 'files/secure/page.phpt',
-                        'secure-view'   => 'files/secure/view.phpt',
-                        'standard-page' => 'files/standard/page.phpt',
-                        'standard-view' => 'files/standard/view.phpt',
-                        'router'        => 'files/standard/router.phpt'
+                        'secure-page'      => 'files/secure/page.phpt',
+                        'secure-view'      => 'files/secure/view.phpt',
+                        'secure-service'   => 'files/secure/service.phpt',
+                        'standard-page'    => 'files/standard/page.phpt',
+                        'standard-view'    => 'files/standard/view.phpt',
+                        'standard-service' => 'files/standard/service.phpt',
+                        'router'           => 'files/standard/router.phpt'
                 );
 
-                return $sources[$source];
+                return realpath("../templates/" . $sources[$source]);
         }
 
         /**
@@ -527,7 +550,7 @@ class MenusHandler extends HandlerBase
                         'topbar'   => 'menus/topbar.menu'
                 );
 
-                return $sources[$source];
+                return realpath("../templates/" . $sources[$source]);
         }
 
 }
@@ -584,7 +607,7 @@ class ContextHandler extends HandlerBase
                         'publish' => 'context/publish.inc'
                 );
 
-                return $sources[$source];
+                return realpath("../templates/" . $sources[$source]);
         }
 
 }
