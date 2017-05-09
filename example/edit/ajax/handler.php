@@ -130,7 +130,7 @@ abstract class HandlerBase
                 if (!is_readable($source)) {
                         throw new RuntimeException(_("The target file is not readable"));
                 }
-                if (!readfile($source) === false) {
+                if (readfile($source) === false) {
                         throw new RuntimeException(_("Failed read file"));
                 }
         }
