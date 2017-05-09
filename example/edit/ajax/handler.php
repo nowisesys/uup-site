@@ -76,7 +76,7 @@ abstract class HandlerBase
          * Send result.
          * @param mixed $result The result.
          */
-        private function send($result = false)
+        protected function send($result = true)
         {
                 echo json_encode(array(
                         'status' => 'success',
@@ -106,7 +106,7 @@ abstract class HandlerBase
                                 'uid'   => $stat['uid'],
                                 'gid'   => $stat['gid'],
                                 'size'  => $stat['size'],
-                                'mtime' => $stat['mtime']
+                                'mtime' => $stat['mtime'],
                         );
                         $this->send($result);
                 }
@@ -130,7 +130,7 @@ abstract class HandlerBase
                 if (!is_readable($source)) {
                         throw new RuntimeException(_("The target file is not readable"));
                 }
-                if (!readfile($source)) {
+                if (!readfile($source) === false) {
                         throw new RuntimeException(_("Failed read file"));
                 }
         }
@@ -150,7 +150,7 @@ abstract class HandlerBase
                 }
 
                 // TODO: implement
-                die("Not yet implemented");
+                throw new BadMethodCallException("Not yet implemented");
         }
 
         /**
@@ -159,7 +159,7 @@ abstract class HandlerBase
          * @param string $content The file content.
          */
         private function update($target, $content = false)
-        {                
+        {
                 if (!$target) {
                         throw new RuntimeException(_("The target file is unset"));
                 }
@@ -178,8 +178,10 @@ abstract class HandlerBase
                 if (!$content) {
                         throw new RuntimeException(_("Refuse to truncate existing file (content input is empty)"));
                 }
-                if (!file_put_contents($target, $content)) {
+                if (!($bytes = file_put_contents($target, $content)) !== false) {
                         throw new RuntimeException(_("Failed write file"));
+                } else {
+                        $this->send($bytes);
                 }
         }
 
@@ -201,10 +203,14 @@ abstract class HandlerBase
                 if (is_dir($target)) {
                         if (!rmdir($target)) {
                                 throw new RuntimeException(_("Failed remove directory"));
+                        } else {
+                                $this->send();
                         }
                 } else {
                         if (!unlink($target)) {
                                 throw new RuntimeException(_("Failed unlink file"));
+                        } else {
+                                $this->send();
                         }
                 }
         }
@@ -230,6 +236,8 @@ abstract class HandlerBase
                 }
                 if (!rename($source, $target)) {
                         throw new RuntimeException(_("Failed rename file or directory"));
+                } else {
+                        $this->send();
                 }
         }
 
@@ -257,6 +265,8 @@ abstract class HandlerBase
                 }
                 if (!rename($source, sprintf("%s/%s", $target, $source))) {
                         throw new RuntimeException(_("Failed move file to directory"));
+                } else {
+                        $this->send();
                 }
         }
 
@@ -281,6 +291,8 @@ abstract class HandlerBase
                 }
                 if (!symlink($source, $target)) {
                         throw new RuntimeException(_("Failed create link"));
+                } else {
+                        $this->send();
                 }
         }
 
@@ -305,6 +317,8 @@ abstract class HandlerBase
                 }
                 if (!copy($source, $target)) {
                         throw new RuntimeException(_("Failed rename file or directory"));
+                } else {
+                        $this->send();
                 }
         }
 
@@ -349,10 +363,12 @@ abstract class HandlerBase
          */
         protected function path($target = null)
         {
-                if (isset($target)) {
-                        return sprintf("%s/%s", $this->_docs, $target);
-                } else {
+                if (!isset($target)) {
                         return sprintf("%s/%s", $this->_docs, $this->_path);
+                } elseif (strpos($target, '/') === false) {
+                        return sprintf("%s/%s/%s", $this->_docs, $this->_path, $target);
+                } else {
+                        return sprintf("%s/%s", $this->_docs, $target);
                 }
         }
 
@@ -369,7 +385,7 @@ class FilesHandler extends HandlerBase
         {
                 $request->setFilter(array(
                         'action' => '/^(stat|create|read|update|delete|rename|move|link|copy|list)$/',
-                        'source' => '/^(secure-page|secure-view|standard-page|standard-view|router|directory|file)$/'
+                        'source' => '/^(secure-page|secure-view|secure-service|standard-page|standard-view|standard-service|router|directory|file)$/'
                 ));
 
                 switch ($request->getParam('action')) {
@@ -435,6 +451,8 @@ class FilesHandler extends HandlerBase
                 }
                 if (!mkdir($target)) {
                         throw new RuntimeException(_("Failed create directory"));
+                } else {
+                        $this->send();
                 }
         }
 
@@ -446,6 +464,8 @@ class FilesHandler extends HandlerBase
         {
                 if (!touch($target)) {
                         throw new RuntimeException(_("Failed create file"));
+                } else {
+                        $this->send();
                 }
         }
 
