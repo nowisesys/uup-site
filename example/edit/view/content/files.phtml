@@ -17,12 +17,117 @@
 
 ?>
 
-<div id="content-files">
+<style>
+    #files-menu {
+        position: relative;
+        float: right;
+    }
+</style>
+
+<div id="content-files w3-right">
+    <div id="files-menu" class="w3-dropdown-hover">
+        <button class="w3-button w3-light-grey">Create <i class="fa fa-caret-down" aria-hidden="true" ></i> </button>
+        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <a href="#" class="w3-bar-item w3-button" onclick="create_directory()"><?= _("Directory") ?></a>
+            <a href="#" class="w3-bar-item w3-button" onclick="create_file()"><?= _("Empty File") ?></a>
+
+            <div class="w3-bar-item w3-button" onclick="toggle_accordion('view-files')">
+                <i class="fa fa-caret-down"></i> View </div>
+            <div id="view-files" class="w3-hide w3-white w3-card-4">
+                <a href="#" class="w3-bar-item w3-button" onclick="create_template('standard-view')"><?= _("Standard") ?></a>
+                <a href="#" class="w3-bar-item w3-button" onclick="create_template('secure-view')"><?= _("Secure") ?></a>
+            </div>
+
+            <div class="w3-bar-item w3-button" onclick="toggle_accordion('page-files')">
+                <i class="fa fa-caret-down"></i> Page </div>
+            <div id="page-files" class="w3-hide w3-white w3-card-4">
+                <a href="#" class="w3-bar-item w3-button" onclick="create_template('standard-page')"><?= _("Standard") ?></a>
+                <a href="#" class="w3-bar-item w3-button" onclick="create_template('secure-page')"><?= _("Secure") ?></a>
+            </div>
+
+            <div class="w3-bar-item w3-button" onclick="toggle_accordion('service-files')">
+                <i class="fa fa-caret-down"></i> Service </div>
+            <div id="service-files" class="w3-hide w3-white w3-card-4">
+                <a href="#" class="w3-bar-item w3-button" onclick="create_template('secure-service')"><?= _("Standard") ?></a>
+                <a href="#" class="w3-bar-item w3-button" onclick="create_template('standard-service')"><?= _("Secure") ?></a>
+            </div>
+
+            <a href="#" class="w3-bar-item w3-button" onclick="create_template('router')"><?= _("Router") ?></a>
+
+        </div>        
+    </div>
+
     <h1><?= _("Content - Files") ?></h1>
-    <div id="files-listing">
-
-    </div>
-    <div id="files-menu">
-
-    </div>
+    <div id="files-listing"></div>
 </div>
+
+<script>
+        /**
+         * Toggle accordion visible.
+         * @param {String} id The document element ID.
+         */
+        function toggle_accordion(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") === -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-green";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className =
+                        x.previousElementSibling.className.replace(" w3-green", "");
+            }
+        }
+
+        /**
+         * Create new directory and reload table.
+         */
+        function create_directory() {
+            var target = prompt("<?= _("Give name for new directory:") ?>", "directory1");
+            if (target !== null) {
+                api.create('directory', target, function (xhr) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        load_content_section('files-listing', 'files');
+                    } else if (response.status === 'failure') {
+                        alert(response.message);
+                    }
+                });
+            }
+        }
+
+        /**
+         * Create new empty file and reload table.
+         */
+        function create_file() {
+            var target = prompt("<?= _("Give name for new file:") ?>", "file1.phtml");
+            if (target !== null) {
+                api.create('file', target, function (xhr) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        load_content_section('files-listing', 'files');
+                    } else if (response.status === 'failure') {
+                        alert(response.message);
+                    }
+                });
+            }
+        }
+
+        /**
+         * Create file from template and reload table.
+         * @param {String} source The template source.
+         */
+        function create_template(source) {
+            var target = prompt("<?= _("Give name for new file:") ?>", source + "1.php");
+            if (target !== null) {
+                api.create(source, target, function (xhr) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        load_content_section('files-listing', 'files');
+                    } else if (response.status === 'failure') {
+                        alert(response.message);
+                    }
+                });
+            }
+        }
+
+</script>
