@@ -122,6 +122,14 @@ return array(
 //                'host' => 'localhost'                 // The edit host
 //        ),
 //        /**
+//         * License options for files created from templates.
+//         */
+//        'license' => array(
+//                'file' => 'apache-2.0.txt',     // See directory edit/templates/license
+//                'project' => '',                // The project name.
+//                'company' => ''                 // The company name.
+//        ),
+//        /**
 //         * The toolbox plugins to expose. Themes can choose whether to show them or not.
 //         */
 //        'tools' => array(

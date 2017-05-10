@@ -26,6 +26,7 @@ namespace UUP\Site\Utility\Content;
  * @property string $author The page author.
  * @property string $suffix The class suffix.
  * @property string $name The page name.
+ * @property License $license The license file.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -53,26 +54,29 @@ class Template
          * The class suffix.
          * @var string 
          */
-        private $_suffix;
+        private $_suffix = 'Page';
         /**
          * The page name.
          * @var string 
          */
         private $_name;
+        /**
+         * The license object.
+         * @var License 
+         */
+        private $_license;
 
         /**
          * Constructor.
-         * @param string $source The template file.
-         * @param string $target The target file.
-         * @param string $author The page author.
+         * @param array|License $license The license information.
          */
-        public function __construct($source = null, $target = null, $author = null)
+        public function __construct($license)
         {
-                $this->_source = $source;
-                $this->_target = $target;
-                $this->_author = $author;
-                $this->_suffix = 'Page';
-                $this->_name = $this->camelize($target);
+                if (is_object($license)) {
+                        $this->_license = $license;
+                } else {
+                        $this->_license = new License($license);
+                }
         }
 
         public function __get($name)
@@ -88,6 +92,8 @@ class Template
                                 return $this->_suffix;
                         case 'name':
                                 return $this->_name;
+                        case 'license':
+                                return $this->_license;
                 }
         }
 
@@ -108,6 +114,10 @@ class Template
                                 break;
                         case 'name':
                                 $this->_name = (string) $value;
+                                break;
+                        case 'license':
+                                $this->_license = $value;
+                                break;
                 }
         }
 
@@ -130,14 +140,24 @@ class Template
                 }
 
                 $subst = array(
+                        '@file@'     => basename($this->_target),
+                        '@date@'     => date('Y-m-d'),
+                        '@time@'     => date('H:i:s'),
                         '@year@'     => date('Y'),
                         '@author@'   => $this->_author,
                         '@datetime@' => strftime("%x %X"),
                         '@name@'     => sprintf("%s%s", ucfirst($name), $this->_suffix),
-                        '@title@'    => ucfirst($name)
+                        '@title@'    => ucfirst($name),
+                        '@project@'  => $this->_license->project,
+                        '@company@'  => $this->_license->company
                 );
 
+                error_log(print_r($this->_license, true));
+
+                $license = file_get_contents($this->_license->location);
+
                 $content = file_get_contents($this->_source);
+                $content = str_replace('@license@', $license, $content);
                 $content = str_replace(array_keys($subst), $subst, $content);
 
                 if (!file_put_contents($this->_target, $content)) {

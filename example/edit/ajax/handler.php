@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 
+use UUP\Site\Page\Service\SecureService;
 use UUP\Site\Request\Params;
 use UUP\Site\Utility\Content\Iterator\Collector;
 use UUP\Site\Utility\Content\Iterator\Context as ContextIterator;
 use UUP\Site\Utility\Content\Iterator\Files as FilesIterator;
 use UUP\Site\Utility\Content\Iterator\Menus as MenusIterator;
-use UUP\Site\Utility\Content\Template;
 
 // 
 // Site editor API backend classes.
@@ -41,10 +41,10 @@ abstract class HandlerBase
          */
         private $_path;
         /**
-         * The calling user.
-         * @var string 
+         * The AJAX service.
+         * @var SecureService 
          */
-        private $_user;
+        private $_service;
 
         /**
          * Constructor.
@@ -58,12 +58,12 @@ abstract class HandlerBase
         }
 
         /**
-         * Set calling user.
-         * @param string $user The username.
+         * Set AJAX service.
+         * @param SecureService $service The AJAX service.
          */
-        public function setUser($user)
+        public function setService($service)
         {
-                $this->_user = $user;
+                $this->_service = $service;
         }
 
         /**
@@ -206,11 +206,15 @@ abstract class HandlerBase
                         throw new RuntimeException(_("The target file already exists"));
                 }
 
-                $template = new Template();
+                // 
+                // Create target file using requested template (source). The template class
+                // name is derived from target filename (camelized).
+                // 
+                $template = $this->_service->getTemplate();
+                $template->name = $template->camelize($target);
+
                 $template->target = $target;
                 $template->source = $source;
-                $template->author = $this->_user;
-                $template->name = $template->camelize($target);
                 $template->output();
 
                 $this->send();

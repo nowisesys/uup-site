@@ -20,6 +20,7 @@ require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
 require_once('handler.php');
 
 use UUP\Site\Page\Service\SecureService;
+use UUP\Site\Utility\Content\Template;
 
 /**
  * The site edit AJAX service.
@@ -85,20 +86,32 @@ class IndexPage extends SecureService
                 switch ($this->params->getParam('handler')) {
                         case 'files':
                                 $handler = new FilesHandler($this->config->docs, $this->params->getParam('path'));
-                                $handler->setUser($this->session->user);
+                                $handler->setService($this);
                                 $handler->process($this->params);
                                 break;
                         case 'menus':
                                 $handler = new MenusHandler($this->config->docs, $this->params->getParam('path'));
-                                $handler->setUser($this->session->user);
+                                $handler->setService($this);
                                 $handler->process($this->params);
                                 break;
                         case 'context':
                                 $handler = new ContextHandler($this->config->docs, $this->params->getParam('path'));
-                                $handler->setUser($this->session->user);
+                                $handler->setService($this);
                                 $handler->process($this->params);
                                 break;
                 }
+        }
+
+        /**
+         * Get template object.
+         * @return Template
+         */
+        public function getTemplate()
+        {
+                $template = new Template($this->config->license);
+                $template->license->path = realpath('../templates/license');
+                $template->author = $this->session->user;
+                return $template;
         }
 
 }
