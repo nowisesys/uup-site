@@ -527,7 +527,9 @@ class FilesHandler extends HandlerBase
          */
         private function touch($target)
         {
-                if (!touch($target)) {
+                if (file_exists($target)) {
+                        throw new RuntimeException(_("The target file already exists"));
+                } elseif (!touch($target)) {
                         throw new RuntimeException(_("Failed create file"));
                 } else {
                         $this->send();
