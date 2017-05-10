@@ -150,6 +150,13 @@ abstract class HandlerBase
                                 }
                         }
 
+                        // 
+                        // Strip encoding (i.e. text/html;UTF-8) from MIME type:
+                        // 
+                        if (($pos = strpos($stat['mime'], ';')) !== false) {
+                                $stat['mime'] = substr($stat['mime'], 0, $pos);
+                        }
+
                         $result = array(
                                 'mime'  => $stat['mime'],
                                 'nlink' => $stat['nlink'],
