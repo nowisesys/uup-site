@@ -145,4 +145,71 @@
             });
         }
 
+        /**
+         * Upload file using create/update pattern.
+         * @param {File} file The filesystem API object.
+         */
+        function upload_file(file) {
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                api.create('file', file.name, function (xhr) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        api.update(file.name, event.target.result, function (xhr) {
+                            response = JSON.parse(xhr.responseText);
+                            if (response.status === 'success') {
+                                load_content_section('files-listing', 'files');
+                            } else if (response.status === 'failure') {
+                                alert(response.message);
+                            }
+                        });
+                    } else if (response.status === 'failure') {
+                        alert(response.message);
+                    }
+                });
+            }
+
+            reader.readAsBinaryString(file);
+        }
+
+        /**
+         * The file drop handler.
+         * @param {DragEvent} event The drag/drop event.
+         */
+        function drop_handler(event) {
+            var files = event.dataTransfer.files;
+            var items = event.dataTransfer.items;
+
+            for (var i = 0; i < files.length; ++i) {
+                var item = items[i];
+                var file = files[i];
+                var entry = item.webkitGetAsEntry();
+                if (entry.isFile) {
+                    upload_file(file);
+                }
+            }
+        }
+
+        // 
+        // Attach drag/drop event handlers on load.
+        // 
+        window.onload = function () {
+            var dropbox = document.getElementById('files-listing');
+
+            dropbox.ondragenter = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            };
+            dropbox.ondragover = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            };
+            dropbox.ondrop = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                drop_handler(event);
+            };
+        }
+
 </script>
