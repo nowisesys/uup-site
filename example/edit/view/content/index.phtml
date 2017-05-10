@@ -29,9 +29,11 @@
                 <th><?= (_('Link')) ?></th>
                 <th><?= (_('Owner')) ?></th>
                 <th><?= (_('Size')) ?></th>
+                <th><?= (_('Action')) ?></th>
             </tr>                
         </thead>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -219,6 +221,11 @@
                 row.children[3].innerHTML = data.size;
             }
 
+            row.children[4].appendChild(create_action('trash-o', function (event) {
+                delete_entry(data.name, uup.editor.content);
+                event.preventDefault();
+            }));
+
             tbody.insertBefore(row, tbody.lastChild);
             return row;
         }
@@ -246,5 +253,39 @@
                 link.innerHTML = name + '/';
             }
             return link;
+        }
+
+        /**
+         * Create action link.
+         * @param {String} icon The icon name.
+         * @param {Function} func The callback function.
+         * @return {DOM.Element}
+         */
+        function create_action(icon, func) {
+            var link = document.createElement('a');
+
+            link.href = '#';
+            link.onclick = func;
+            link.innerHTML = ' <i class="fa fa-' + icon + '" aria-hidden="true"></i> ';
+
+            return link;
+        }
+
+        /**
+         * Delete target file.
+         * @param {String} target The target file.
+         */
+        function delete_entry(target, content) {
+            switch (content) {
+                case 'files':
+                    delete_file(target);
+                    break;
+                case 'menus':
+                    delete_menu(target);
+                    break;
+                case 'context':
+                    delete_context(target);
+                    break;
+            }
         }
 </script>

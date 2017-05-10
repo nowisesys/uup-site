@@ -28,9 +28,9 @@
     <div id="menus-menu" class="w3-dropdown-hover">
         <button class="w3-button w3-light-grey"><i class="fa fa-plus-square-o" aria-hidden="true" ></i> Create </button>
         <div class="w3-dropdown-content w3-bar-block w3-card-4">
-            <a href="#" class="w3-bar-item w3-button" onclick="create_menus('standard')"><?= _("Standard Menu") ?></a>
-            <a href="#" class="w3-bar-item w3-button" onclick="create_menus('sidebar')"><?= _("Sidebar Menu") ?></a>
-            <a href="#" class="w3-bar-item w3-button" onclick="create_menus('topbar')"><?= _("Topbar Menu") ?></a>
+            <a href="#" class="w3-bar-item w3-button" onclick="create_menu('standard')"><?= _("Standard Menu") ?></a>
+            <a href="#" class="w3-bar-item w3-button" onclick="create_menu('sidebar')"><?= _("Sidebar Menu") ?></a>
+            <a href="#" class="w3-bar-item w3-button" onclick="create_menu('topbar')"><?= _("Topbar Menu") ?></a>
         </div>        
     </div>
 
@@ -43,7 +43,7 @@
          * Create file from template and reload table.
          * @param {String} source The template source.
          */
-        function create_menus(source) {
+        function create_menu(source) {
             var templates = {
                 standard: 'standard.menu',
                 sidebar: 'sidebar.menu',
@@ -52,6 +52,21 @@
             var target = templates[source];
 
             api.create(source, target, function (xhr) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status === 'success') {
+                    load_content_section('menus-listing', 'menus');
+                } else if (response.status === 'failure') {
+                    alert(response.message);
+                }
+            });
+        }
+        
+        /**
+         * Delete target file.
+         * @param {String} target The target file.
+         */
+        function delete_menu(target) {
+            api.delete(target, function (xhr) {
                 var response = JSON.parse(xhr.responseText);
                 if (response.status === 'success') {
                     load_content_section('menus-listing', 'menus');
