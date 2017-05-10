@@ -225,6 +225,11 @@
                 delete_entry(data.name, uup.editor.content);
                 event.preventDefault();
             }));
+            
+            row.children[4].appendChild(create_action('eye', function (event) {
+                document.location = '/' + uup.editor.path + '/' + data.name;
+                event.preventDefault();
+            }));
 
             tbody.insertBefore(row, tbody.lastChild);
             return row;
@@ -266,7 +271,7 @@
 
             link.href = '#';
             link.onclick = func;
-            link.innerHTML = ' <i class="fa fa-' + icon + '" aria-hidden="true"></i> ';
+            link.innerHTML = '<i class="fa fa-' + icon + '" aria-hidden="true" style="margin-right: 8px"></i> ';
 
             return link;
         }
