@@ -115,8 +115,43 @@ abstract class HandlerBase
                         throw new RuntimeException(_("The target file is not readable"));
                 }
                 if (($stat = stat($source))) {
+                        // 
+                        // Detect MIME type using magic database:
+                        // 
+                        if (!isset($stat['mime'])) {
+                                if (($finfo = finfo_open(FILEINFO_MIME_TYPE))) {
+                                        $stat['mime'] = finfo_file($finfo, $source);
+                                        finfo_close($finfo);
+                                } else {
+                                        $stat['mime'] = mime_content_type($source);
+                                }
+                        }
+
+                        // 
+                        // Detect MIME type using web server headers:
+                        // 
+                        if ($stat['mime'] == 'text/plain') {
+                                stream_context_set_default(
+                                    array(
+                                            'http' => array(
+                                                    'method' => 'HEAD'
+                                            )
+                                    )
+                                );
+
+                                $host = filter_input(INPUT_SERVER, 'SERVER_NAME');
+                                $path = substr($source, strlen($this->_docs));
+
+                                $fileurl = sprintf("http://%s/%s", $host, $path);
+                                $headers = get_headers($fileurl, 1);
+
+                                if (array_key_exists('Content-Type', $headers)) {
+                                        $stat['mime'] = $headers['Content-Type'];
+                                }
+                        }
+
                         $result = array(
-                                'mime'  => mime_content_type($source),
+                                'mime'  => $stat['mime'],
                                 'nlink' => $stat['nlink'],
                                 'uid'   => $stat['uid'],
                                 'gid'   => $stat['gid'],

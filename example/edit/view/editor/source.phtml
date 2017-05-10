@@ -21,13 +21,16 @@
 
 <script src="editor/plugins/codemirror/lib/codemirror.js"></script>
 
-<script src="editor/plugins/codemirror/mode/javascript/javascript.js"></script>
-<script src="editor/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
-<script src="editor/plugins/codemirror/mode/php/php.js"></script>
 <script src="editor/plugins/codemirror/mode/xml/xml.js"></script>
 <script src="editor/plugins/codemirror/mode/clike/clike.js"></script>
-<script src="editor/plugins/codemirror/mode/shell/shell.js"></script>
+
+<script src="editor/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="editor/plugins/codemirror/mode/javascript/javascript.js"></script>
+<script src="editor/plugins/codemirror/mode/php/php.js"></script>
 <script src="editor/plugins/codemirror/mode/css/css.js" type="text/javascript"></script>
+
+<script src="editor/plugins/codemirror/mode/shell/shell.js"></script>
+<script src="editor/plugins/codemirror/mode/python/python.js" type="text/javascript"></script>
 
 <script src="editor/plugins/codemirror/addon/display/autorefresh.js"></script>
 
@@ -49,8 +52,12 @@
         var source_editor = (function () {
             var editor = null, target = document.getElementById('editor-source');
 
+            function config() {
+                CodeMirror.defineMIME('text/x-shellscript', 'shell');
+            }
+
             function create() {
-                return CodeMirror(target, {
+                editor = CodeMirror(target, {
                     lineNumbers: true,
                     matchBrackets: true,
                     autoRefresh: true,
@@ -61,7 +68,8 @@
 
             function instance() {
                 if (editor === null) {
-                    editor = create();
+                    config();
+                    create();
                 }
                 return editor;
             }
