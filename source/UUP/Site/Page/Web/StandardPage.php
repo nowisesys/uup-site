@@ -25,6 +25,7 @@ use UUP\Site\Page\Context\Menu\TopMenu;
 use UUP\Site\Page\Context\Menus;
 use UUP\Site\Page\Context\Publisher;
 use UUP\Site\Request\Handler as RequestHandler;
+use UUP\Site\Request\Params;
 use UUP\Site\Utility\Content\Navigator;
 use UUP\Site\Utility\Fortune;
 
@@ -144,6 +145,9 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
          */
         final public function render()
         {
+                if ($this->params->hasParam('content', Params::INPUT_POST)) {
+                        $this->putContent($this->params->getParam('content', Params::INPUT_POST));
+                }
 
                 if ($this->params->hasParam('ajax')) {
                         $this->printContent();

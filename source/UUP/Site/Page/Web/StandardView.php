@@ -18,6 +18,10 @@
 
 namespace UUP\Site\Page\Web;
 
+use LogicException;
+use RangeException;
+use RuntimeException;
+
 /**
  * Simple view support.
  * 
@@ -50,13 +54,13 @@ class StandardView extends StandardPage
          */
         public function __construct($title, $view)
         {
-                parent::__construct($title);
-
                 if (is_array($view)) {
                         $this->_views = $view;
                 } else {
                         $this->_views = array($view);
                 }
+
+                parent::__construct($title);
         }
 
         public function printContent()
@@ -70,4 +74,39 @@ class StandardView extends StandardPage
         {
                 return true;
         }
+
+        protected function putContent($content)
+        {
+                try {
+                        $index = 0;
+                        $count = count($this->_views);
+
+                        if ($count == 0) {
+                                throw new LogicException("No view pages are defined");
+                        }
+
+                        if ($this->params->hasParam('index')) {
+                                $index = $this->params->getParam('index');
+                        }
+                        if ($index >= $count || $index < 0) {
+                                throw new RangeException("Expected index between 0 and $count");
+                        } else {
+                                $target = $this->_views[$index];
+                        }
+
+                        echo json_encode(array(
+                                'status' => 'success',
+                                'result' => $this->setContent($content, $target)
+                        ));
+                } catch (\Exception $exception) {
+                        echo json_encode(array(
+                                'status'  => 'failure',
+                                'message' => $exception->getMessage(),
+                                'code'    => $exception->getCode()
+                        ));
+                } finally {
+                        exit(0);
+                }
+        }
+
 }

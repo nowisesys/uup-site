@@ -19,8 +19,8 @@
 namespace UUP\Site\Request;
 
 use DomainException;
+use RuntimeException;
 use UUP\Site\Page\Context\Headers;
-use UUP\Site\Page\Web\ErrorPage;
 use UUP\Site\Utility\Config;
 use UUP\Site\Utility\Locale;
 use UUP\Site\Utility\Profile;
@@ -215,6 +215,61 @@ abstract class Handler
         public function isEditable()
         {
                 return false;
+        }
+
+        /**
+         * Put page content.
+         * 
+         * Trap method for updating the page content targetted by this request. Needs to
+         * be implemented by sub class. Call setContent() to handle the actual content 
+         * writing.
+         * 
+         * @param string $content The page content.
+         */
+        protected function putContent($content)
+        {
+                try {
+                        throw new RuntimeException("Setting page content is unsupported");
+                } catch (RuntimeException $exception) {
+                        echo json_encode(array(
+                                'status'  => 'failure',
+                                'message' => $exception->getMessage(),
+                                'code'    => $exception->getCode()
+                        ));
+                } finally {
+                        exit(0);
+                }
+        }
+
+        /**
+         * Write page content.
+         * 
+         * This method write content to file while checking required permissions of method 
+         * caller.
+         * 
+         * @param string $content The page content.
+         * @param string $target The target file.
+         * @return int The number of bytes written.
+         * @throws RuntimeException
+         */
+        protected function setContent($content, $target)
+        {
+                if (!$this->session->authenticated()) {
+                        throw new RuntimeException("Caller is not authenticated");
+                }
+                if (!in_array($this->session->user, $this->config->edit['user'])) {
+                        throw new RuntimeException("Caller is not a page editor");
+                }
+
+                if (!is_writable($target)) {
+                        throw new RuntimeException("The target view is not writable");
+                }
+
+                if (($bytes = file_put_contents($target, trim($content))) == false) {
+                        throw new RuntimeException("Failed write view content");
+                }
+
+                return $bytes;
         }
 
         /**

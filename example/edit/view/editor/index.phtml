@@ -112,8 +112,6 @@
                 } else if (response.status === 'failure') {
                     alert(response.message);
                 }
-
-                console.log("save_file(" + uup.editor.file.name + ")");
             });
         }
 
@@ -129,11 +127,9 @@
         // Load editor.
         //
         function load_editor(type) {
-            console.log(uup.editor);
-
             uup.editor.curr.open(uup.editor.text, uup.editor.file.mime);
             uup.editor.curr.show();
-
+            
             show_editor(type);
         }
 
@@ -141,8 +137,6 @@
         // Open editor.
         // 
         function open_editor(type, event) {
-            console.log(uup.editor);
-
             uup.editor.text = uup.editor.curr.value();
             uup.editor.curr.close();
 
@@ -151,7 +145,6 @@
             uup.editor.curr.show();
 
             show_editor(type, event);
-            console.log(uup.editor);
         }
 
         // 

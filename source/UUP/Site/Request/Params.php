@@ -36,6 +36,19 @@ class Params
 {
 
         /**
+         * Check POST method parameter.
+         */
+        const INPUT_POST = 1;
+        /**
+         * Check GET method parameter.
+         */
+        const INPUT_GET = 2;
+        /**
+         * Check both GET and POST parameters.
+         */
+        const INPUT_ANY = 3;
+
+        /**
          * The path relative to project.
          * @var string 
          */
@@ -156,14 +169,14 @@ class Params
          * @param int $method The request method (GET and POST).
          * @return boolean 
          */
-        public function hasParam($name, $method = INPUT_GET | INPUT_POST)
+        public function hasParam($name, $method = self::INPUT_ANY)
         {
-                if ($method & INPUT_GET) {
+                if ($method & self::INPUT_GET) {
                         if (filter_has_var(INPUT_GET, $name)) {
                                 return true;
                         }
                 }
-                if ($method & INPUT_POST) {
+                if ($method & self::INPUT_POST) {
                         if (filter_has_var(INPUT_POST, $name)) {
                                 return true;
                         }
@@ -179,7 +192,7 @@ class Params
          * @param mixed $default The default value.
          * @param int $method The request method (GET and POST).
          */
-        public function getParam($name, $default = false, $method = INPUT_GET | INPUT_POST)
+        public function getParam($name, $default = false, $method = self::INPUT_ANY)
         {
                 if (!($value = $this->getValue($name, $method))) {
                         return $default;
@@ -212,17 +225,17 @@ class Params
          * @param array $names The input parameter names.
          * @param int $method The request method (GET and POST).
          */
-        public function getParams($names = null, $method = INPUT_GET | INPUT_POST)
+        public function getParams($names = null, $method = self::INPUT_ANY)
         {
                 $result = array();
 
                 if (!isset($names)) {
                         $names = array();
 
-                        if ($method & INPUT_GET) {
+                        if ($method & self::INPUT_GET) {
                                 $names = array_merge($names, array_keys($_GET));
                         }
-                        if ($method & INPUT_GET) {
+                        if ($method & self::INPUT_POST) {
                                 $names = array_merge($names, array_keys($_POST));
                         }
 
@@ -245,12 +258,12 @@ class Params
          */
         private function getValue($name, $method)
         {
-                if ($method & INPUT_GET) {
+                if ($method & self::INPUT_GET) {
                         if (($value = filter_input(INPUT_GET, $name))) {
                                 return $value;
                         }
                 }
-                if ($method & INPUT_POST) {
+                if ($method & self::INPUT_POST) {
                         if (($value = filter_input(INPUT_POST, $name))) {
                                 return $value;
                         }

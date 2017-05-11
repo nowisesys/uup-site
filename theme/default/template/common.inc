@@ -174,8 +174,8 @@
         <div id="edit-box" class="panel w3-row-padding w3-padding-16" style="display: none">
             <div class="w3-container w3-right-align">
                 <div class="w3-input w3-border-0"><?= _("Edit page content in inline mode") ?></div>                
-                <input class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(this)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
-                <input class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_open(this)" value="<?= _('Open') ?>" title="<?php _("Open this page in editor") ?>">
+                <input class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(event)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
+                <input class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_open(event)" value="<?= _('Open') ?>" title="<?php _("Open this page in editor") ?>">
             </div>
         </div>
 <?php endif; ?>
@@ -300,24 +300,20 @@
             page.focus();
         }
 
-        function edit_save(elem) {
-            console.log(document.location);
-
+        function edit_save(event) {
             var html = document.getElementById("page-content");
             var form = new FormData();
+            
+            form.append("content", html.innerHTML);
 
-            form.append("file", '<?= $this->params->file ?>');
-            form.append("page", '<?= $this->params->page ?>');
-            form.append("html", html.innerHTML);
-
-            var target = "<?= $config->url($config->edit['ajax']) ?>";
+            var target = "";
             var xhr = new XMLHttpRequest();
 
             xhr.onreadystatechange = function (x) {
                 if (this.readyState === 4 && this.status === 200) {
                     var json = JSON.parse(this.responseText);
                     if (json.status === 'failure') {
-                        alert(json.reason);
+                        alert(json.message);
                     }
                 }
             }
@@ -326,8 +322,9 @@
             xhr.send(form);
         }
 
-        function edit_open(elem) {
-            window.location = "<?= $config->url($config->edit['view']) ?>?path=<?= $this->params->path ?>";
+        function edit_open(event) {
+            window.location = "<?= $config->url($config->edit['view']) ?>" + "?path=" + "<?= $this->params->path ?>";
+            event.preventDefault();
         }
 
         // 
