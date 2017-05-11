@@ -174,8 +174,8 @@
         <div id="edit-box" class="panel w3-row-padding w3-padding-16" style="display: none">
             <div class="w3-container w3-right-align">
                 <div class="w3-input w3-border-0"><?= _("Edit page content in inline mode") ?></div>                
-                <input class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(event)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
-                <input class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_open(event)" value="<?= _('Open') ?>" title="<?php _("Open this page in editor") ?>">
+                <input id="input-edit-save" class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(event)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
+                <input id="input-edit-open" class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_open(event)" value="<?= _('Open') ?>" title="<?php _("Open this page in editor") ?>">
             </div>
         </div>
 <?php endif; ?>
@@ -282,6 +282,8 @@
         // Page and site editor.
         // 
         function toggle_edit_open(host) {
+            var editable = <?= $this->isEditable() ? 1 : 0 ?>;
+
             // 
             // Redirect to editing host if required:
             // 
@@ -296,14 +298,16 @@
             var edit = (x.style.display !== 'none');
             var page = document.getElementById("page-content");
 
-            page.setAttribute("contenteditable", edit);
-            page.focus();
+            if (editable) {
+                page.setAttribute("contenteditable", edit);
+                page.focus();
+            }
         }
 
         function edit_save(event) {
             var html = document.getElementById("page-content");
             var form = new FormData();
-            
+
             form.append("content", html.innerHTML);
 
             var target = "";
