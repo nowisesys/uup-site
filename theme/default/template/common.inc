@@ -411,7 +411,7 @@
         var scrolling = false;
         window.addEventListener('scroll', function (e) {
 
-            if (window.scrollY > 20) {
+            if (window.scrollY > 120) {
                 if (scrolling) {
                     return;
                 } else {

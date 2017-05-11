@@ -21,19 +21,32 @@ $output = new format($this);
     </head>
 
     <body>
+        <style>
+            .header-container {
+                background-image: url('http://www.pachd.com/free-images/nature-images/sunset-04.jpg');
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+            }            
+            #sidenav-menu {
+                background: rgba(0,0,0,0.6);
+                color: white;
+            }
+        </style>
+
         <!-- Site logotype etc. -->
         <div id='header'>
-            <div class="w3-hide-small w3-hide-medium" style='text-align: center'>
-                <div class="w3-text-red w3-xxlarge w3-padding-16"><?= $output->title() ?></div>
+            <div class="w3-hide-small w3-hide-medium header-container" style='text-align: center'>
+                <div class="w3-xxlarge w3-padding-16"><?= $output->title() ?></div>
             </div>
-            <div class="w3-hide-small w3-hide-large" style='text-align: center'>
-                <div class="w3-text-red w3-large w3-padding-16"><?= $output->title() ?></div>
+            <div class="w3-hide-small w3-hide-large header-container" style='text-align: center'>
+                <div class="w3-large w3-padding-16"><?= $output->title() ?></div>
             </div>
         </div>
 
         <!-- Side bar navigation -->
         <?php include('common.inc') ?>
-        <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-collapse w3-white w3-card-2" style="display: none; z-index: 2">
+        <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-collapse w3-card-2" style="display: none; z-index: 2">
             <?php $output->navmenu() ?>
             <?php $output->sidebar() ?>
         </nav>
@@ -42,12 +55,6 @@ $output = new format($this);
             <div id="page-content" class="w3-container">
                 <?php $output->content(); ?>                                            
             </div>
-
-            <?php if($config->fortune) : ?>
-            <div class="no-print w3-container w3-black w3-center w3-opacity w3-padding-64">
-                <h1 class="w3-margin w3-xlarge">Quote of the day:<br/><br/><?= $this->fortune->cookie ?></h1>
-            </div>
-            <?php endif; ?>
 
             <!-- Footer -->
             <footer class="no-print w3-container w3-padding-64 w3-center w3-opacity">  
