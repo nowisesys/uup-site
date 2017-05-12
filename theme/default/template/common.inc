@@ -305,6 +305,13 @@
         }
 
         function edit_save(event) {
+            var editable = <?= $this->isEditable() ? 1 : 0 ?>;
+
+            if (!editable) {
+                alert("This page is not editable using inline method");
+                return;
+            }
+
             var html = document.getElementById("page-content");
             var form = new FormData();
 
