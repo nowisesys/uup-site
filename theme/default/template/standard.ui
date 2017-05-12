@@ -28,9 +28,17 @@ $output = new format($this);
                 background-size: cover;
                 background-position: center;
             }            
-            #sidenav-menu {
-                background: rgba(0,0,0,0.6);
-                color: white;
+            @media (max-width: 990px) {
+                #sidenav-menu {
+                    background: rgba(0,0,0,0.6);
+                    color: white;
+                }
+            }
+            @media (min-width: 990px) {
+                #sidenav-menu {
+                    background: rgba(240,240,255,0.6);
+                    color: black;
+                }
             }
         </style>
 

@@ -57,7 +57,7 @@
         .panel {
             min-width: 400px;
         }
-    }
+    }    
     .goog-te-gadget-simple {
         border: none;
     }
@@ -70,8 +70,6 @@
         max-width: 200px;
     }
 </style>
-
-
 
 <!-- Navigation bar -->
 <div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-black">
@@ -418,7 +416,7 @@
         var scrolling = false;
         window.addEventListener('scroll', function (e) {
 
-            if (window.scrollY > 120) {
+            if (window.scrollY > 86) {
                 if (scrolling) {
                     return;
                 } else {
