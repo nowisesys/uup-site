@@ -171,9 +171,14 @@
         <!-- Page edit box -->
         <div id="edit-box" class="panel w3-row-padding w3-padding-16" style="display: none">
             <div class="w3-container w3-right-align">
-                <div class="w3-input w3-border-0"><?= _("Edit page content in inline mode") ?></div>                
-                <input id="input-edit-save" class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(event)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
-                <input id="input-edit-open" class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_open(event)" value="<?= _('Open') ?>" title="<?php _("Open this page in editor") ?>">
+                <div class="w3-input w3-border-0"><?= _("Edit page content in inline mode") ?></div> 
+                <?php if (!$this->params->hasParam('path')) : ?>
+                        <input id="input-edit-save" class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(event)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
+                        <input id="input-edit-open" class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_open(event)" value="<?= _('Open') ?>" title="<?php _("Open this location in editor") ?>">
+                <?php else : ?>
+                        <input id="input-edit-save" class="w3-btn w3-deep-orange w3-large" type="button" onclick="edit_save(event)" value="<?= _('Save') ?>" title="<?php _("Save changes made on this page") ?>">
+                        <input id="input-edit-open" class="w3-btn w3-blue-grey w3-large" type="button" onclick="edit_close(event)" value="<?= _('Close') ?>" title="<?php _("Close edit mode for this location") ?>">
+                <?php endif; ?>
             </div>
         </div>
 <?php endif; ?>
@@ -333,6 +338,11 @@
 
         function edit_open(event) {
             window.location = "<?= $config->url($config->edit['view']) ?>" + "?path=" + "<?= $this->params->path ?>";
+            event.preventDefault();
+        }
+        
+        function edit_close(event) {
+            window.location = "<?= $config->url('/' . $this->params->getParam('path')) ?>";
             event.preventDefault();
         }
 
