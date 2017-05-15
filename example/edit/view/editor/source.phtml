@@ -44,6 +44,10 @@
 
 <div id="editor-source">
 </div>
+<div class="w3-container w3-light-gray w3-padding-top">
+    <input type="checkbox" onchange="source_editor.linewrap(this.checked)"><?= _("Toggle linewrap mode") ?> 
+    <input type="checkbox" onchange="source_editor.linenums(this.checked)" checked=""><?= _("Show line numbers") ?>
+</div>
 
 <script>
         // 
@@ -92,6 +96,12 @@
                 },
                 gettype: function () {
                     return 'source';
+                },
+                linewrap: function (enable) {
+                    editor.setOption("lineWrapping", enable);
+                },
+                linenums: function (enable) {
+                    editor.setOption("lineNumbers", enable);
                 }
             };
         }());
