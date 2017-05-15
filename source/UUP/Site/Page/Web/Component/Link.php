@@ -72,12 +72,12 @@ class Link
                 if (preg_match('/^:(.*?):(.*)$/', $href, $match)) {
                         if (empty($match[1])) {
                                 return array(
-                                        'href'    => '#',
+                                        'href'    => $match[2],
                                         'onclick' => sprintf("content_replace(event, 'page-content', '%s')", $match[2])
                                 );
                         } else {
                                 return array(
-                                        'href'    => '#',
+                                        'href'    => $match[2],
                                         'onclick' => sprintf("content_replace(event, '%s', '%s')", $match[1], $match[2])
                                 );
                         }

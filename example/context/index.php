@@ -40,6 +40,7 @@ class IndexPage extends StandardPage
                 printf("<li><a href=\"publish\">Provide and display publisher information</a></li>\n");
                 printf("<li><a href=\"sidebar\">Including sidebar menus</a></li>\n");
                 printf("<li><a href=\"tree\">Infrastructure context test</a></li>\n");
+                printf("<li><a href=\"replace\">DOM content replace using target ID</a></li>\n");
                 printf("</ul>\n");
         }
 

@@ -208,7 +208,10 @@
             xhr.send();
 
             event.preventDefault();
+            event.stopPropagation();
+            
             close_overlay();
+            return false;
         }
 
         function close_overlay() {

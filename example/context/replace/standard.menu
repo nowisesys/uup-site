@@ -1,0 +1,11 @@
+<?php
+
+return array(
+    'head' => _('Replace'),
+    'data' => array(
+        _('Location') => 'source.php',
+        _('Content')  => '::source.php',
+        _('Custom')   => ':custom-id:source.php',
+        _('Restore')  => 'index.php'
+    )
+);
