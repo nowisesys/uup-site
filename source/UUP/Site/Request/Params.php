@@ -121,6 +121,37 @@ class Params
         }
 
         /**
+         * Set path from filename.
+         * 
+         * This method should only be called from a router. Uses filename to
+         * set path (location) correctly if filename refer to an index page 
+         * or not.
+         * 
+         * @param string $file The requested script.
+         */
+        public function setPath($file)
+        {
+                $this->_path = $this->getPath($file);
+                $this->_path = trim($this->_path, 'index');
+                $this->_path = trim($this->_path, '/');
+        }
+
+        /**
+         * Get request URI for file.
+         * 
+         * @param string $file The requested script.
+         * @return string
+         */
+        private function getPath($file)
+        {
+                if (basename($file, ".php") == "index") {
+                        return substr(filter_input(INPUT_SERVER, 'REQUEST_URI'), 1);
+                } else {
+                        return dirname(substr(filter_input(INPUT_SERVER, 'REQUEST_URI'), 1));
+                }
+        }
+
+        /**
          * Set request parameter filter.
          * 
          * <code>

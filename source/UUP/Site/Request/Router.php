@@ -237,6 +237,7 @@ class Router extends Handler
         {
                 $page->params = new Params($this->config->docs);
                 $page->params->setFile($this->_page);
+                $page->params->setPath($this->_page);
 
                 $page->render();
         }
