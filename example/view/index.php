@@ -9,9 +9,9 @@
 </p>
 <p>
     The HTML code in views (e.g. the content of this file) should be rendered inside the 
-    page body using the simple view class using direct rendering or an dispatcher. Using 
-    direct rendering is kind of pointless, unless you are creating a page mixing multiple 
-    views together.
+    page body using the simple view class using direct rendering or an router (see dispatcher in
+    <a href="../routing/">examples/routing</a>). Using direct rendering is kind of pointless 
+    unless you are creating a page mixing multiple views together.
 </p>
 <hr>
 
