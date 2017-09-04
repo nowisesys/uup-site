@@ -23,7 +23,8 @@
 </p>
 <p>
     <span style="margin: 20px">
-        <input type="button" class="w3-btn w3-blue" onclick="window.location = '<?= $this->config->url($this->config->auth['logoff']) ?>'" value="<?= _("Logoff") ?>">
+        <input type="button" style="min-width: 80px" class="w3-btn w3-red" onclick="window.location = '<?= $this->config->url($this->config->auth['logoff']) ?>'" value="<?= _("Logoff") ?>">
+        <input type="button" style="min-width: 80px" class="w3-btn w3-indigo" onclick="window.history.back()" value="<?= _("Back") ?>">
     </span>
 </p>
 
