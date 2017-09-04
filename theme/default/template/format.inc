@@ -55,9 +55,9 @@ class format
                 if ($this->page->template != "welcome") {
                         foreach ($this->page->topmenu as $name => $link) {
                                 if ($small) {
-                                        printf("<li id=\"%s\"><a href=\"%s\" class=\"w3-padding-8\">%s</a></li>\n", md5(basename($link)), $link, $name);
+                                        printf("<a id=\"%s\" href=\"%s\" class=\"w3-bar-item w3-mobile w3-button\">%s</a>\n", md5(basename($link)), $link, $name);
                                 } else {
-                                        printf("<li id=\"%s\"><a href=\"%s\" class=\"w3-hover-white w3-padding-16 w3-large w3-hide-small\">%s</a></li>\n", md5(basename($link)), $link, $name);
+                                        printf("<a id=\"%s\" href=\"%s\" class=\"w3-bar-item w3-hover-white w3-hide-small\">%s</a>\n", md5(basename($link)), $link, $name);
                                 }
                         }
                 }

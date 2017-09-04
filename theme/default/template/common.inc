@@ -28,7 +28,7 @@
     body, h1, h2, h3, h4, h5, h6 {
         font-family: "Lato", sans-serif
     }
-    .w3-navbar, h1, button {
+    .w3-bar, h1, button {
         font-family: "Montserrat", sans-serif
     }
     .fa-anchor, .fa-coffee {
@@ -69,66 +69,58 @@
         width: 200px;
         max-width: 200px;
     }
+    #topbar-menu a,
+    #navbar-menu a {
+        text-decoration: none;
+    }
 </style>
 
 <!-- Navigation bar -->
 <div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-black">
-    <div style="overflow:auto;">
-        <ul class="w3-navbar w3-left" style="overflow: hidden;">
-            <li class="w3-opennav w3-left">
-                <a class="w3-hover-white w3-theme w3-padding-16 w3-large" onclick="toggle_sidenav_open()" href="javascript:void(0)">
-                    <i class="fa fa-bars fa-lg"></i>
-                </a>
-            </li>
-            <li>
-                <a href="<?= $config->location ?>" class="w3-padding-16 w3-large w3-white w3-hide-small"><?= _('Home') ?></a>
-            </li>
-            <?php $output->topmenu(false) ?>
-        </ul>
-        <ul id="topbar-sitehome" class="w3-navbar w3-right" style="overflow: hidden; display: none">
-            <li>
-                <a href="<?= $config->location ?>" class="w3-padding-16 w3-large w3-hover-light-grey"><?= $config->name ?></a>
-            </li>
-        </ul>
-        <ul id="topbar-tools" class="w3-navbar w3-right" style="overflow: hidden; min-width: 200px">
-            <li class="w3-opennav w3-right w3-hide-large w3-hide-medium">
-                <a class="w3-hover-white w3-padding-16 w3-large w3-right" onclick="toggle_navbar_open()" href="javascript:void(0)">
-                    <i class="fa fa-ellipsis-v fa-lg"></i>
-                </a>
-            </li>
-            <?php if ($config->tools['auth']) : ?>
-                    <li class="w3-right">
-                        <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Open authentication box') ?>" onclick="toggle_logon_open(this)" href="javascript:void(0)">
-                            <?php if ($session->authenticated()) : ?>
-                                    <i class="fa fa-lock fa-lg" id="logon-status"></i>
-                            <?php else: ?>
-                                    <i class="fa fa-unlock-alt fa-lg" id="logon-status"></i>
-                            <?php endif; ?>
-                        </a>
-                    </li>
+    <div class="w3-bar w3-large">
+        <span class="w3-left">
+            <a class="w3-bar-item w3-hover-white" onclick="toggle_sidenav_open()" href="javascript:void(0)">
+                <i class="fa fa-bars fa-lg"></i>
+            </a>
+            <?php if ($config->tools['home']) : ?>
+                    <a class="w3-bar-item w3-hover-white" title="<?= _('Home') ?>" href="<?= $config->location ?>">
+                        <i class="fa fa-home fa-lg"></i>
+                    </a>
             <?php endif; ?>
-            <?php if ($config->tools['search']) : ?>
-                    <li class="w3-right" id="search-button">
-                        <a class="w3-opennav w3-right w3-hover-white w3-padding-16 w3-large" title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
-                            <i class="fa fa-search fa-lg"></i>
-                        </a>
-                    </li>
+            <?php $output->topmenu(false) ?>
+        </span>
+        <span class="w3-right" id="topbar-sitehome" style="overflow: hidden; display: none">
+            <a href="<?= $config->location ?>" class="w3-bar-item w3-hover-white"><?= $config->name ?></a>
+        </span>
+        <span class="w3-right" id="topbar-tools">
+            <?php if ($config->tools['edit'] && $session->authenticated()) : ?>
+                    <a class="w3-bar-item w3-hover-white" title="<?= _('Open page editor') ?>" onclick="toggle_edit_open('<?= $config->edit['host'] ?>')" href="javascript:void(0)">
+                        <i class="fa fa-pencil-square-o fa-lg"></i>
+                    </a>
             <?php endif; ?>
             <?php if ($config->tools['translate']) : ?>
-                    <li class="w3-right">
-                        <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
-                            <i class="fa fa-globe fa-lg"></i>
-                        </a>
-                    </li>
+                    <a class="w3-bar-item w3-hover-white" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
+                        <i class="fa fa-globe fa-lg"></i>
+                    </a>
             <?php endif; ?>
-            <?php if ($config->tools['edit'] && $session->authenticated()) : ?>
-                    <li class="w3-right">
-                        <a class="w3-hover-white w3-right w3-padding-16 w3-large" title="<?= _('Open page editor') ?>" onclick="toggle_edit_open('<?= $config->edit['host'] ?>')" href="javascript:void(0)">
-                            <i class="fa fa-pencil-square-o fa-lg"></i>
-                        </a>
-                    </li>
+            <?php if ($config->tools['search']) : ?>
+                    <a class="w3-bar-item w3-hover-white" id="search-button" title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
+                        <i class="fa fa-search fa-lg"></i>
+                    </a>
             <?php endif; ?>
-        </ul>
+            <?php if ($config->tools['auth']) : ?>
+                    <a class="w3-bar-item w3-hover-white" title="<?= _('Open authentication box') ?>" onclick="toggle_logon_open(this)" href="javascript:void(0)">
+                        <?php if ($session->authenticated()) : ?>
+                                <i class="fa fa-lock fa-lg" id="logon-status"></i>
+                        <?php else: ?>
+                                <i class="fa fa-unlock-alt fa-lg" id="logon-status"></i>
+                        <?php endif; ?>
+                    </a>
+            <?php endif; ?>
+            <a class="w3-bar-item w3-hover-white w3-hide-large w3-hide-medium" onclick="toggle_navbar_open()" href="javascript:void(0)">
+                <i class="fa fa-ellipsis-v fa-lg"></i>
+            </a>
+        </span>
     </div>
 </div>
 
@@ -184,10 +176,8 @@
 <?php endif; ?>
 
 <!-- Navigation menu (for small devices) -->
-<div id="navbar-menu" class="panel no-print w3-container w3-center w3-white" style="display: none;">
-    <ul class="w3-navbar w3-large w3-hide-medium w3-hide-large w3-theme w3-wide">
-        <?php $output->topmenu(true) ?>            
-    </ul> 
+<div id="navbar-menu" class="w3-bar w3-card w3-animate-top w3-xlarge w3-hide-medium w3-hide-large panel no-print" style="display: none;">
+    <?php $output->topmenu(true) ?>            
 </div>
 
 <!-- Main content overlay with 50% opaqueness when sidebar menu is opened -->
@@ -209,7 +199,7 @@
 
             event.preventDefault();
             event.stopPropagation();
-            
+
             close_overlay();
             return false;
         }
@@ -343,7 +333,7 @@
             window.location = "<?= $config->url($config->edit['view']) ?>" + "?path=" + "<?= $this->params->path ?>";
             event.preventDefault();
         }
-        
+
         function edit_close(event) {
             window.location = "<?= $config->url('/' . $this->params->getParam('path')) ?>";
             event.preventDefault();
