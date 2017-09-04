@@ -117,9 +117,11 @@
                         <?php endif; ?>
                     </a>
             <?php endif; ?>
-            <a class="w3-bar-item w3-hover-white w3-hide-large w3-hide-medium" onclick="toggle_navbar_open()" href="javascript:void(0)">
-                <i class="fa fa-ellipsis-v fa-lg"></i>
-            </a>
+            <?php if ($config->topmenu && count($this->topmenu)) : ?>
+                    <a class="w3-bar-item w3-hover-white w3-hide-large w3-hide-medium" onclick="toggle_navbar_open()" href="javascript:void(0)">
+                        <i class="fa fa-ellipsis-v fa-lg"></i>
+                    </a>
+            <?php endif; ?>
         </span>
     </div>
 </div>
@@ -176,7 +178,7 @@
 <?php endif; ?>
 
 <!-- Navigation menu (for small devices) -->
-<div id="navbar-menu" class="w3-bar w3-card w3-animate-top w3-xlarge w3-hide-medium w3-hide-large panel no-print" style="display: none;">
+<div id="navbar-menu" class="w3-bar w3-animate-top w3-card-2 w3-xlarge w3-hide-medium w3-hide-large panel no-print" style="display: none">
     <?php $output->topmenu(true) ?>            
 </div>
 
