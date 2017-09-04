@@ -37,6 +37,7 @@ class IndexPage extends StandardPage
                 printf("<li><a href=\"content\">Use content specification</a></li>\n");
                 printf("<li><a href=\"headers\">Output custom HTML headers</a></li>\n");
                 printf("<li><a href=\"navmenu\">Navigation menu</a></li>\n");
+                printf("<li><a href=\"topmenu\">Topbar menu</a></li>\n");
                 printf("<li><a href=\"publish\">Provide and display publisher information</a></li>\n");
                 printf("<li><a href=\"sidebar\">Including sidebar menus</a></li>\n");
                 printf("<li><a href=\"tree\">Infrastructure context test</a></li>\n");

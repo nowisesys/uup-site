@@ -26,7 +26,7 @@ class IndexPage extends StandardPage
         public function __construct()
         {
                 parent::__construct(__CLASS__);
-                $this->topmenu = array(
+                $this->config->topmenu = array(
                         _('Start')   => 'start.php',
                         _('About')   => 'about.php',
                         _('Contact') => 'contact.php'
