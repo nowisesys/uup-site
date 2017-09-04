@@ -2,7 +2,7 @@
 # 
 # Usage: 
 # 
-#   uup-site.sh --setup                     // setup site and theme(s)
+#   uup-site.sh --setup [--auth] [--edit]   // setup site, tools and theme(s)
 #   uup-site.sh --config <options>          // run configuration script (batch)
 # 
 #   uup-site.sh --develop                   // setup develop mode
@@ -41,13 +41,21 @@ function setup_themes()
     fi
 }
 
-function setup_login()
+function setup_auth()
 {
     for dir in logon logoff; do
         if ! [ -e public/$dir ]; then
             cp -a $srcdir/example/secure/$dir public/$dir
         fi
     done
+}
+
+function setup_edit()
+{
+    if ! [ -e public/edit ]; then
+        cp -a $srcdir/example/edit public/edit
+        echo "Install content editors by running setup.sh in public/edit/view/editor/plugins"
+    fi
 }
 
 function setup_dispatcher()
@@ -67,7 +75,6 @@ function setup_package()
     echo "Setup in package mode"
     setup_config vendor/bmc/uup-site
     setup_themes
-    setup_login
     setup_dispatcher vendor/bmc/uup-site
 }
 
@@ -76,7 +83,6 @@ function setup_standalone()
     echo "Setup in standalone mode"
     setup_config .
     setup_themes
-    setup_login
     setup_dispatcher .
 }
 
@@ -137,7 +143,16 @@ function develop()
 
 case "$1" in
     --setup)
+        shift
         setup
+        ;;
+    --auth)
+        shift
+        setup_auth
+        ;;
+    --edit)
+        shift
+        setup_edit
         ;;
     --develop)
         develop
@@ -151,8 +166,8 @@ case "$1" in
         config $*
         ;;
     *)
-        echo "$0 --setup"
-        echo "$0 --config <options>"
+        echo "$0 --setup [--auth] [--edit]"
+        echo "$0 --config --help"
         exit 1
         ;;
 esac
