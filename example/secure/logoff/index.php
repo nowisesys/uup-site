@@ -37,7 +37,7 @@ class IndexPage extends LogoffPage
         {
                 parent::printContent();
 
-                if (!$this->config->debug) {
+                if ($this->config->debug) {
                         echo "<p><pre><code>\n";
                         print_r($this->session);
                         echo "</code></pre></p>\n";
