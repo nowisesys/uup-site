@@ -88,7 +88,7 @@ class Router extends Handler
 {
 
         /**
-         * The requested page.
+         * The requested page (script name).
          * @var string 
          */
         private $_page;
@@ -159,7 +159,7 @@ class Router extends Handler
                         $page = new TransitionalPage($this->_page);
                         $this->routed($page);
                 } else {
-                        $page = new StandardView($this->_name, $this->_page);
+                        $page = new StandardView($this->getTitle(), $this->_page);
                         $this->routed($page);
                 }
         }
@@ -222,6 +222,17 @@ class Router extends Handler
         private function getPage()
         {
                 return sprintf("%s/%s.%s", $this->_root, $this->config->uri, $this->_ext);
+        }
+
+        /**
+         * Get page title from view name.
+         * @return string
+         */
+        private function getTitle()
+        {
+                $parts = explode('-', basename($this->config->uri));
+                $parts = array_map('ucfirst', $parts);                
+                return implode(' ', $parts);
         }
 
         public function render()
