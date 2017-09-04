@@ -43,6 +43,7 @@ use UUP\Site\Utility\Fortune;
  * @property-read SideMenu $sidebar The sidebar menu.
  * 
  * @property-read string $title The page title.
+ * @property-read string $template The template used for page rendering.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -109,6 +110,8 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                                 return $this->menus->side;
                         case 'title':
                                 return $this->_title;
+                        case 'template':
+                                return $this->_template;
                 }
 
                 return parent::__get($name);
