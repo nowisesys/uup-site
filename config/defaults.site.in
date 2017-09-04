@@ -133,10 +133,11 @@ return array(
 //         * The toolbox plugins to expose. Themes can choose whether to show them or not.
 //         */
 //        'tools' => array(
-//                'auth'      => true,    // Enable authentication box.
-//                'search'    => true,    // Enable Google search box.
-//                'translate' => true,    // Enable Google translate box.
-//                'edit'      => true     // Enable online page/site editor.
+//                'home'      => false,    // Enable home navigation icon.
+//                'auth'      => false,    // Enable authentication box.
+//                'search'    => false,    // Enable Google search box.
+//                'translate' => false,    // Enable Google translate box.
+//                'edit'      => false     // Enable online page/site editor.
 //        ),
 //        /**
 //         * Locale support (gettext). Comment to disable locale support.
