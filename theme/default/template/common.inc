@@ -442,7 +442,7 @@
                 tm.className += " w3-top";
                 tt.style.display = "none";
                 ts.style.display = "inline-block";
-                sm.style.top = "59px";
+                sm.style.top = "43px";
             } else {
                 tm.className = tm.className.replace(" w3-top", "");
                 tt.style.display = "";
