@@ -342,6 +342,7 @@ class Config
 
                 if (!$config['tools']) {
                         $config['tools'] = array(
+                                'home'      => false,
                                 'auth'      => false,
                                 'edit'      => false,
                                 'search'    => false,
