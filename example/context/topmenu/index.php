@@ -33,7 +33,7 @@ class IndexPage extends StandardPage
                 echo "<h1>Page topmenu</h1>\n";
                 echo "<p>Examples on using page topmenus. As the name suggests, this menu is displayed at top of page and usually contains common links that should be available no matter which page in the site the user is currently on.</p>\n";
 
-                if (!$this->config->headers) {
+                if (!$this->config->topmenu) {
                         echo "<p>Use of topbar menus is <u>disabled</u> in the configuration, but these examples will dynamic enable support for testing purposes.</p>\n";
                 }
                 
