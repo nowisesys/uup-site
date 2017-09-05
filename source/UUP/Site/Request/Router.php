@@ -230,9 +230,20 @@ class Router extends Handler
          */
         private function getTitle()
         {
-                $parts = explode('-', basename($this->config->uri));
-                $parts = array_map('ucfirst', $parts);                
-                return implode(' ', $parts);
+                $dirs = array_reverse(explode('/', $this->config->uri));
+
+                if (count($dirs) == 1) {
+                        $name = $dirs[0];
+                } elseif ($dirs[0] == 'index') {
+                        $name = $dirs[1];
+                } else {
+                        $name = $dirs[0];
+                }
+
+                $part = explode('-', $name);
+                $part = array_map('ucfirst', $part);
+
+                return implode(' ', $part);
         }
 
         public function render()
