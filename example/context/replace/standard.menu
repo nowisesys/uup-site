@@ -3,9 +3,10 @@
 return array(
     'head' => _('Replace'),
     'data' => array(
-        _('Location') => 'source.php',
-        _('Content')  => '::source.php',
-        _('Custom')   => ':custom-id:source.php',
-        _('Restore')  => 'index.php'
+        _('Location')  => 'view.php',
+        _('Content')   => '::view.php',
+        _('Custom')    => ':custom-id:view.php',
+        _('Decorated') => ':custom-id:page.php',
+        _('Restore')   => 'index.php'
     )
 );

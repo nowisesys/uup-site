@@ -1,7 +1,6 @@
 <?php
 /*
- * Copyright (C) Error: on line 5, column 33 in Templates/Licenses/license-apache20.txt
-  The string doesn't match the expected date/time format. The string to parse was: "May 15, 2017". The expected format was: "yyyy-MMM-dd". Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +17,6 @@
 
 ?>
 <div style='background-color: blue'>
-    <h3>This is content from source.php</h3>
+    <h3>This is content from view.php</h3>
     <b>Date: <?= strftime("%x %X") ?></b>
 </div>
