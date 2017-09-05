@@ -21,8 +21,9 @@ namespace UUP\Site\Page\Web\Component;
 /**
  * HTML link component.
  * 
- * @property string $name The link text.
- * @property array $attr The link attributes.
+ * @property string $name The link name.
+ * @property string $href The link target.
+ * @property array $attr Optional link attributes.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -33,30 +34,33 @@ class Link
 
         /**
          * Constructor.
-         * @property string $name The link text.
-         * @property array $attr Optional link attributes.
+         * @param string $name The link text.
+         * @param string|array $attr The link attributes.
          */
         public function __construct($name = null, $attr = null)
         {
-                if (is_array($attr)) {
+                if (!isset($attr) || is_string($attr)) {
                         $this->name = $name;
+                        $this->href = $attr;
+                        $this->attr = array();
+                } elseif (isset($attr['href'])) {
+                        $this->name = $name;
+                        $this->href = $attr['href'];
                         $this->attr = $attr;
-                } elseif ($attr[0] == ':') {
-                        $this->name = $name;
-                        $this->attr = self::parse($attr);
-                } else {
-                        $this->name = $name;
-                        $this->attr = array('href' => $attr);
                 }
-                if (!isset($this->attr['href'])) {
-                        $this->attr['href'] = '#';
-                }
-                if (!array_key_exists('id', $this->attr)) {
-                        $this->attr['id'] = md5(basename($this->attr['href']));
+
+                if (isset($this->attr['href'])) {
+                        unset($this->attr['href']);
                 }
         }
 
-        public function render()
+        public function render($location)
+        {
+                $this->prepare($location);
+                $this->output();
+        }
+
+        private function output()
         {
                 $attr = array();
 
@@ -67,20 +71,64 @@ class Link
                 printf("<a %s>%s</a>\n", implode(" ", $attr), $this->name);
         }
 
-        private static function parse($href)
+        private function prepare($location)
         {
+                // 
+                // Set dummy target:
+                // 
+                if (!isset($this->href)) {
+                        $this->href = '#';
+                }
+                
+                // 
+                // Relocate link relative to site root:
+                // 
+                if (strpos($this->href, '@') !== false) {
+                        $this->href = self::relocate($this->href, $location);
+                }
+                
+                // 
+                // Prefix link with dest attribute if defined:
+                // 
+                if (isset($this->attr['dest'])) {
+                        $this->href = sprintf(":%s:%s", $this->attr['dest'], $this->href);
+                        unset($this->attr['dest']);
+                }
+
+                // 
+                // Parse dynamic content links:
+                // 
+                if ($this->href[0] == ':') {
+                        $this->attr = array_merge($this->attr, self::parse($this->href, $location));
+                } else {
+                        $this->attr = array_merge($this->attr, array('href' => $this->href));
+                }
+        }
+
+        private static function parse($href, $location)
+        {
+                $match = array();
+
                 if (preg_match('/^:(.*?):(.*)$/', $href, $match)) {
-                        if (empty($match[1])) {
-                                return array(
-                                        'href'    => $match[2],
-                                        'onclick' => sprintf("content_replace(event, 'page-content', '%s')", $match[2])
-                                );
-                        } else {
-                                return array(
-                                        'href'    => $match[2],
-                                        'onclick' => sprintf("content_replace(event, '%s', '%s')", $match[1], $match[2])
-                                );
+                        if (isset($match[2])) {
+                                $match[2] = self::relocate($match[2], $location);
                         }
+                        if (empty($match[1])) {
+                                $match[1] = 'page-content';
+                        }
+                        return array(
+                                'href'    => $match[2],
+                                'onclick' => sprintf("content_replace(event, '%s', '%s')", $match[1], $match[2])
+                        );
+                }
+        }
+
+        private static function relocate($href, $location)
+        {
+                if (strpos($href, '@') === false) {
+                        return $href;
+                } else {
+                        return str_replace('@', $location, $href);
                 }
         }
 

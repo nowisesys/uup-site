@@ -1,5 +1,6 @@
 <?php
 
+use UUP\Site\Page\Web\Component\Link;
 use UUP\Site\Page\Web\Component\Links;
 use UUP\Site\Page\Web\StandardPage;
 
@@ -53,12 +54,10 @@ class format
         public function topmenu($small)
         {
                 if ($this->page->template != "welcome") {
-                        foreach ($this->page->topmenu as $name => $link) {
-                                if ($small) {
-                                        printf("<a id=\"%s\" href=\"%s\" class=\"w3-bar-item w3-mobile w3-button\">%s</a>\n", md5(basename($link)), $link, $name);
-                                } else {
-                                        printf("<a id=\"%s\" href=\"%s\" class=\"w3-bar-item w3-hover-white w3-hide-small\">%s</a>\n", md5(basename($link)), $link, $name);
-                                }
+                        foreach ($this->page->topmenu as $name => $attr) {
+                                $link = new Link($name, $attr);
+                                $link->attr['class'] = ($small) ? 'w3-bar-item w3-mobile w3-button' : 'w3-bar-item w3-hover-white w3-hide-small';
+                                $link->render($this->page->config->location);
                         }
                 }
         }
@@ -67,7 +66,7 @@ class format
         {
                 foreach ($this->page->navmenu as $menu) {
                         $links = new Links($menu);
-                        $links->render();
+                        $links->render($this->page->config->location);
                 }
         }
 
@@ -75,8 +74,9 @@ class format
         {
                 foreach ($this->page->sidebar as $sect => $data) {
                         printf("<h3>%s</h3>\n", $sect);
-                        foreach ($data as $name => $link) {
-                                printf("<a id=\"%s\" href=\"%s\">%s</a>\n", md5(basename($link)), $link, $name);
+                        foreach ($data as $name => $attr) {
+                                $link = new Link($name, $attr);
+                                $link->render($this->page->config->location);
                         }
                 }
         }

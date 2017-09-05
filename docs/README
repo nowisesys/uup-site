@@ -114,8 +114,11 @@ unzip everything in proper places.
     constructor.
 
     See example/context for infrastructure example. See example/multi for example
-    on programmatically defined menus. The site config file has some influence on menu 
+    on programatically defined menus. The site config file has some influence on menu 
     handling too.
+
+    See example/context/menus for more advanced menus, like dynamic update page content
+    or defining menus relative current site root.
 
 ** Pages:
 

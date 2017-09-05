@@ -498,6 +498,8 @@ class Config
                         return sprintf("%s", $dest);
                 } elseif ($comp['path'][0] == '/') {
                         return sprintf("%s", $dest);
+                } elseif ($dest[0] == '@') {
+                        return sprintf("%s/%s", $this->location, substr($dest, 1));
                 } else {
                         return sprintf("%s/%s", $this->location, $dest);
                 }

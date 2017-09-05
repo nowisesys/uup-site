@@ -44,7 +44,7 @@ class Links
         /**
          * Render all links.
          */
-        public function render()
+        public function render($location)
         {
                 if (isset($this->menu->name)) {
                         printf("<h3>%s</h3>\n", $this->menu->name);
@@ -52,7 +52,7 @@ class Links
                 if (isset($this->menu->data)) {
                         foreach ($this->menu->data as $name => $attr) {
                                 $link = new Link($name, $attr);
-                                $link->render();
+                                $link->render($location);
                         }
                 }
         }

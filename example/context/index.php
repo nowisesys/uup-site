@@ -33,13 +33,20 @@ class IndexPage extends StandardPage
                 echo "<h1>Context test</h1>\n";
                 echo "<p>This is a test of menus and publish info gathered from files included in this directory and parent directories.</p>\n";
 
-                printf("<ul>Various examples:\n");
+                printf("<ul>Context examples:\n");
                 printf("<li><a href=\"content\">Use content specification</a></li>\n");
                 printf("<li><a href=\"headers\">Output custom HTML headers</a></li>\n");
+                printf("<li><a href=\"publish\">Provide and display publisher information</a></li>\n");
+                printf("</ul>\n");
+
+                printf("<ul>Menus examples:\n");
                 printf("<li><a href=\"navmenu\">Navigation menu</a></li>\n");
                 printf("<li><a href=\"topmenu\">Topbar menu</a></li>\n");
-                printf("<li><a href=\"publish\">Provide and display publisher information</a></li>\n");
                 printf("<li><a href=\"sidebar\">Including sidebar menus</a></li>\n");
+                printf("<li><a href=\"menus\">Advanced menus</a></li>\n");
+                printf("</ul>\n");
+
+                printf("<ul>Other examples:\n");
                 printf("<li><a href=\"tree\">Infrastructure context test</a></li>\n");
                 printf("<li><a href=\"replace\">DOM content replace using target ID</a></li>\n");
                 printf("</ul>\n");
