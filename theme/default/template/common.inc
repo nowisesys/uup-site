@@ -197,6 +197,7 @@
             }
 
             xhr.open("GET", source, true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.send();
 
             event.preventDefault();
