@@ -69,6 +69,7 @@
         width: 200px;
         max-width: 200px;
     }
+
     #topbar-menu a,
     #navbar-menu a {
         text-decoration: none;
@@ -353,10 +354,12 @@
         function google_translate_element_init() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false,
                 multilanguagePage: true
             }, 'google_translate_element');
+
+            var select = document.getElementsByClassName('goog-te-combo')[0];
+            select.className += " w3-input w3-white w3-medium w3-border-grey w3-text-black";
         }
 
         // 
