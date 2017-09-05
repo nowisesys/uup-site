@@ -43,7 +43,7 @@ class IndexPage extends StandardPage
                 foreach ($menus['data'] as $name => $source) {
                         echo "<li>";
                         $link = new Link($name, $source);
-                        $link->render();
+                        $link->render($this->config->location);
                         echo "</li>\n";
                 }
                 echo "</ul>\n";
