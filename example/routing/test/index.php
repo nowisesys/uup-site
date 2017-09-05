@@ -28,7 +28,7 @@ class IndexPage extends StandardPage
 
         public function printContent()
         {
-                echo "<h1>Index view for router test</h1>\n";
+                echo "<h1>Index view for router test (from test subdir)</h1>\n";
         }
 
 }
