@@ -152,7 +152,9 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
                         $this->putContent($this->params->getParam('content', Params::INPUT_POST));
                 }
 
-                if ($this->params->hasParam('ajax')) {
+                if ($this->isAjax()) {
+                        $this->printContent();
+                } elseif ($this->params->hasParam('ajax')) {
                         $this->printContent();
                 } elseif (is_null($this->_template)) {
                         $this->printContent();

@@ -209,6 +209,25 @@ abstract class Handler
         }
 
         /**
+         * Detect AJAX request.
+         * 
+         * Returns true if the server magic array contains HTTP_X_REQUESTED_WITH
+         * with value XMLHttpRequest.
+         * @return boolean
+         */
+        public function isAjax()
+        {
+                if (filter_has_var(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH') == false) {
+                        return false;
+                }
+                if (filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH') != 'XMLHttpRequest') {
+                        return false;
+                }
+
+                return true;
+        }
+
+        /**
          * Content is editable.
          * @return boolean
          */
