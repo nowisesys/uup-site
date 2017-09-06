@@ -340,33 +340,37 @@ class Config
                         }
                 }
 
-                if (!$config['tools']) {
-                        $config['tools'] = array(
+                $tools = array(
+                        'tools' => array(
                                 'home'      => false,
                                 'auth'      => false,
                                 'edit'      => false,
                                 'search'    => false,
                                 'translate' => false
-                        );
-                }
-
-                if (!$config['auth']) {
-                        $config['auth'] = array(
-                                'start'  => '/',
-                                'logon'  => '/secure/logon',
-                                'logoff' => '/secure/logoff',
+                        ),
+                        'auth'  => array(
+                                'start'  => false,
+                                'logon'  => '/auth/logon',
+                                'logoff' => '/auth/logoff',
                                 'config' => $config['proj'] . '/config/auth.inc',
                                 'sso'    => true
-                        );
-                }
-
-                if (!$config['edit']) {
-                        $config['edit'] = array(
+                        ),
+                        'edit'  => array(
                                 'view' => '/edit/view',
                                 'ajax' => '/edit/ajax',
                                 'user' => array('webmaster'),
                                 'host' => $config['site']
-                        );
+                        )
+                );
+
+                foreach ($tools as $tool => $data) {
+                        if ($config[$tool]) {
+                                if (!is_array($config[$tool])) {
+                                        $config[$tool] = $data;
+                                } else {
+                                        $config[$tool] = array_merge($data, $config[$tool]);
+                                }
+                        }
                 }
 
                 if ($config['tools']['auth'] || $config['tools']['edit']) {
