@@ -500,6 +500,8 @@ class Config
                         throw new DomainException(_("Invalid URL $dest for redirect"));
                 } elseif (isset($comp['scheme'])) {
                         return sprintf("%s", $dest);
+                } elseif (!isset($comp['path'])) {
+                        return sprintf("%s/%s", $this->location, $dest);
                 } elseif ($comp['path'][0] == '/') {
                         return sprintf("%s", $dest);
                 } elseif ($dest[0] == '@') {
