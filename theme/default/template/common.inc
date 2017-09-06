@@ -355,7 +355,8 @@
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
                 autoDisplay: false,
-                multilanguagePage: true
+                multilanguagePage: true,
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
             }, 'google_translate_element');
 
             var select = document.getElementsByClassName('goog-te-combo')[0];
