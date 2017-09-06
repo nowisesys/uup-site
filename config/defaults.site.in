@@ -106,10 +106,10 @@ return array(
 //         * The authentication options. Enables session and suggests config->tools->auth.
 //         */
 //        'auth'      => array(
-//                'start'  => '/',                      // Start page after logon
+//                'start'  => '/',                      // Start page after successful logon
 //                'logon'  => '/logon',                 // The logon page
 //                'logoff' => '/logoff',                // The logoff page
-//                'config' => __DIR__ . '/auth.inc',    // Authenticator config file
+//                'config' => __DIR__ . '/auth.inc',    // Config file for authenticators
 //                'sso'    => true                      // Enable SSO login
 //        ),
 //        /**

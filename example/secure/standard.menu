@@ -5,6 +5,7 @@ return array(
     'data' => array(
         _('Normal Page') => 'normal.php',
         _('Secure Page') => 'secure.php',
+        _('Start Page') => 'start.php',
         _('Logon Page')  => 'logon',
         _('Logoff Page') => 'logoff'
     )

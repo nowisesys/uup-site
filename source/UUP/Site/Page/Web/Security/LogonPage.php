@@ -90,6 +90,11 @@ class LogonPage extends StandardPage
                 'secure' => 'secure.phtml',
                 'form'   => 'form.phtml'
         );
+        /**
+         * The logon is interactive (initiated by user).
+         * @var boolean 
+         */
+        private $_user = false;
 
         /**
          * Constructor.
@@ -103,6 +108,7 @@ class LogonPage extends StandardPage
                 $name = filter_input(INPUT_GET, 'auth');
                 $type = filter_input(INPUT_GET, 'type');
                 $json = filter_input(INPUT_GET, 'json', FILTER_VALIDATE_BOOLEAN);
+                $user = filter_input(INPUT_GET, 'user', FILTER_VALIDATE_BOOLEAN);
 
                 if ($json) {
                         $this->setTemplate(null);       // Don't render in template
@@ -113,6 +119,9 @@ class LogonPage extends StandardPage
                 }
                 if ($type) {
                         $this->_type = $type;
+                }
+                if ($user) {
+                        $this->_user = $user;
                 }
 
                 $this->setPages($pages);
@@ -137,6 +146,9 @@ class LogonPage extends StandardPage
                 if ($this->_step == self::STEP_ALREADY_LOGGED_ON) {
                         include($this->_pages['secure']);
                 } elseif ($this->_step == self::STEP_SELECT_METHOD) {
+                        if ($this->_user && $this->config->auth['start'] == false) {
+                                $this->session->return = filter_input(INPUT_SERVER, 'HTTP_REFERER');
+                        }
                         if ($this->_form) {
                                 include($this->_pages['form']);
                         } else {

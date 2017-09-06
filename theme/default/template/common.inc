@@ -136,7 +136,7 @@
                         <input class="w3-btn w3-blue w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Details') ?>">
                         <input class="w3-btn w3-red w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logoff']) ?>'" value="<?= _('Logoff') ?>">
                 <?php else: ?>
-                        <input class="w3-btn w3-orange w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) ?>'" value="<?= _('Logon') ?>">
+                        <input class="w3-btn w3-orange w3-large" type="button" onclick="window.location = '<?= $config->url($config->auth['logon']) . '?user=1' ?>'" value="<?= _('Logon') ?>">
                 <?php endif; ?>
             </div>
         </div>
