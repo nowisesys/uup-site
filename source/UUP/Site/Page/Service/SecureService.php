@@ -18,6 +18,7 @@
 
 namespace UUP\Site\Page\Service;
 
+use DomainException;
 use UUP\Authentication\Exception as LogonException;
 
 /**
@@ -34,6 +35,9 @@ abstract class SecureService extends StandardService
         {
                 parent::__construct($config);
 
+                if (!$this->config->auth) {
+                        throw new DomainException(_("Authentication are disabled"));
+                }
                 if (!$this->validate()) {
                         throw new LogonException(_("Authentication is required"));
                 }

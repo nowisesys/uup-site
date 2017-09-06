@@ -18,6 +18,7 @@
 
 namespace UUP\Site\Page\Web\Security;
 
+use DomainException;
 use UUP\Site\Page\Web\StandardPage;
 
 /**
@@ -40,6 +41,9 @@ abstract class SecurePage extends StandardPage
         {
                 parent::__construct($title, $template, $config);
 
+                if (!$this->config->auth) {
+                        throw new DomainException(_("Authentication are disabled"));
+                }
                 if (!$this->validate()) {
                         $this->redirect($this->config->auth['logon']);
                 }
