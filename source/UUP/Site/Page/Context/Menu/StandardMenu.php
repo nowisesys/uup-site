@@ -144,4 +144,24 @@ class StandardMenu extends \ArrayObject
                 }
         }
 
+        public function remove($head)
+        {
+                if (is_numeric($head)) {
+                        if (isset($this[$head])) {
+                                unset($this[$head]);
+                        }
+                } elseif (is_string($head)) {
+                        $found = false;
+                        foreach ($this as $index => $menu) {
+                                if ($menu->name == $head) {
+                                        $found = $index;
+                                        break;
+                                }
+                        }
+                        if ($found !== false) {
+                                unset($this[$index]);
+                        }
+                }
+        }
+
 }

@@ -64,18 +64,24 @@ class IndexPage extends StandardPage
                         _('Page 9')  => 'page9.php',
                         _('Page 10') => 'page10.php'
                     ), _("Header 1"));
+
+                // 
+                // Remove menu section:
+                // 
+                // $this->navmenu->remove(1);              // By index
+                // $this->navmenu->remove("Header 2");     // By header name
         }
 
         public function printContent()
         {
                 echo "<h1>Mixed menu and template handling</h1>\n";
                 echo "<p>All pages in this directory should display a navigation menu using the ";
-                echo "<a href=\"standard.menu\">standard.menu</a> "; 
+                echo "<a href=\"standard.menu\">standard.menu</a> ";
                 echo "file.</p>";
-                
+
                 echo "<p>This page demonstrate using insert() and append() methods on the ";
                 echo "\$this->navmenu object to dynamic modify the navigation menu.</p>\n";
-                
+
                 if ($this->config->debug) {
                         echo "<pre>\n";
                         print_r($this->navmenu);
