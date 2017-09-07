@@ -83,6 +83,45 @@ class StandardMenu extends \ArrayObject
                 parent::append(new MenuData($value));
         }
 
+        /**
+         * Append menu data.
+         * 
+         * Use this method to append data to an existing menu. The head argument 
+         * is either an index or string (the menu name). The default is to append 
+         * data to first menu.
+         * 
+         * <code>
+         * $page->navmenu->append(array(
+         *      'Link1' => 'file1.php', 
+         *      'Link2' => 'file2.php'
+         * ));
+         * </code>
+         * 
+         * Another options is pass an complete menu array. The array is the used
+         * as the $data and $head argument:
+         * 
+         * <code>
+         * $page->navmenu->append(array(
+         *      'head' => 'Name',
+         *      'data' => array(
+         *              'Link1' => 'file1.php', 
+         *              'Link2' => 'file2.php'
+         *      )
+         * ));
+         * </code>
+         * 
+         * The previous example is the same as this example:
+         * 
+         * <code>
+         * $page->navmenu->append(array(
+         *      'Link1' => 'file1.php', 
+         *      'Link2' => 'file2.php'
+         * ), 'Name');
+         * </code>
+         * 
+         * @param type $data
+         * @param type $head
+         */
         public function append($data, $head = 0)
         {
                 if (isset($data['head']) && isset($data['data'])) {
