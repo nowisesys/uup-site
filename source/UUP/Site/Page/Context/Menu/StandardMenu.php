@@ -56,8 +56,9 @@ class StandardMenu extends \ArrayObject
                                         $menus[] = false;
                                 }
                         }
+
                         if (count($menus) != 0) {
-                                parent::__construct($menus);
+                                parent::__construct(array_filter($menus));
                         }
                 }
         }
