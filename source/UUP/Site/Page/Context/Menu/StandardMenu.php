@@ -119,8 +119,8 @@ class StandardMenu extends \ArrayObject
          * ), 'Name');
          * </code>
          * 
-         * @param type $data
-         * @param type $head
+         * @param array $data The menu data.
+         * @param int|string $head The menu header or index.
          */
         public function append($data, $head = 0)
         {
@@ -144,11 +144,24 @@ class StandardMenu extends \ArrayObject
                 }
         }
 
-        public function remove($head)
+        /**
+         * Remove menu section.
+         * 
+         * If called without $name, then the whole menu section is removed. If called
+         * with $name, then that menu item within the menu section is removed.
+         * 
+         * @param int|string $head The menu header or index.
+         * @param string $name The menu item name.
+         */
+        public function remove($head, $name = null)
         {
                 if (is_numeric($head)) {
                         if (isset($this[$head])) {
-                                unset($this[$head]);
+                                if (!isset($name)) {
+                                        unset($this[$head]);
+                                } elseif (isset($this[$head]->data[$name])) {
+                                        unset($this[$head]->data[$name]);
+                                }
                         }
                 } elseif (is_string($head)) {
                         $found = false;
@@ -159,7 +172,11 @@ class StandardMenu extends \ArrayObject
                                 }
                         }
                         if ($found !== false) {
-                                unset($this[$index]);
+                                if (isset($this[$index]->data[$name])) {
+                                        unset($this[$index]->data[$name]);
+                                } else {
+                                        unset($this[$index]);
+                                }
                         }
                 }
         }
