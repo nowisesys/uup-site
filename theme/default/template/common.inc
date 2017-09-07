@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2016-2017 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,13 @@
 // Provides an navigation menu including standard and topbar menu, Google translate 
 // and search. Tune to suite your needs ;-)
 // 
+
+use UUP\Site\Utility\Content\Runtime;
+
+// 
+// Get runtime options:
+// 
+$show = new Runtime($this);
 
 ?>
 
@@ -83,7 +90,7 @@
             <a class="w3-bar-item w3-hover-white" onclick="toggle_sidenav_open()" href="javascript:void(0)">
                 <i class="fa fa-bars fa-lg"></i>
             </a>
-            <?php if ($config->tools['home']) : ?>
+            <?php if ($show->home) : ?>
                     <a class="w3-bar-item w3-hover-white" title="<?= _('Home') ?>" href="<?= $config->location ?>">
                         <i class="fa fa-home fa-lg"></i>
                     </a>
@@ -94,22 +101,22 @@
             <a href="<?= $config->location ?>" class="w3-bar-item w3-hover-white"><?= $config->name ?></a>
         </span>
         <span class="w3-right" id="topbar-tools">
-            <?php if ($config->tools['edit'] && $session->authenticated()) : ?>
+            <?php if ($show->edit) : ?>
                     <a class="w3-bar-item w3-hover-white" title="<?= _('Open page editor') ?>" onclick="toggle_edit_open('<?= $config->edit['host'] ?>')" href="javascript:void(0)">
                         <i class="fa fa-pencil-square-o fa-lg"></i>
                     </a>
             <?php endif; ?>
-            <?php if ($config->tools['translate']) : ?>
+            <?php if ($show->translate) : ?>
                     <a class="w3-bar-item w3-hover-white" title="<?= _('Translate this page') ?>" onclick="toggle_translate_open(this)" href="javascript:void(0)">
                         <i class="fa fa-globe fa-lg"></i>
                     </a>
             <?php endif; ?>
-            <?php if ($config->tools['search']) : ?>
+            <?php if ($show->search) : ?>
                     <a class="w3-bar-item w3-hover-white" id="search-button" title="<?= _('Search in content') ?>" onclick="toggle_search_open(this)" href="javascript:void(0)">
                         <i class="fa fa-search fa-lg"></i>
                     </a>
             <?php endif; ?>
-            <?php if ($config->tools['auth']) : ?>
+            <?php if ($show->auth) : ?>
                     <a class="w3-bar-item w3-hover-white" title="<?= _('Open authentication box') ?>" onclick="toggle_logon_open(this)" href="javascript:void(0)">
                         <?php if ($session->authenticated()) : ?>
                                 <i class="fa fa-lock fa-lg" id="logon-status"></i>
@@ -118,7 +125,7 @@
                         <?php endif; ?>
                     </a>
             <?php endif; ?>
-            <?php if ($config->topmenu && count($this->topmenu)) : ?>
+            <?php if ($show->topmenu) : ?>
                     <a class="w3-bar-item w3-hover-white w3-hide-large w3-hide-medium" onclick="toggle_navbar_open()" href="javascript:void(0)">
                         <i class="fa fa-ellipsis-v fa-lg"></i>
                     </a>
@@ -127,7 +134,7 @@
     </div>
 </div>
 
-<?php if ($config->tools['auth']) : ?>
+<?php if ($show->auth) : ?>
         <!-- Logon status box -->
         <div id="logon-box" class="panel w3-row-padding w3-padding-16" style="display: none;">
             <div class="w3-container w3-right-align">
@@ -142,7 +149,7 @@
         </div>
 <?php endif; ?>
 
-<?php if ($config->tools['translate']) : ?>
+<?php if ($show->translate) : ?>
         <!-- Language selection and translation -->
         <div id="language-box" class="panel w3-row-padding w3-padding-16" style="display: none">
             <div class="w3-container w3-right-align">
@@ -152,7 +159,7 @@
         </div>
 <?php endif; ?>
 
-<?php if ($config->tools['search']) : ?>
+<?php if ($show->search) : ?>
         <!-- Content search box -->
         <div id="search-box" class="panel w3-row-padding w3-padding-16" style="display: none">
             <div class="w3-container w3-right-align">
@@ -162,7 +169,7 @@
         </div>
 <?php endif; ?>
 
-<?php if ($config->tools['edit'] && $session->authenticated()) : ?>
+<?php if ($show->edit) : ?>
         <!-- Page edit box -->
         <div id="edit-box" class="panel w3-row-padding w3-padding-16" style="display: none">
             <div class="w3-container w3-right-align">
@@ -460,6 +467,6 @@
 
 </script>
 
-<?php if ($config->tools['translate']) : ?>
+<?php if ($show->translate) : ?>
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>
 <?php endif; ?>

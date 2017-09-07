@@ -5,7 +5,7 @@ use UUP\Site\Page\Web\Component\Links;
 use UUP\Site\Page\Web\StandardPage;
 
 /*
- * Copyright (C) 2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

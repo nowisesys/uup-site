@@ -28,7 +28,7 @@ class IndexPage extends StandardPage
         public function __construct()
         {
                 // 
-                // Use start page template instead of default standard template.
+                // Use welcome page template instead of default standard template.
                 // 
                 parent::__construct(__CLASS__, "welcome");
 
