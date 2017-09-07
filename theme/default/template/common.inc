@@ -197,12 +197,15 @@ $show = new Runtime($this);
 
 <script>
 
-        function content_replace(event, id, source) {
+        function content_replace(event, id, source, callback) {
             var xhr = new XMLHttpRequest();
 
             xhr.onreadystatechange = function (x) {
                 if (this.readyState === 4 && this.status === 200) {
                     document.getElementById(id).innerHTML = this.responseText;
+                    if(callback !== undefined) {
+                            callback();
+                    }
                 }
             }
 
