@@ -39,7 +39,7 @@ if (!defined('UUP_SITE_EXCEPT_DUMP')) {
          */
         define('UUP_SITE_EXCEPT_DUMP', 4);
 }
-if (!defined('UUP_SITE_EXCEPT_STACK')) {
+if (!defined('UUP_SITE_EXCEPT_BRIEF')) {
         /**
          * Display brief exception message.
          */
