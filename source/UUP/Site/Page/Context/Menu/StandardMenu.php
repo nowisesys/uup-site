@@ -63,4 +63,46 @@ class StandardMenu extends \ArrayObject
                 }
         }
 
+        /**
+         * Insert new menu data.
+         * 
+         * <code>
+         * $page->navmenu->insert(array(
+         *      'head' => 'Name',
+         *      'data' => array(
+         *              'Link1' => 'file1.php', 
+         *              'Link2' => 'file2.php'
+         *      )
+         * ));
+         * </code>
+         * 
+         * @param array $value The sub-menu data definition.
+         */
+        public function insert($value)
+        {
+                parent::append(new MenuData($value));
+        }
+
+        public function append($data, $head = 0)
+        {
+                if (isset($data['head']) && isset($data['data'])) {
+                        $data = $data['data'];
+                        $head = $data['head'];
+                }
+
+                if (is_numeric($head)) {
+                        if (isset($this[$head])) {
+                                $menu = $this[$head];
+                                $menu->data = array_merge($menu->data, $data);
+                        }
+                } elseif (is_string($head)) {
+                        foreach ($this as $menu) {
+                                if ($menu->name != $head) {
+                                        continue;
+                                }
+                                $menu->data = array_merge($menu->data, $data);
+                        }
+                }
+        }
+
 }
