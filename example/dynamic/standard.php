@@ -20,7 +20,7 @@ require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
 use UUP\Site\Page\Web\StandardPage;
 
-class Page2 extends StandardPage
+class MyPage extends StandardPage
 {
 
         public function __construct()
@@ -30,10 +30,13 @@ class Page2 extends StandardPage
 
         public function printContent()
         {
-                echo "<h1>Page 2</h1>\n";
+                echo "<h1>Standard page</h1>\n";
+                echo "<p>This page should only display navigation menu from the ";
+                echo "<a href=\"standard.menu\">standard.menu</a> "; 
+                echo "file.</p>\n";
         }
 
 }
 
-$page = new Page2();
+$page = new MyPage();
 $page->render();

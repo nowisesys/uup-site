@@ -20,26 +20,20 @@ require_once(realpath(__DIR__ . '/../../vendor/autoload.php'));
 
 use UUP\Site\Page\Web\StandardPage;
 
-class IndexPage extends StandardPage
+class MyPage extends StandardPage
 {
-
         public $sections;
 
         public function __construct()
         {
                 // 
-                // Use welcome page template instead of default standard template.
+                // Use welcome page template instead of default standard template:
                 // 
+                // parent::__construct(__CLASS__, "welcome");   // alt. 1
+                // $this->setTemplate("welcome");               // alt. 2
+                //                 
                 parent::__construct(__CLASS__, "welcome");
-
-                // 
-                // Example of per page menus:
-                // 
-                $this->navmenu->append(array(
-                        _('Page 1') => 'page1.php',
-                        _('Page 2') => 'page2.php'
-                ));
-
+                
                 $this->sections = array(
                         _('Introduction') => array(
                                 'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -60,11 +54,28 @@ class IndexPage extends StandardPage
         }
 
         public function printContent()
-        {
-                echo "<h1>Start page</h1>\n";
+        {                
+                echo "<h1>Welcome page</h1>\n";
+                
+                echo "<p>This page should be rendered using the 'welcome' template. ";
+                echo "Switching template can be useful if the page should adapt its UI ";
+                echo "at runtime.</p>\n";
+                
+                echo "<p>There are two different ways to switch between the rendering ";
+                echo "template being used:</p>\n";
+                echo "<code><pre>\n";
+                echo "// Inside constructor:\n";
+                echo "parent::__construct(\$title, \"welcome\");\n";
+                echo "\n";
+                echo "// During execution:\n";
+                echo "\$this->setTemplate(\"welcome\");\n";
+                echo "</pre></code>\n";
+                echo "<p>The template should normally be set before the rendering chain is ";
+                echo "being started. This means that once \$this->render() has been called ";
+                echo "the template can't be switched.</p>\n";
         }
 
 }
 
-$page = new IndexPage();
+$page = new MyPage();
 $page->render();
