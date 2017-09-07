@@ -181,4 +181,19 @@ class StandardMenu extends \ArrayObject
                 }
         }
 
+        /**
+         * Clear all menu sections.
+         */
+        public function clear()
+        {
+                $count = $this->count();
+                $index = 0;
+                
+                if ($count > 0) {
+                        for ($index = 0; $index < $count; $index++) {
+                                unset($this[$index]);
+                        }
+                }
+        }
+
 }

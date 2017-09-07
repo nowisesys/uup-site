@@ -71,6 +71,11 @@ class IndexPage extends StandardPage
                 // $this->navmenu->remove(1);                   // Remove menu section by index.
                 // $this->navmenu->remove("Header 2");          // Remove menu section by header.
                 // $this->navmenu->remove("Header 2", "Page 4");// Remove menu item by header/name.
+                
+                // 
+                // Delete all menu sections:
+                // 
+                // $this->navmenu->clear();
         }
 
         public function printContent()
