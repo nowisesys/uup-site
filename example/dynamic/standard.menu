@@ -5,6 +5,7 @@ return array(
     'data' => array(
         _('Index')    => 'index.php',
         _('Standard') => 'standard.php',
-        _('Welcome')  => 'welcome.php'
+        _('Welcome')  => 'welcome.php',
+        _('Runtime')  => 'runtime.php'
     )
 );
