@@ -87,9 +87,11 @@ $show = new Runtime($this);
 <div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-black">
     <div class="w3-bar w3-large">
         <span class="w3-left">
-            <a class="w3-bar-item w3-hover-white" onclick="toggle_sidenav_open()" href="javascript:void(0)">
-                <i class="fa fa-bars fa-lg"></i>
-            </a>
+            <?php if ($show->navmenu) : ?>
+                    <a class="w3-bar-item w3-hover-white" onclick="toggle_sidenav_open()" href="javascript:void(0)">
+                        <i class="fa fa-bars fa-lg"></i>
+                    </a>
+            <?php endif; ?>
             <?php if ($show->home) : ?>
                     <a class="w3-bar-item w3-hover-white" title="<?= _('Home') ?>" href="<?= $config->location ?>">
                         <i class="fa fa-home fa-lg"></i>
