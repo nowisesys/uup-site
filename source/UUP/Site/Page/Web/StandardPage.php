@@ -164,6 +164,26 @@ abstract class StandardPage extends RequestHandler implements PageTemplate
         }
 
         /**
+         * Authorize resource access.
+         * 
+         * Call this method to conditional redirect caller to logon page if not
+         * authenticated. This method is useful for standard pages that controls
+         * both public and secure content.
+         * 
+         * @param string $method The authentication method (i.e. cas).
+         */
+        final public function authorize($method = false)
+        {
+                if (!$this->validate()) {
+                        if (isset($method)) {
+                                $this->redirect(sprintf("%s?auth=%s", $this->config->auth['logon'], $method));
+                        } else {
+                                $this->redirect(sprintf("%s", $this->config->auth['logon']));
+                        }
+                }
+        }
+
+        /**
          * Redirect peer to destination.
          * 
          * @param string $dest The target URL (relative, absolute or extern).
