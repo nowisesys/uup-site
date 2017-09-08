@@ -5,14 +5,21 @@
 // gets merged in. The standard menus are available for an page in the $this->navmenu
 // member variable.
 // 
+// Use Link::SEPARATOR or false as menu separator. See example/context/menus for 
+// more details on menus (i.e. dynamic content replace).
+// 
 // Author: @author@
 // Date:   @datetime@
 // 
+
+use UUP\Site\Page\Web\Component\Link;
 
 return array(
     'head' => _('Header'),
     'data' => array(
         _('Page 1') => 'page1',
-        _('Page 2') => 'page2'
+        _('Page 2') => 'page2',
+        Link::SEPARATOR,
+        _('Page 2') => 'page2',
     )
 );
