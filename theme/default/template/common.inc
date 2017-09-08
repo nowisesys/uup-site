@@ -198,13 +198,16 @@ $show = new Runtime($this);
 <script>
 
         function content_replace(event, id, source, callback) {
+            event.preventDefault();
+            event.stopPropagation();
+
             var xhr = new XMLHttpRequest();
 
             xhr.onreadystatechange = function (x) {
                 if (this.readyState === 4 && this.status === 200) {
                     document.getElementById(id).innerHTML = this.responseText;
-                    if(callback !== undefined) {
-                            callback();
+                    if (callback !== undefined) {
+                        callback();
                     }
                 }
             }
@@ -212,9 +215,6 @@ $show = new Runtime($this);
             xhr.open("GET", source, true);
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.send();
-
-            event.preventDefault();
-            event.stopPropagation();
 
             close_overlay();
             return false;
