@@ -1,9 +1,0 @@
-<?php
-
-return array(
-    'head' => _('Dir 1'),
-    'data' => array(
-        _('Index')           => 'index',
-        _('Getting Started') => 'getting-started',
-    )
-);

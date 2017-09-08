@@ -1,9 +1,0 @@
-<?php
-
-return array(
-    'head' => _('View'),
-    'data' => array(
-        _('Index')  => 'index.php',
-        _('Render') => 'render.php'
-    )
-);

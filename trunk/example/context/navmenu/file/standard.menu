@@ -1,9 +1,0 @@
-<?php
-
-return array(
-    'head' => _('File Mode'),
-    'data' => array(
-        _('Page 3') => 'page3',
-        _('Page 4') => 'page4'
-    )
-);

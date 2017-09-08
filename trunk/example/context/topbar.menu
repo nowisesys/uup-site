@@ -1,7 +1,0 @@
-<?php
-
-return array(
-    _('Start')   => 'start.php',
-    _('About')   => 'about.php',
-    _('Contact') => 'contact.php'
-);
