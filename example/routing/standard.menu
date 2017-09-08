@@ -6,6 +6,7 @@ return array(
         _('About')    => 'about',
         _('Standard') => 'index',
         _('Welcome')  => 'welcome',
+            0 => false,
         _('Test')     => 'test'
     )
 );

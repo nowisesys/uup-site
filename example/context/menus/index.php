@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015-2017 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,60 +26,47 @@ class IndexPage extends StandardPage
         public function __construct()
         {
                 parent::__construct(__CLASS__);
-
-                $this->config->topmenu = array(
-                        // Use default target:
-                        _('T1') => '::topmenu1.php',
-                        // // Use target top2-id:
-                        _('T2') => ':topmenu2-id:topmenu2.php',
-                        // Equivalent to T2
-                        _('T3') => array(
-                                'href' => $this->config->url('topmenu3.php'),
-                                'dest' => 'topmenu3-id'
-                        ),
-                        // Equivalent to T3 (already relocated site root)
-                        _('T4') => array(
-                                'href' => $this->config->url('@topmenu4.php'),
-                                'dest' => 'topmenu4-id'
-                        ),
-                        // Relocated to site root (i.e. public):
-                        _('R1') => '@/topmenu5.php',
-                        // Relative current script:
-                        _('R2') => 'topmenu6.php',
-                        // Use virtual host as root:
-                        _('R3') => '/topmenu7.php',
-                        // Combined example of dynamic update and relocation:
-                        _('C1') => ':topmenu8-id:@/topmenu8.php',
-                        // Test extern link:
-                        _('E1') => 'http://www.bmc.uu.se'
-                );
-
-                $this->config->navmenu = array(
-                        'head' => _('Navmenu'),
-                        'data' => array(
-                                _('N1') => ':navmenu1-id:navmenu1.php',
-                                _('N2') => '@/navmenu2.php'
-                        )
-                );
-                $this->config->sidebar = array(
-                        _('Sidebar') => array(
-                                _('S1') => ':sidebar1-id:sidebar1.php',
-                                _('S2') => '@/sidebar2.php'
-                        )
-                );
         }
 
         public function printContent()
         {
-                echo "<h1>Advanced menus</h1>\n";
-                echo "<p>Examples on defining site root relocated and dynamic content replace menus. Use of menus has been forced on by this class for demonstration purposes.</p>\n";
-                echo "<p>Because links are rendered the same for all kind of menus, only the topbar menu contains the full set of test cases. Use developer tools in the web browser to inspect.</p>\n";
+                echo "<h1>More on menus</h1>\n";
+                echo "<p>These examples demonstrate more complex areas on menus, like javascript ";
+                echo "menus that replaces page content without reloding the page.</p>\n";
 
-                echo "<p><pre><code>\n";
-                print_r($this->topmenu);
-                print_r($this->navmenu);
-                print_r($this->sidebar);
-                echo "</code></pre></p>\n";
+                echo "<ul>\n";
+                echo "<li><a href=\"separator.php\">Define menu separator.</a></li>\n";
+                echo "<li><a href=\"advanced.php\">Content replace menus.</a></li>\n";
+                echo "</ul>\n";
+
+                echo "<p>Menus are defined by its header and data. The data is normally an array ";
+                echo "of name => link pairs, but the array values (link) are not restricted to being ";
+                echo "strings. An array containing keys mapping standard attribute names is ";
+                echo "another possibility:</p>\n";
+
+                $menu = array(
+                        'head' => _('Menu'),
+                        'data' => array(
+                                _('Link 1') => array(
+                                        'onclick' => "open_content(event, 'files')"
+                                ),
+                                _('Link 2') => ':target-id:script.php',
+                                _('Link 3') => array(
+                                        'href'  => 'script.php',
+                                        'title' => 'Some description text',
+                                        'style' => 'color: green; text-decoration: underline'
+                                ),
+                                _('Link 4') => array(
+                                        'href'    => '#',
+                                        'onclick' => 'window.location = script.php',
+                                        'class'   => 'w3-button w3-blue'
+                                )
+                        )
+                );
+
+                echo "<pre><code>\n";
+                print_r($menu);
+                echo "</code></pre>\n";
         }
 
 }

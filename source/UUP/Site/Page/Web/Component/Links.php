@@ -43,6 +43,7 @@ class Links
 
         /**
          * Render all links.
+         * @param string $location The site root location.
          */
         public function render($location)
         {
