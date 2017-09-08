@@ -1,0 +1,212 @@
+<?php
+/*
+ * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+?>
+
+<div id="edit-area">
+    <div id="content-editor" class="w3-animate-zoom">
+        <div style="float: right; position: relative;">
+            <?php require_once('navigator.phtml') ?>                
+        </div>
+        <div id="section-content" style="display: none">
+            <?php require_once('content/index.phtml') ?>            
+        </div>
+        <div id="section-editor" style="display: none">
+            <?php require_once('editor/index.phtml') ?>
+        </div>
+    </div>
+</div>
+
+<script>
+        // 
+        // The editor object:
+        // 
+        var uup = {
+            editor: {
+                // 
+                // Common settings:
+                // 
+                section: 'content',
+                content: 'files',
+                location: '<?= $this->config->location ?>',
+                path: '<?= $this->_path ?>',
+                ajax: '<?= $this->config->url($this->config->edit['ajax']) ?>',
+                view: '<?= $this->config->url($this->config->edit['view']) ?>',
+                // 
+                // Editor specific:
+                // 
+                curr: source_editor,
+                text: '',
+                file: {
+                    name: null,
+                    mime: null,
+                    stat: null
+                },
+                back: {
+                    inline: inline_editor,
+                    source: source_editor,
+                    normal: normal_editor
+                },
+                url: function (uri) {
+                    return this.location + '/' + this.path + '/' + uri;
+                }
+            }
+        };
+
+        // 
+        // The AJAX API object.
+        // 
+        var api = (function () {
+
+            // 
+            // Send AJAX request:
+            // 
+            this.request = function (uri, data, func) {
+                var xhr = new XMLHttpRequest();
+                var url = uup.editor.ajax + '/' + uri;
+                xhr.onreadystatechange = function (x) {
+                    if (this.readyState === 4 && this.status === 200) {
+                        func(xhr);
+                    }
+                }
+
+                if (data !== null) {
+                    xhr.open("POST", url);
+                    xhr.send(data);
+                } else {
+                    xhr.open("GET", url);
+                    xhr.send();
+                }
+            }
+
+            // 
+            // Encode request parameters:
+            // 
+            this.encode = function (params) {
+                let result = [];
+                for (let name in params) {
+                    result.push(encodeURIComponent(name) + '=' + encodeURIComponent(params[name]));
+                }
+
+                return result.join('&');
+            }
+
+            // 
+            // Send request and call func:
+            // 
+            this.send = function (params, data, func) {
+                if (params.path === undefined) {
+                    params.path = uup.editor.path;
+                }
+                if (params.handler === undefined) {
+                    params.handler = uup.editor.content;
+                }
+                request('?' + encode(params), data, func);
+            }
+
+            // 
+            // Return public API:
+            // 
+            return {
+                // 
+                // Common methods:
+                // 
+                stat: function (source, func) {
+                    send({action: 'stat', source: source}, null, func);
+                },
+                list: function (source, func) {
+                    send({handler: source, action: 'list'}, null, func);
+                },
+                create: function (source, target, func) {
+                    send({action: 'create', source: source, target: target}, null, func);
+                },
+                read: function (source, func) {
+                    send({action: 'read', source: source}, null, func);
+                },
+                update: function (target, data, func) {
+                    send({action: 'update', target: target}, data, func);
+                },
+                delete: function (target, func) {
+                    send({action: 'delete', target: target}, null, func);
+                },
+                rename: function (source, target, func) {
+                    send({action: 'rename', source: source, target: target}, null, func);
+                },
+                move: function (source, target, func) {
+                    send({action: 'move', source: source, target: target}, null, func);
+                },
+                link: function (source, target, func) {
+                    send({action: 'link', source: source, target: target}, null, func);
+                },
+                copy: function (source, target, func) {
+                    send({action: 'copy', source: source, target: target}, null, func);
+                },
+                // 
+                // Menu specific:
+                // 
+                add: function (target, link, name, func) {
+                    send({handler: 'menus', action: 'add', target: target}, {link: link, name: name}, func);
+                },
+                remove: function (target, link, func) {
+                    send({handler: 'menus', action: 'remove', target: target}, {link: link}, func);
+                }
+            }
+        }());
+
+        /**
+         * Open top level section.
+         * @param {String} section The section name (content|editor).
+         * @return {undefined}
+         */
+        function open_section(section) {
+            switch (section) {
+                case 'content':
+                    open_section_content();
+                    break;
+                case 'editor':
+                    open_section_editor();
+                    break;
+            }
+        }
+
+        /**
+         * Open content section.
+         * @return {undefined}
+         */
+        function open_section_content() {
+            document.getElementById('section-content').style.display = 'block';
+            document.getElementById('section-editor').style.display = 'none';
+        }
+
+        /**
+         * Open editor section.
+         * @return {undefined}
+         */
+        function open_section_editor() {
+            document.getElementById('section-content').style.display = 'none';
+            document.getElementById('section-editor').style.display = 'block';
+        }
+
+        // 
+        // Wait for DOM to become ready:
+        // 
+        document.onreadystatechange = function () {
+            if (document.readyState === "interactive") {
+                open_content(undefined, 'files');
+            }
+        }
+</script>

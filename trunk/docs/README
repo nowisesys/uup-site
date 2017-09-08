@@ -1,0 +1,204 @@
+=============================================================================
+    UUP-SITE - OOP site 
+=============================================================================
+
+This library takes a object oriented approach at building web sites by separating 
+page layout from content. It supports multiple theme, rendering page direct or
+using a dispatcher (routing) script.
+
+Despite its name, this package can be used as the rendering engine in any web
+application. In the following though we will outline the process for using it
+to render an ordinary web site, but the same approach can equally well be used
+for an web application.
+
+This package and optional theme can either be installed using composer or by
+unzip everything in proper places.
+
+** Directory structure:
+
+    Locations are configurable in config/defaults.site that is used when initializing 
+    a page class instance. This is the suggested directory structure:
+
+    site/
+      +-- config/                       // Configuration
+      +-- public/                       // Document root
+      |     +-- theme/xyz/assets/       // Theme support files
+      |                     +-- css/
+      |                     +-- js/
+      |                     +-- img/
+      +-- template/                     // Page rendering templates (themes)
+      +-- locale/                       // Support for locale (gettext)
+      +-- vendor/                       // Composer packages, including uup-site
+      +-- composer.json                 // Site project composer file
+      +-- Makefile                      // Compile locales (PO-files).
+
+** Site config:
+
+    The config/defaults.site file is looked for in the package directory (vendor/bmc/uup-site)
+    or in the site directory (the virtual host directory). All directory and 
+
+** Setup:
+
+    Composer is the de-factor standard for installing PHP packages. There are two ways to
+    use this package: Either as a package or stand-alone.
+
+    o) Use as package:
+
+        Start by initialize the composer.json file:
+
+            bash$> cd /var/www/<virtual-host-root>
+            bash$> composer init
+
+        Add the repository to composer.json:
+
+            "repositories": [
+                {
+                    "type": "composer",
+                    "url": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/"
+                }
+            ],
+            "require": {
+                "bmc/uup-site": ">=0.9.0"
+            }
+
+        Require the package to have it installed:
+
+            bash$> composer require bmc/uup-site
+
+        Run the uup-site.php script to finish setup:
+
+            bash$> ./vendor/bin/uup-site.sh --setup
+
+    o) Use in standalone mode:
+
+        This mode is suitable for small sites or web applications. Begin by downloading
+        the package:
+
+            bash$> cd /var/www/<virtual-host-root>
+            bash$> wget http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/stable/latest.tar.gz
+
+        Unpack the source:
+
+            bash$> tar xfvp latest.tar.gz
+
+        You should now have an almost functional directory structure. Start by generating
+        the composer autoloader:
+
+            bash$> composer dump-autoload
+
+        Run uup-site.php to initialize the site or application:
+
+            bash$> ./uup-site.sh --setup
+
+        Open config/defaults.site to tweak options. The default options (none) should be
+        fine in most cases.
+
+    After running uup-site.php, review content of public and config. Decide upon if page
+    routing (mod_rewrite) should be used or not.
+
+** Themes:
+
+    All themes should at least provide the standard.ui template, but it's up to user 
+    to define any number of *.ui files as needed. See theme/default for example on
+    theme construction. More themes can be downloaded and installed from:
+    
+        http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site. 
+
+    Install new themes be either require them using composer or simply download and
+    unpack them inside the theme directory.
+
+** Infrastructure:
+
+    Menus and publish information can either be defined by having custom files in
+    the page directory or programmatically by redefining menu content in the page 
+    constructor.
+
+    See example/context for infrastructure example. See example/multi for example
+    on programatically defined menus. The site config file has some influence on menu 
+    handling too.
+
+    See example/context/menus for more advanced menus, like dynamic update page content
+    or defining menus relative current site root.
+
+** Pages:
+
+    A page class can be rendered either direct or using routing. Using routing
+    is the recommended method that in addition supports views.
+
+    o) Using direct rendering:
+
+        // 
+        // Assume virtual host defines include path to root directory:
+        // 
+        require_once('vendor/autoload.php');
+
+        use UUP\Site\Page\Web\StandardPage;
+
+        class IndexPage extends StandardPage
+        {
+            // Define the printContent() member function at least.
+        };
+
+        $page = new IndexPage();
+        $page->render();
+
+    o) Using page routing (pretty URL's):
+
+        // 
+        // The dispatcher.php (router) has already setup autoloading, no need
+        // to explicit call render() either.
+        // 
+        class IndexPage extends StandardPage
+        {
+            // Define the printContent() member function at least.
+        };
+
+    More examples is included in example directory in the source package.
+
+** Views:
+
+    While pages are complete classes, views are simple files that contains just
+    the main section content (HTML/PHP fragments). Using routing is the recommended 
+    method for render views.
+
+    Using standard page class for rendering views makes the context (i.e. menus) 
+    available for decoration. Views are intended for web sites, while pages are 
+    more targeted at web application (more control).
+
+** Locales and translation:
+
+    See comments in UUP\Site\Utility\Locale on how to create POT-files, add new locales
+    and translations (PO-files) and compiling PO -> MO. 
+
+    If the site/application is huge, then its recommended to use multiple text domains:
+
+    site/
+      +-- htdocs/                       // Document root
+      |     +-- dir1/
+      |     +-- dir2/
+     ...   ...
+      +-- locale/                       // Support for locale (gettext)
+      |     +-- dir1.pot
+      |     +-- dir2.pot
+     ...   ...
+
+    Each page can initialize its own text domain in the constructor:
+
+        class MyPage extends StandardPage
+        {
+
+                public function __construct()
+                {
+                        parent::__construct("My page");
+                        $this->locale->setTextDomain("dir2");
+                }
+     
+        }
+
+    An example makefile is distributed in the admin directory that can serve as 
+    an inspiration for keeping translation files (POT/PO-files) up to date. Notice
+    that it only supports a single message.pot:
+
+        bash$> make -f admin/Makefile
+        
+// Anders Lövgren, 2015-12-07

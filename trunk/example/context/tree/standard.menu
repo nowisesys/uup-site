@@ -1,0 +1,9 @@
+<?php
+
+return array(
+    'head' => _('Dir 1'),
+    'data' => array(
+        _('Dir 2') => 'dir2',
+        _('Dir 3') => 'dir3'
+    )
+);

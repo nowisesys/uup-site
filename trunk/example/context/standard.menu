@@ -1,0 +1,9 @@
+<?php
+
+return array(
+    'head' => _('Root'),
+    'data' => array(
+        _('Page 1') => 'page1.php',
+        _('Page 2') => 'page2.php'
+    )
+);

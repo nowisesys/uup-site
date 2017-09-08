@@ -1,0 +1,13 @@
+<?php
+
+return array(
+    'head' => _('Test'),
+    'data' => array(
+        _('Index')           => 'index',
+        _('Transitional')    => 'transitional',
+        _('View')            => 'view',
+        _('Getting Started') => 'getting-started',
+        _('Dir 1')           => 'dir1',
+        _('Start Again')     => 'dir1/getting-started',        
+    )
+);

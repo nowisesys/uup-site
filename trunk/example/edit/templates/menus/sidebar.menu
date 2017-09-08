@@ -1,0 +1,27 @@
+<?php
+
+// 
+// The sidebar menu might occure on right hand side or merged with the standard menu.
+// An page can programmatically access the $this->sidebar member variable.
+// 
+// Use Link::SEPARATOR or false as menu separator. See example/context/menus for 
+// more details on menus (i.e. dynamic content replace).
+// 
+// Author: @author@
+// Date:   @datetime@
+// 
+
+use UUP\Site\Page\Web\Component\Link;
+
+return array(
+    _('Sect1') => array(
+            _('Link 1') => 'link1',
+            _('Link 2') => 'link2'
+    ),
+    _('Sect2') => array(
+            _('Link 3') => 'link3',
+            _('Link 4') => 'link4',
+            Link::SEPARATOR,
+            _('Link 5') => 'link5'
+        )
+);

@@ -1,0 +1,296 @@
+<?php
+/*
+ * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// 
+// Directory content listing.
+// 
+
+?>
+
+<div style="display: none">        
+    <table class="w3-table-all" id="content-table-template">
+        <thead>
+            <tr class="w3-green">
+                <th><?= (_('Name')) ?></th>
+                <th><?= (_('Link')) ?></th>
+                <th><?= (_('Owner')) ?></th>
+                <th><?= (_('Size')) ?></th>
+                <th><?= (_('Action')) ?></th>
+            </tr>                
+        </thead>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+
+<div class="w3-container w3-margin-top">
+    <div id="files-content" class="w3-container content-section w3-animate-opacity w3-animate-left w3-padding-12" style="display:none">
+        <?php require_once('files.phtml'); ?>
+    </div>
+
+    <div id="menus-content" class="w3-container content-section w3-animate-opacity w3-animate-left w3-padding-12" style="display:none">
+        <?php require_once('menus.phtml'); ?>
+    </div>
+
+    <div id="context-content" class="w3-container content-section w3-animate-opacity w3-animate-left w3-padding-12" style="display:none">
+        <?php require_once('context.phtml'); ?>
+    </div>
+</div>
+
+<script>
+        /**
+         * Open content section and load content.
+         * @param {event} event The click event.
+         * @param {String} content The content type (files|menus|context).
+         * @return {undefined}
+         */
+        function open_content(event, content) {
+            switch (content) {
+                case 'files':
+                    load_content_section('files-listing', content);
+                    open_content_section('files-content');
+                    break;
+                case 'menus':
+                    load_content_section('menus-listing', content);
+                    open_content_section('menus-content');
+                    break;
+                case 'context':
+                    load_content_section('context-listing', content);
+                    open_content_section('context-content');
+                    break;
+            }
+
+            if (event !== undefined) {
+                event.preventDefault();
+            }
+            if (content !== undefined) {
+                uup.editor.content = content;
+            }
+
+            close_overlay();
+        }
+
+        /**
+         * Open content section. This also unhides the parent container.
+         * @param {String} sect The section ID.
+         * @return {undefined}
+         */
+        function open_content_section(sect) {
+            var i, x;
+
+            x = document.getElementsByClassName("content-section");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(sect).style.display = "block";
+
+            open_section('content');    // unhide parent container.
+        }
+
+        /**
+         * Load content for section.
+         * @param {String} target The DOM target ID. 
+         * @param {String} source The content source (files|menus|context).
+         * @return {undefined}
+         */
+        function load_content_section(target, source) {
+            load_content(source, function (result) {
+                show_content(result, target);
+            });
+        }
+
+        /**
+         * Load content files listing (using AJAX request).
+         * @param {String} source The content source (files|menus|context).
+         * @param {Function} func The result callback.
+         * @return {undefined}
+         */
+        function load_content(source, func) {
+            api.list(source, function (xhr) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status === 'success') {
+                    func(response.result);
+                } else if (response.status === 'failure') {
+                    alert(response.message);
+                }
+            });
+        }
+
+        /**
+         * Show content result.
+         * @param {String} result The AJAX response.
+         * @param {String} target The DOM target ID. 
+         * @return {undefined}
+         */
+        function show_content(result, target) {
+            // 
+            // Clone template table:
+            // 
+            var table = document.getElementById('content-table-template').cloneNode(true);
+
+            // 
+            // Append files and directories to table:
+            // 
+            for (var i = 0; i < result.dir.length; ++i) {
+                add_directory(table, result.dir[i]);
+            }
+            for (var i = 0; i < result.file.length; ++i) {
+                add_file(table, result.file[i]);
+            }
+
+            // 
+            // Remove the empty table row (inside tbody):
+            // 
+            table.childNodes[3].removeChild(table.childNodes[3].firstChild);
+
+            // 
+            // Clean target DOM element:
+            // 
+            var dest = document.getElementById(target);
+            while (dest.firstChild) {
+                dest.removeChild(dest.firstChild);
+            }
+
+            // 
+            // Append table as single child element:
+            // 
+            dest.appendChild(table);
+        }
+
+        /**
+         * Add directory in table.
+         * 
+         * @param {DOM.Element} table The HTML table element.
+         * @param {Object} data The directory object.
+         */
+        function add_directory(table, data) {
+            add_entry(table, data, false);
+        }
+
+        /**
+         * Add file in table.
+         * 
+         * @param {DOM.Element} table The HTML table element.
+         * @param {Object} data The directory object.
+         */
+        function add_file(table, data) {
+            add_entry(table, data, true);
+        }
+
+        /**
+         * Add table entry.
+         * 
+         * @param {DOM.Element} table The HTML table element.
+         * @param {Object} data The directory object.
+         * @param {Boolean} file Create file link.
+         * @return {DOM.Element}
+         */
+        function add_entry(table, data, file) {
+            var tbody = table.lastChild;
+            var row = tbody.firstChild.cloneNode(true);
+
+            if (data.name !== null && data.name.length !== 0) {
+                row.children[0].appendChild(create_link(data.name, file));
+            }
+            if (data.link !== null && data.link.length !== 0) {
+                row.children[1].appendChild(create_link(data.link, true));
+            }
+            if (data.owner !== null && data.owner.length !== 0) {
+                row.children[2].innerHTML = data.owner;
+            }
+            if (data.size !== null && data.size > 0) {
+                row.children[3].innerHTML = data.size;
+            }
+
+            row.children[4].appendChild(create_action('trash-o', function (event) {
+                delete_entry(data.name, uup.editor.content);
+                event.preventDefault();
+            }));
+            
+            row.children[4].appendChild(create_action('eye', function (event) {
+                document.location = '/' + uup.editor.path + '/' + data.name;
+                event.preventDefault();
+            }));
+
+            tbody.insertBefore(row, tbody.lastChild);
+            return row;
+        }
+
+        /**
+         * Create links opening editor.
+         * 
+         * @param {String} name The file name.
+         * @param {Boolean} file Create file link.
+         * @return {DOM.Element}
+         */
+        function create_link(name, file)
+        {
+            var link = document.createElement('a');
+            var path = uup.editor.path + '/' + name;
+
+            if (file) {
+                link.href = '#';
+                link.onclick = function (event) {
+                    open_file(path, event);
+                };
+                link.innerHTML = name;
+            } else {
+                link.href = '?path=' + path;
+                link.innerHTML = name + '/';
+            }
+            return link;
+        }
+
+        /**
+         * Create action link.
+         * @param {String} icon The icon name.
+         * @param {Function} func The callback function.
+         * @return {DOM.Element}
+         */
+        function create_action(icon, func) {
+            var link = document.createElement('a');
+
+            link.href = '#';
+            link.onclick = func;
+            link.innerHTML = '<i class="fa fa-' + icon + '" aria-hidden="true" style="margin-right: 8px"></i> ';
+
+            return link;
+        }
+
+        /**
+         * Delete target file.
+         * @param {String} target The target file.
+         */
+        function delete_entry(target, content) {
+            switch (content) {
+                case 'files':
+                    delete_file(target);
+                    break;
+                case 'menus':
+                    delete_menu(target);
+                    break;
+                case 'context':
+                    delete_context(target);
+                    break;
+            }
+        }
+</script>

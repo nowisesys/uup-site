@@ -1,0 +1,10 @@
+Install codemirror and ckeditor for fancy source code editing. Run setup.sh to install
+them into this directory:
+
+    bash$> setup.sh codemirror git
+
+See help options:
+
+    bash$> setup.sh --help
+
+// Anders Lövgren, 2017-04-05

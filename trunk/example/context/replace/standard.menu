@@ -1,0 +1,12 @@
+<?php
+
+return array(
+    'head' => _('Replace'),
+    'data' => array(
+        _('Location')  => 'view.php',
+        _('Content')   => '::view.php',
+        _('Custom')    => ':custom-id:view.php',
+        _('Decorated') => ':custom-id:page.php',
+        _('Restore')   => 'index.php'
+    )
+);

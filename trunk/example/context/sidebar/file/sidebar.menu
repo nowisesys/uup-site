@@ -1,0 +1,12 @@
+<?php
+
+return array(
+    _('Related') => array(
+            _('Link 1') => 'link1',
+            _('Link 2') => 'link2'
+    ),
+    _('News') => array(
+            _('News 1') => 'news1',
+            _('News 2') => 'news2'
+        )
+);

@@ -1,0 +1,13 @@
+# 
+# Support for page routing (e.g. pretty URL's). Include in virtual host/directory 
+# definition. Adjust the location for dispatcher.php
+#  
+
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} ^.*/$
+RewriteRule ^(.*)$ /uup-site/example/routing/dispatch.php?uri=$1index [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /uup-site/example/routing/dispatch.php?uri=$1 [QSA,L]
