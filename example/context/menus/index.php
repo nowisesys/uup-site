@@ -37,6 +37,7 @@ class IndexPage extends StandardPage
                 echo "<ul>\n";
                 echo "<li><a href=\"separator.php\">Define menu separator.</a></li>\n";
                 echo "<li><a href=\"advanced.php\">Content replace menus.</a></li>\n";
+                echo "<li><a href=\"conditional.php\">Hide content when not authenticated.</a></li>\n";
                 echo "</ul>\n";
 
                 echo "<p>Menus are defined by its header and data. The data is normally an array ";
