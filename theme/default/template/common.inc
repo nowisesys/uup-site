@@ -83,6 +83,15 @@ $show = new Runtime($this);
     }
 </style>
 
+<?php if (!$session->authenticated()) : ?>
+        <style>
+            a[auth="true"],a[auth="1"],a[auth="yes"],
+            [auth="true"],[auth="1"],[auth="yes"]{
+                display: none;
+            }
+        </style>
+<?php endif; ?>
+
 <!-- Navigation bar -->
 <div id="topbar-menu" class="no-print w3-card-2 w3-slim w3-black">
     <div class="w3-bar w3-large">
