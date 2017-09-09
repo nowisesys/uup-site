@@ -150,6 +150,11 @@ class Config
          */
         private $_prjdir;
         /**
+         * Directories to detect files in.
+         * @var array 
+         */
+        private $_subdirs = array();
+        /**
          * Cached configuration options.
          * @var array 
          */
@@ -250,8 +255,24 @@ class Config
          */
         private function detect($config)
         {
-                $this->_topdir = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
-                $this->_prjdir = realpath(__DIR__ . "/../../../..");
+                // 
+                // Set search directories:
+                // 
+                if (strpos(__DIR__, "/vendor/") === false) {
+                        $this->_subdirs[] = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
+                        $this->_subdirs[] = realpath(__DIR__ . "/../../../..");
+                } else {
+                        $this->_subdirs[] = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
+                        $this->_subdirs[] = realpath(__DIR__ . "/../../../../../../..");
+                }
+
+                $this->_subdirs[] = dirname(getcwd());
+                $this->_subdirs[] = __DIR__;
+                
+                $this->_subdirs = array_unique($this->_subdirs);
+                
+                $this->_topdir = $this->_subdirs[0];
+                $this->_prjdir = $this->_subdirs[1];
 
                 // 
                 // Get config settings:
@@ -433,7 +454,7 @@ class Config
          */
         private function locate($path)
         {
-                foreach (array($this->_topdir, $this->_prjdir, __DIR__) as $test) {
+                foreach ($this->_subdirs as $test) {
                         if (($dest = realpath(sprintf("%s/%s", $test, $path)))) {
                                 return $dest;
                         }
