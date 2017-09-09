@@ -38,8 +38,6 @@ class SimplePage extends StandardPage
 // 
 // Render error page direct. This is purely for testing!
 // 
-//$inner = new Exception('The inner exception message', 9288);
-//$outer = new Exception('The outer exception message', 4758, $inner);
 
 $page = new SimplePage();
 $page->onException(new Exception('The exception message', 4758, new Exception('The inner exception', 9288)));
