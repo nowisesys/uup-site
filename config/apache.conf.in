@@ -1,13 +1,33 @@
 # 
-# Support for page routing (e.g. pretty URL's). Include in virtual host/directory 
-# definition. Adjust the location for dispatcher.php
-#  
+# Support for page routing. 
+# 
+# Include in virtual host or configuration file for a web application. 
+# The same file can be included in multiple locations. 
+# 
+# For development or testing uup-site you don't need this file. Simply link 
+# the project directory under htdocs.
+# 
+# Author: Anders Lövgren
+# Date:   2017-09-09
+# 
 
-RewriteEngine on
+# 
+# Config for include in virtual host using the public directory from 
+# uup-site as document root:
+# 
 
+# Allow access from localhost and private network:
+Require local
+Require ip 192.168.
+
+# Exclude theme location:
+RewriteRule ^/theme - [L]
+
+# Handle index page request:
 RewriteCond %{REQUEST_FILENAME} ^.*/$
-RewriteRule ^(.*)$ /uup-site/example/routing/dispatch.php?uri=$1index [QSA,L]
+RewriteRule ^(.*)$ /dispatch.php?uri=$1index [QSA,L]
 
+# Route all page request to dispatcher:
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ /uup-site/example/routing/dispatch.php?uri=$1 [QSA,L]
+RewriteRule ^(.*)$ /dispatch.php?uri=$1 [QSA,L]
