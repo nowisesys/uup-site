@@ -51,17 +51,26 @@ if (!defined('UUP_SITE_EXCEPT_STACK')) {
          */
         define('UUP_SITE_EXCEPT_STACK', 16);
 }
+if (!defined('UUP_SITE_EXCEPT_CODE')) {
+        /**
+         * Display exception code.
+         */
+        define('UUP_SITE_EXCEPT_CODE', 32);
+}
 if (!defined('UUP_SITE_EXCEPT_DEVELOP')) {
         /**
          * Development mode error reporting (not for production mode).
          */
-        define('UUP_SITE_EXCEPT_DEVELOP', UUP_SITE_EXCEPT_DUMP | UUP_SITE_EXCEPT_STACK | UUP_SITE_EXCEPT_BRIEF);
+        define('UUP_SITE_EXCEPT_DEVELOP', \
+            UUP_SITE_EXCEPT_DUMP | UUP_SITE_EXCEPT_STACK | \
+            UUP_SITE_EXCEPT_CODE | UUP_SITE_EXCEPT_BRIEF);
 }
 if (!defined('UUP_SITE_EXCEPT_ALL')) {
         /**
          * Full exception reporting (development + error logging).
          */
-        define('UUP_SITE_EXCEPT_ALL', UUP_SITE_EXCEPT_DEVELOP | UUP_SITE_EXCEPT_LOG);
+        define('UUP_SITE_EXCEPT_ALL', \
+            UUP_SITE_EXCEPT_DEVELOP | UUP_SITE_EXCEPT_LOG);
 }
 
 /**

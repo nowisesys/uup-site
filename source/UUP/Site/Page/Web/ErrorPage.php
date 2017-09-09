@@ -25,6 +25,7 @@ use const UUP_SITE_EXCEPT_DUMP;
 use const UUP_SITE_EXCEPT_LOG;
 use const UUP_SITE_EXCEPT_SILENT;
 use const UUP_SITE_EXCEPT_STACK;
+use const UUP_SITE_EXCEPT_CODE;
 
 /**
  * Page for displaying error.
@@ -70,6 +71,9 @@ class ErrorPage extends StandardPage
                 }
                 if ($this->config->exception & UUP_SITE_EXCEPT_BRIEF) {
                         printf("<b>%s:</b> %s<br/>\n", get_class($this->_exception), $this->_exception->getMessage());
+                }
+                if ($this->config->exception & UUP_SITE_EXCEPT_CODE) {
+                        printf("<b>Code:</b> %s<br/>\n", $this->_exception->getCode());
                 }
                 if ($this->config->exception & UUP_SITE_EXCEPT_STACK) {
                         $stack = $this->_exception->getTraceAsString();

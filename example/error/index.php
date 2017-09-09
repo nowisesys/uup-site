@@ -60,7 +60,10 @@ class IndexPage extends StandardPage
                         echo "<li>UUP_SITE_EXCEPT_SILENT (error report is suppressed)</li>\n";
                 }
                 if ($this->config->exception & UUP_SITE_EXCEPT_BRIEF) {
-                        echo "<li>UUP_SITE_EXCEPT_BRIEF (only display exception class and message)</li>\n";
+                        echo "<li>UUP_SITE_EXCEPT_BRIEF (display error message and exception class)</li>\n";
+                }
+                if ($this->config->exception & UUP_SITE_EXCEPT_CODE) {
+                        echo "<li>UUP_SITE_EXCEPT_CODE (display error code)</li>\n";
                 }
                 if ($this->config->exception & UUP_SITE_EXCEPT_STACK) {
                         echo "<li>UUP_SITE_EXCEPT_STACK (show stack trace)</li>\n";
