@@ -57,6 +57,12 @@ if (!defined('UUP_SITE_EXCEPT_DEVELOP')) {
          */
         define('UUP_SITE_EXCEPT_DEVELOP', UUP_SITE_EXCEPT_DUMP | UUP_SITE_EXCEPT_STACK | UUP_SITE_EXCEPT_BRIEF);
 }
+if (!defined('UUP_SITE_EXCEPT_ALL')) {
+        /**
+         * Full exception reporting (development + error logging).
+         */
+        define('UUP_SITE_EXCEPT_ALL', UUP_SITE_EXCEPT_DEVELOP | UUP_SITE_EXCEPT_LOG);
+}
 
 /**
  * Site configuration class.
