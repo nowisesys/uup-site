@@ -28,9 +28,14 @@ class IndexPage extends StandardPage
 
         public function printContent()
         {
-                echo "<h1>Index view for router test</h1>\n";
+                echo "<h1>Using page routing</h1>\n";
+
+                echo "<p>Locations under this directory uses a router to locate related pages/views ";
+                echo "and render them. Preferable the routing is setup in the web server instead ";
+                echo "of relying on an .htaccess file.</p>\n";
                 
-                echo "<ul>Some example links:\n";
+                echo "<p>Some example links:</p>\n";
+                echo "<ul>\n";
                 echo "<li><a href=\"welcome\">welcome</a></li>\n";
                 echo "<li><a href=\"about\">about</a></li>\n";
                 echo "<li><a href=\"test/\">index</a></li>\n";

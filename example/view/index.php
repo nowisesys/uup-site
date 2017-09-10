@@ -25,3 +25,15 @@
     content in this file rendered using the standard template. Put context files in
     current directory to show menus and publish info.
 </p>
+
+<h4>Scure views</h4>
+<p>
+    Enforce authetication in page header to create secure views. For an example on 
+    conditional hiding content (HTML elements), see 
+    <a href="../context/menus/conditional.php">conditional.php</a>
+</p>
+<pre><code>
+if ($session->authenticated()) {
+        throw new Exception("Authentication is required");
+}
+</code></pre>

@@ -1,0 +1,10 @@
+<?php
+
+if ($session->authenticated()) {
+        throw new Exception("Authentication is required");
+}
+
+?>
+
+<h1>Secure view</h1>
+<p>This view is only visible for authenticated users.</p>
