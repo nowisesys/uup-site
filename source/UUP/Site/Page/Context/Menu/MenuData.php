@@ -50,7 +50,12 @@ class MenuData
         {
                 if (isset($data['data'])) {
                         foreach ($data['data'] as $name => $link) {
-                                if ($link) {
+                                if(is_bool($link)) {
+                                        continue;       // Skip separator
+                                } elseif($link[0] == '<') {
+                                        continue;       // 
+                                }
+                                if ($link && $link[0]) {
                                         $data['data'][$name] = $parent . '/' . $link;
                                 }
                         }
