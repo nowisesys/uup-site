@@ -269,10 +269,10 @@ class Config
                 $this->_subdirs[] = dirname(getcwd());
                 $this->_subdirs[] = __DIR__;
                 
-                $this->_subdirs = array_unique($this->_subdirs);
-                
                 $this->_topdir = $this->_subdirs[0];
                 $this->_prjdir = $this->_subdirs[1];
+                
+                $this->_subdirs = array_values(array_unique($this->_subdirs));
 
                 // 
                 // Get config settings:
