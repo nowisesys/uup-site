@@ -269,8 +269,13 @@ class Config
                 $this->_subdirs[] = dirname(getcwd());
                 $this->_subdirs[] = __DIR__;
 
-                $this->_topdir = $this->_subdirs[0];
-                $this->_prjdir = $this->_subdirs[1];
+                if (isset($this->_subdirs[1])) {
+                        $this->_topdir = $this->_subdirs[0];
+                        $this->_prjdir = $this->_subdirs[1];
+                } else {
+                        $this->_topdir = $this->_subdirs[0];
+                        $this->_prjdir = $this->_subdirs[0];
+                }
 
                 $this->_subdirs = array_values(array_unique($this->_subdirs));
 
