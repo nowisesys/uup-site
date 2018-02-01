@@ -268,10 +268,10 @@ class Config
 
                 $this->_subdirs[] = dirname(getcwd());
                 $this->_subdirs[] = __DIR__;
-                
+
                 $this->_topdir = $this->_subdirs[0];
                 $this->_prjdir = $this->_subdirs[1];
-                
+
                 $this->_subdirs = array_values(array_unique($this->_subdirs));
 
                 // 
@@ -530,6 +530,7 @@ class Config
          */
         public function getUrl($dest)
         {
+
                 if (empty($dest)) {
                         return $this->location;
                 } elseif (!($comp = parse_url($dest))) {
@@ -542,8 +543,10 @@ class Config
                         return sprintf("%s", $dest);
                 } elseif ($dest[0] == '@') {
                         return sprintf("%s/%s", $this->location, substr($dest, 1));
-                } else {
+                } elseif ($this->location != '/') {
                         return sprintf("%s/%s", $this->location, $dest);
+                } else {
+                        return sprintf("%s", $dest);
                 }
         }
 
