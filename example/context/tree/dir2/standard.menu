@@ -4,6 +4,10 @@ return array(
     'head' => _('Dir 2'),
     'data' => array(
         _('Page 5') => 'page5',
-        _('Page 6') => 'page6'
+        _('Page 6') => 'page6',
+        _('Page 7') => array(
+            'href'  => 'page7',
+            'title' => 'open page 7'
+        )
     )
 );

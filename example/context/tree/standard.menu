@@ -7,6 +7,10 @@ return array(
     'data' => array(
         _('Dir 2') => 'dir2',
         Link::SEPARATOR,
-        _('Dir 3') => 'dir3'
+        _('Dir 3') => 'dir3',
+        _('Page 4') => array(
+            'href'  => 'page4',
+            'title' => 'Open page 4'
+        )
     )
 );

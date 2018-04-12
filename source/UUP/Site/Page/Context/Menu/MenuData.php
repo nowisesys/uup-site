@@ -50,13 +50,24 @@ class MenuData
         {
                 if (isset($data['data'])) {
                         foreach ($data['data'] as $name => $link) {
-                                if(is_bool($link)) {
-                                        continue;       // Skip separator
-                                } elseif($link[0] == '<') {
-                                        continue;       // 
+                                if (is_array($link)) {
+                                        $href = $link['href'];
+                                } else {
+                                        $href = $link;
                                 }
-                                if ($link && $link[0]) {
-                                        $data['data'][$name] = $parent . '/' . $link;
+
+                                if (!is_string($href)) {
+                                        continue;       // Skip separator                                        
+                                } elseif ($href[0] == '<') {
+                                        continue;       // Skip separator                                        
+                                } else {
+                                        $href = $parent . '/' . $href;
+                                }
+
+                                if (is_string($link)) {
+                                        $data['data'][$name] = $href;
+                                } else {
+                                        $data['data'][$name]['href'] = $href;
                                 }
                         }
                 }
