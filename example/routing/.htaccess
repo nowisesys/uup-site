@@ -1,5 +1,8 @@
 RewriteEngine on
 
+RewriteCond %{REQUEST_FILENAME} "/uup-site/(theme|assets)"
+RewriteRule "(.*)" - [L]
+
 RewriteCond %{REQUEST_FILENAME} ^.*/$
 RewriteRule ^(.*)$ /uup-site/example/routing/dispatch.php?uri=$1index [QSA,L]
 

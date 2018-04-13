@@ -24,7 +24,8 @@ Require ip 192.168.
 RewriteEngine on
 
 # Exclude theme location:
-RewriteRule ^/theme - [L]
+RewriteCond %{REQUEST_FILENAME} "^/theme"
+RewriteRule "(.*)" - [L]
 
 # Handle index page request:
 RewriteCond %{REQUEST_FILENAME} ^.*/$
