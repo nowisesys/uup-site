@@ -23,6 +23,7 @@ namespace UUP\Site\Page\Context\Menu;
  * 
  * @property-read string $name The header name.
  * @property-read array $data The header data.
+ * @property-read string $parent The parent link.
  * 
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  */
@@ -36,6 +37,8 @@ class MenuData
          */
         public function __construct($data, $parent = null)
         {
+                $this->parent = $parent;
+
                 if (isset($parent)) {
                         self::relocate($data, $parent);
                 }

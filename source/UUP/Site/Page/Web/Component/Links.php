@@ -48,7 +48,7 @@ class Links
         public function render($location)
         {
                 if (isset($this->menu->name)) {
-                        printf("<h3>%s</h3>\n", $this->menu->name);
+                        printf("<h3><a href=\"%s\">%s</a></h3>\n", $this->menu->parent, $this->menu->name);
                 }
                 if (isset($this->menu->data)) {
                         foreach ($this->menu->data as $name => $attr) {
