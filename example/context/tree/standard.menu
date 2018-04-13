@@ -11,6 +11,12 @@ return array(
         _('Page 4') => array(
             'href'  => 'page4',
             'title' => 'Open page 4'
-        )
+        ),
+        _('Page 5') => '@/page5',
+        _('Page 6') => 'https://www.google.se',
+        _('Page 7') => '::page7',
+        _('Page 8') => '::https://www.google.se',
+        _('Page 9') => ':target-id:page9',
+        _('Page 10') => ':target-id:https://www.google.se'
     )
 );

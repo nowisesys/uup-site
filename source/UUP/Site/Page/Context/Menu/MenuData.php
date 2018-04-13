@@ -32,6 +32,7 @@ class MenuData
         /**
          * Constructor.
          * @param array $data The header data.
+         * @param string $parent The parent directory.
          */
         public function __construct($data, $parent = null)
         {
@@ -46,6 +47,11 @@ class MenuData
                 }
         }
 
+        /**
+         * Relocate link targets in menu.
+         * @param array $data The header data.
+         * @param string $parent The parent directory.
+         */
         private static function relocate(&$data, $parent)
         {
                 if (isset($data['data'])) {
@@ -59,7 +65,15 @@ class MenuData
                                 if (!is_string($href)) {
                                         continue;       // Skip separator                                        
                                 } elseif ($href[0] == '<') {
-                                        continue;       // Skip separator                                        
+                                        continue;       // Skip separator 
+                                } elseif ($href[0] == '@') {
+                                        continue;       // Skip site anchor
+                                } elseif (preg_match('%http(s)?://.*%', $href)) {
+                                        continue;       // Skip external link
+                                } elseif ($href[0] == ':') {
+                                        if (preg_match('%^:(.*?):(.*)%', $href, $parts)) {
+                                                $href = sprintf(":%s:%s/%s", $parts[1], $parent, $parts[2]);
+                                        }
                                 } else {
                                         $href = $parent . '/' . $href;
                                 }
