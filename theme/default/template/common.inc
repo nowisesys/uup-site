@@ -300,7 +300,9 @@ $show = new Runtime($this);
         }
 
         function content_replace(event, id, source, callback) {
-            if (source.match('/http(s)?:\/\/')) {
+            if (typeof content_replace_extern === 'function') {
+                return content_replace_extern(event, id, source, callback);
+            } else if (source.match('/http(s)?:\/\/')) {
                 return content_replace_text(event, id, source, callback);
             } else {
                 return content_replace_html(event, id, source, callback)

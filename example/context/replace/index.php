@@ -38,7 +38,8 @@ class IndexPage extends StandardPage
 
                 echo "<p>If requested content contains script-tags, then they are added if onajax=\"add\"";
                 echo "attribute is set and run if onajax=\"run\" is set (see script.php). Any script ";
-                echo "fragment without onajax attribute is missing.</p>\n";
+                echo "fragment without onajax attribute is missing. If function content_replace_extern() ";
+                echo "is defined, then if will be automatic called instead of the supplied function.</p>\n";
 
                 echo "<p>Pages can programatically use the Link class to render links:</p>\n";
 
