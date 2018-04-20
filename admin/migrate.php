@@ -352,6 +352,8 @@ class Application
                 printf("  -f,--force:\n");
                 printf("     --overwrite:  Force overwrite existing target file.\n");
                 printf("  -h,--help:       This casual help.\n");
+                printf("Notice:\n");
+                printf("  Use either one of the -b|-o|-s|-r mode options.\n");
                 printf("\n");
                 printf("Copyright (C) 2016-2018 Anders Lövgren, Computing Department at BMC, Uppsala University\n");
         }
