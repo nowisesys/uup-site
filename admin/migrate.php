@@ -314,7 +314,7 @@ class Application
 
                         foreach ($data as $func) {
                                 $todo = sprintf("//\n// TODO: Fix call to missing function %s\n//", $func);
-                                $body = sprintf("trigger_error('Missing function %s called', E_USER_DEPRECATED)", $func);
+                                $body = sprintf("trigger_error('Missing function %s called', E_USER_DEPRECATED);", $func);
                                 $plug = sprintf("function %s\n{\n\t%s\n}", $func, $body);
                         }
 
