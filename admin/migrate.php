@@ -210,7 +210,7 @@ class Convert
         {
                 if ($this->_autoload) {
                         fprintf($this->_out, "\n");
-                        fprintf($this->_out, "\$page = new IndexPage();\n");
+                        fprintf($this->_out, "\$page = new %s();\n", $this->_name);
                         fprintf($this->_out, "\$page->render();\n");
                 }
         }
