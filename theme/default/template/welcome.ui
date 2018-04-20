@@ -1,6 +1,7 @@
 <?php
 include_once('format.inc');
 $output = new format($this);
+
 ?>
 <!DOCTYPE html>
 <!--
@@ -23,7 +24,7 @@ $output = new format($this);
     <body>
         <style>
             .header-container {
-                background-image: url('http://www.pachd.com/free-images/nature-images/sunset-04.jpg');
+                background-image: url('<?= $config->img("sunset-04.jpg") ?>');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: 50%;
@@ -95,10 +96,10 @@ $output = new format($this);
             </div>
         </div>
 
-        <?php if($config->fortune) : ?>
-        <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
-            <h1 class="w3-margin w3-xlarge">Quote of the day:<br/><br/><?= $this->fortune->cookie ?></h1>
-        </div>
+        <?php if ($config->fortune) : ?>
+                <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
+                    <h1 class="w3-margin w3-xlarge">Quote of the day:<br/><br/><?= $this->fortune->cookie ?></h1>
+                </div>
         <?php endif ?>
 
         <!-- Footer -->
