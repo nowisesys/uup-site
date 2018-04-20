@@ -18,6 +18,31 @@
 ?>
 
 <script>
+
+        // 
+        // Add a script element as a child of the body:
+        // 
+        function delayed_javascript_loading() {
+<?php if ($show->translate) : ?>
+                    var element = document.createElement("script");
+                    element.src = "//translate.google.com/translate_a/element.js?cb=google_translate_element_init";
+                    document.body.appendChild(element);
+<?php endif; ?>
+        }
+
+        // 
+        // Check for browser support of event handling capability:
+        // 
+        if (window.addEventListener) {
+            window.addEventListener("load", delayed_javascript_loading, false);
+        } else if (window.attachEvent) {
+            window.attachEvent("onload", delayed_javascript_loading);
+        } else {
+            window.onload = delayed_javascript_loading;
+        }
+</script>
+
+<script>
         // 
         // Fetch content as text and assign to inner html.
         // 
@@ -181,9 +206,9 @@
         function toggle_edit_open(host) {
             var editable = "<?= $this->isEditable() ? 1 : 0 ?>";
 
-        // 
-        // Redirect to editing host if required:
-        // 
+            // 
+            // Redirect to editing host if required:
+            // 
             if (window.location.host !== host) {
                 window.location.host = host;
                 return false;
@@ -355,6 +380,3 @@
 
 </script>
 
-<?php if ($show->translate) : ?>
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=google_translate_element_init"></script>
-<?php endif; ?>
