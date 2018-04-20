@@ -43,6 +43,21 @@ class Convert
          * @var TransitionalPage 
          */
         private $_page;
+        /**
+         * Generate code for autoload.
+         * @var bool 
+         */
+        private $_autoload = false;
+        /**
+         * The input stream.
+         * @var resource 
+         */
+        private $_inp;
+        /**
+         * The output stream.
+         * @var resource 
+         */
+        private $_out;
 
         /**
          * Constructor.
@@ -53,6 +68,13 @@ class Convert
         {
                 $this->_name = $name;
                 $this->_page = $page;
+        }
+
+        public function __set($name, $value)
+        {
+                if ($name === 'autoload') {
+                        $this->_autoload = (bool) $value;
+                }
         }
 
         /**
@@ -67,6 +89,7 @@ class Convert
 
                 $this->outputStart();
                 $this->outputClass();
+                $this->outputRender();
         }
 
         private function outputStart()
@@ -83,6 +106,11 @@ class Convert
                                 fprintf($this->_out, "%s\n", $line);
                         }
                 }
+
+                // 
+                // Output autoload statement:
+                // 
+                $this->outputAutoload();
 
                 // 
                 // Output use statement:
@@ -171,6 +199,22 @@ class Convert
                 fprintf($this->_out, "\t\n");
         }
 
+        private function outputAutoload()
+        {
+                if ($this->_autoload) {
+                        fprintf($this->_out, "\n%s\n", "require_once('vendor/autoload.php');");
+                }
+        }
+
+        private function outputRender()
+        {
+                if ($this->_autoload) {
+                        fprintf($this->_out, "\n");
+                        fprintf($this->_out, "\$page = new IndexPage();\n");
+                        fprintf($this->_out, "\$page->render();\n");
+                }
+        }
+
 }
 
 /**
@@ -227,6 +271,11 @@ class Application
          * @var bool 
          */
         private $_overwrite = false;
+        /**
+         * Generate code for autoload.
+         * @var bool 
+         */
+        private $_autoload = false;
 
         /**
          * Constructor.
@@ -250,6 +299,10 @@ class Application
         {
                 for ($i = 1; $i < $argc; ++$i) {
                         switch ($argv[$i]) {
+                                case '-a':
+                                case '--autoload':
+                                        $this->_autoload = true;
+                                        break;
                                 case "-b":
                                 case "--backup":
                                         $this->_mode = self::MODE_BACKUP;
@@ -291,6 +344,7 @@ class Application
                 printf("\n");
                 printf("Usage: %s page.php [options...]\n", $script);
                 printf("Options:\n");
+                printf("  -a,--autoload:   Generate code for autoload.\n");
                 printf("  -b,--backup:     Keep backup of old file.\n");
                 printf("  -o,--output:     Output to new file (*.new)\n");
                 printf("  -s,--stdout:     Write converted file to standard out.\n");
@@ -299,7 +353,7 @@ class Application
                 printf("     --overwrite:  Force overwrite existing target file.\n");
                 printf("  -h,--help:       This casual help.\n");
                 printf("\n");
-                printf("Copyright (C) 2016 Anders Lövgren, Computing Department at BMC, Uppsala University\n");
+                printf("Copyright (C) 2016-2018 Anders Lövgren, Computing Department at BMC, Uppsala University\n");
         }
 
         /**
@@ -370,13 +424,18 @@ class Application
                 }
 
                 $convert = new Convert($this->getName(), $this->_page);
+                $convert->autoload = $this->_autoload;
                 $convert->write($inp, $out);
 
                 // 
                 // Close file handles:
                 // 
-                fclose($inp);
-                fclose($out);
+                if (!fclose($inp)) {
+                        throw new Exception(sprintf("Failed close %s for input", $this->_source));
+                }
+                if (!fclose($out)) {
+                        throw new Exception(sprintf("Failed close %s for output", $this->_target));
+                }
         }
 
         /**
