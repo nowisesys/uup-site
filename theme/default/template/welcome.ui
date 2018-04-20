@@ -24,7 +24,7 @@ $output = new format($this);
     <body>
         <style>
             .header-container {
-                background-image: url('<?= $config->img("sunset-04.jpg") ?>');
+                background-image: url('<?= $config->img("sunset-04.jpeg") ?>');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: 50%;
@@ -39,8 +39,9 @@ $output = new format($this);
             }
         </style>
 
+        <?php include('header.inc') ?>
+        
         <!-- Side bar navigation -->
-        <?php include('common.inc') ?>
         <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-card-2" style="display: none; z-index: 2">
             <?php $output->navmenu() ?>
             <?php $output->sidebar() ?>
@@ -119,6 +120,8 @@ $output = new format($this);
                 <a href="http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/" target="_blank">uup-site</a>
             </p>
         </footer>
+        
+        <?php include('footer.inc') ?>
 
     </body>
 </html>

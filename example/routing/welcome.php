@@ -30,17 +30,17 @@ class WelcomePage extends StartPage
                 $this->sections = array(
                         _('Introduction') => array(
                                 'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                'image' => $this->config->getImage('introduction.png'),
+                                'image' => $this->config->getImage('introduction.jpeg'),
                                 'link'  => 'page1.php'
                         ),
                         _('Products')     => array(
                                 'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                'image' => $this->config->getImage('products.jpg'),
+                                'image' => $this->config->getImage('products.jpeg'),
                                 'link'  => 'page2.php'
                         ),
                         _('Contact')      => array(
                                 'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                'image' => $this->config->getImage('contact.jpg'),
+                                'image' => $this->config->getImage('contact.jpeg'),
                                 'link'  => 'page3.php'
                         )
                 );

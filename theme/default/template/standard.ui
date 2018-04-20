@@ -24,7 +24,7 @@ $output = new format($this);
     <body>
         <style>
             .header-container {
-                background-image: url('<?= $config->img("sunset-04.jpg") ?>');
+                background-image: url('<?= $config->img("sunset-04.jpeg") ?>');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
@@ -53,8 +53,9 @@ $output = new format($this);
             </div>
         </div>
 
+        <?php include('header.inc') ?>
+        
         <!-- Side bar navigation -->
-        <?php include('common.inc') ?>
         <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-collapse w3-card-2" style="display: none; z-index: 2">
             <?php $output->navmenu() ?>
             <?php $output->sidebar() ?>
@@ -84,6 +85,8 @@ $output = new format($this);
             </footer>
 
         </div>
+        
+        <?php include('footer.inc') ?>
 
     </body>
 </html>

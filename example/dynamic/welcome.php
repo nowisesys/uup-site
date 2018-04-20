@@ -37,17 +37,17 @@ class MyPage extends StandardPage
                 $this->sections = array(
                         _('Introduction') => array(
                                 'text'  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                'image' => $this->config->getImage('introduction.png'),
+                                'image' => $this->config->getImage('introduction.jpeg'),
                                 'link'  => 'page3.php'
                         ),
                         _('Products')     => array(
                                 'text'  => "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                                'image' => $this->config->getImage('products.jpg'),
+                                'image' => $this->config->getImage('products.jpeg'),
                                 'link'  => 'page4.php'
                         ),
                         _('Contact')      => array(
                                 'text'  => "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                                'image' => $this->config->getImage('contact.jpg'),
+                                'image' => $this->config->getImage('contact.jpeg'),
                                 'link'  => 'page5.php'
                         )
                 );
