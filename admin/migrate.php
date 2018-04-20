@@ -24,194 +24,79 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
 require_once(realpath(__DIR__ . '/../vendor/autoload.php'));
 
-use UUP\Site\Page\Web\Migration\TransitionalPage;
+require_once('include/convert/page.inc');
+require_once('include/convert/publish.inc');
+require_once('include/convert/content-spec.inc');
+require_once('include/convert/sidebar-menu.inc');
+require_once('include/convert/standard-menu.inc');
+require_once('include/convert/topbar-menu.inc');
 
 /**
- * Conversion helper class.
- * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
+ * The conversion helper class.
  */
 class Convert
 {
 
         /**
-         * The class name.
+         * The source file.
          * @var string 
          */
-        private $_name;
-        /**
-         * The source page object.
-         * @var TransitionalPage 
-         */
-        private $_page;
+        private $_source;
         /**
          * Generate code for autoload.
          * @var bool 
          */
         private $_autoload = false;
-        /**
-         * The input stream.
-         * @var resource 
-         */
-        private $_inp;
-        /**
-         * The output stream.
-         * @var resource 
-         */
-        private $_out;
 
         /**
          * Constructor.
-         * @param string $name The 
-         * @param TransitionalPage $page The page object.
+         * @param string $source The source file.
+         * @param bool $autoload The autoload setting.
          */
-        public function __construct($name, $page)
+        public function __construct($source, $autoload)
         {
-                $this->_name = $name;
-                $this->_page = $page;
+                $this->_source = $source;
+                $this->_autoload = $autoload;
         }
 
-        public function __set($name, $value)
+        public function process($inp, $out, $type)
         {
-                if ($name === 'autoload') {
-                        $this->_autoload = (bool) $value;
+                if ($type == "detect") {
+                        $type = basename($this->_source);
                 }
-        }
 
-        /**
-         * Output converted page.
-         * @param resource $inp The input stream.
-         * @param resource $out The output stream.
-         */
-        public function write($inp, $out)
-        {
-                $this->_inp = $inp;
-                $this->_out = $out;
-
-                $this->outputStart();
-                $this->outputClass();
-                $this->outputRender();
-        }
-
-        private function outputStart()
-        {
-                // 
-                // Read until first include:
-                // 
-                while (($line = fgets($this->_inp))) {
-                        $line = trim($line);
-                        if (preg_match('/^include.*/', $line)) {
-                                fprintf($this->_out, "// %s\n", $line);
+                switch ($type) {
+                        case 'publish':
+                        case 'publish.inc':
+                                $convert = new Publish($this->_source);
                                 break;
-                        } else {
-                                fprintf($this->_out, "%s\n", $line);
-                        }
-                }
-
-                // 
-                // Output autoload statement:
-                // 
-                $this->outputAutoload();
-
-                // 
-                // Output use statement:
-                // 
-                fprintf($this->_out, "\n%s\n", "use UUP\Site\Page\Web\StandardPage;");
-        }
-
-        private function outputClass()
-        {
-                // 
-                // Output class definition:
-                // 
-                fprintf($this->_out, "\nclass %s extends StandardPage\n{\t\n", $this->_name);
-
-                $this->outputConstructor();
-                $this->outputCallbacks();
-
-                fprintf($this->_out, "\n}\n");
-        }
-
-        private function outputCallbacks()
-        {
-                while (($line = fgets($this->_inp))) {
-                        $line = trim($line);
-                        if (preg_match('/^function print_body.*/', $line)) {
-                                $this->outputPrintContent();
-                        } elseif (preg_match('/^function print_header.*/', $line)) {
-                                $this->outputPrintHeader();
-                        }
-                }
-        }
-
-        private function outputPrintHeader()
-        {
-                fprintf($this->_out, "\t\n");
-                fprintf($this->_out, "\tpublic function printHeader()\n");
-                fprintf($this->_out, "\t{\n");
-
-                while (($line = fgets($this->_inp))) {
-                        $line = rtrim($line);
-                        if (strlen($line) == 0) {
-                                $line = ' ';
-                        } elseif ($line[0] == '}') {
+                        case 'topbar':
+                        case 'topbar.menu':
+                                $convert = new TopbarMenu($this->_source);
                                 break;
-                        } elseif ($line[0] == '{') {
-                                continue;
-                        } else {
-                                fprintf($this->_out, "\t\t%s\n", $line);
-                        }
-                }
-
-                fprintf($this->_out, "\t}\n");
-                fprintf($this->_out, "\t\n");
-        }
-
-        private function outputConstructor()
-        {
-                fprintf($this->_out, "\t\n");
-                fprintf($this->_out, "\tpublic function __construct()\n");
-                fprintf($this->_out, "\t{\n");
-                fprintf($this->_out, "\t\tparent::__construct(\"%s\");\n", $this->_page->title);
-                fprintf($this->_out, "\t}\n");
-                fprintf($this->_out, "\t\n");
-        }
-
-        private function outputPrintContent()
-        {
-                fprintf($this->_out, "\t\n");
-                fprintf($this->_out, "\tpublic function printContent()\n");
-                fprintf($this->_out, "\t{\n");
-
-                while (($line = fgets($this->_inp))) {
-                        $line = rtrim($line);
-                        if (strlen($line) == 0) {
-                                $line = ' ';
-                        } elseif ($line[0] == '}') {
+                        case 'menu':
+                        case 'standard.menu':
+                                $convert = new StandardMenu($this->_source);
                                 break;
-                        } elseif ($line[0] == '{') {
-                                continue;
-                        } else {
-                                fprintf($this->_out, "\t\t%s\n", $line);
-                        }
+                        case 'sidebar':
+                        case 'sidebar.menu':
+                                $convert = new SidebarMenu($this->_source);
+                                break;
+                        case 'content':
+                        case 'content.spec':
+                                $convert = new ContentSpec($this->_source);
+                                break;
+                        case 'page':
+                        default:
+                                $convert = new Page($this->_source);
+                                $convert->autoload = $this->_autoload;
+                                break;
                 }
 
-                fprintf($this->_out, "\t}\n");
-                fprintf($this->_out, "\t\n");
-        }
-
-        private function outputAutoload()
-        {
-                if ($this->_autoload) {
-                        fprintf($this->_out, "\n%s\n", "require_once('vendor/autoload.php');");
-                }
-        }
-
-        private function outputRender()
-        {
-                if ($this->_autoload) {
-                        fprintf($this->_out, "\n");
-                        fprintf($this->_out, "\$page = new %s();\n", $this->_name);
-                        fprintf($this->_out, "\$page->render();\n");
+                try {
+                        $convert->write($inp, $out);
+                } catch (Exception $exception) {
+                        fprintf(STDERR, $exception->getMessage() . "\n");
                 }
         }
 
@@ -219,6 +104,11 @@ class Convert
 
 /**
  * The migration application class.
+ * 
+ * Migration of content/menus are ambigous because content.spec in old format 
+ * contains both content spec and standard menu (urls) in same file. Use the
+ * type options to resolve this issue.
+ * 
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  */
 class Application
@@ -240,6 +130,34 @@ class Application
          * Overwrite old file.
          */
         const MODE_REPLACE = "replace";
+        /**
+         * Convert source page (*.php).
+         */
+        const TYPE_PAGE = "page";
+        /**
+         * Convert content spec.
+         */
+        const TYPE_CONTENT = "content";
+        /**
+         * Convert publish information.
+         */
+        const TYPE_PUBLISH = "publish";
+        /**
+         * Convert sidebar menu.
+         */
+        const TYPE_SIDEBAR = "sidebar";
+        /**
+         * Convert topbar menu.
+         */
+        const TYPE_TOPBAR = "topbar";
+        /**
+         * Convert standard menu.
+         */
+        const TYPE_MENU = "menu";
+        /**
+         * Try to detect conversion.
+         */
+        const TYPE_DETECT = "detect";
 
         /**
          * The source file.
@@ -257,15 +175,15 @@ class Application
          */
         private $_backup;
         /**
-         * The page object.
-         * @var TransitionalPage 
-         */
-        private $_page;
-        /**
          * The migration mode.
          * @var string 
          */
         private $_mode = self::MODE_BACKUP;
+        /**
+         * The conversion type.
+         * @var string 
+         */
+        private $_type = self::TYPE_DETECT;
         /**
          * Overwrite existing files.
          * @var bool 
@@ -286,8 +204,6 @@ class Application
                 $this->_source = $source;
                 $this->_target = sprintf("%s.new", $source);
                 $this->_backup = sprintf("%s.old", $source);
-
-                $this->_page = new TransitionalPage($this->_source, false);
         }
 
         /**
@@ -298,7 +214,13 @@ class Application
         public function parse($argc, $argv)
         {
                 for ($i = 1; $i < $argc; ++$i) {
-                        switch ($argv[$i]) {
+                        if (strstr($argv[$i], "=")) {
+                                list($key, $val) = explode("=", $argv[$i]);
+                        } else {
+                                list($key, $val) = array($argv[$i], null);
+                        }
+
+                        switch ($key) {
                                 case '-a':
                                 case '--autoload':
                                         $this->_autoload = true;
@@ -319,6 +241,9 @@ class Application
                                 case "-r":
                                 case "--replace":
                                         $this->_mode = self::MODE_REPLACE;
+                                        break;
+                                case "--type":
+                                        $this->_type = $val;
                                         break;
                                 case "-f":
                                 case "--force":
@@ -342,18 +267,24 @@ class Application
 
                 printf("%s - template system migration tool\n", $script);
                 printf("\n");
-                printf("Usage: %s page.php [options...]\n", $script);
+                printf("Usage: %s inputfile [options...]\n", $script);
                 printf("Options:\n");
                 printf("  -a,--autoload:   Generate code for autoload.\n");
                 printf("  -b,--backup:     Keep backup of old file.\n");
                 printf("  -o,--output:     Output to new file (*.new)\n");
                 printf("  -s,--stdout:     Write converted file to standard out.\n");
                 printf("  -r,--replace:    Replace old file with converted file.\n");
+                printf("     --type=name:  The type of input (page, content, publish, sidebar, topbar or menu)\n");
                 printf("  -f,--force:\n");
                 printf("     --overwrite:  Force overwrite existing target file.\n");
                 printf("  -h,--help:       This casual help.\n");
                 printf("Notice:\n");
-                printf("  Use either one of the -b|-o|-s|-r mode options.\n");
+                printf("  * Use either one of the -b|-o|-s|-r mutual exclusion mode options.\n");
+                printf("  * The input file is either:\n");
+                printf("    1. PHP source code file (*.php)\n");
+                printf("    2. Content specification (content.spec)\n");
+                printf("    3. Page publisher (publish.inc)\n");
+                printf("    4. Menu file (sidebar.menu, standard.menu or topbar.menu\n");
                 printf("\n");
                 printf("Copyright (C) 2016-2018 Anders Lövgren, Computing Department at BMC, Uppsala University\n");
         }
@@ -425,13 +356,9 @@ class Application
                         throw new Exception(sprintf("Failed open %s for output", $this->_target));
                 }
 
-                $convert = new Convert($this->getName(), $this->_page);
-                $convert->autoload = $this->_autoload;
-                $convert->write($inp, $out);
+                $convert = new Convert($this->_source, $this->_autoload);
+                $convert->process($inp, $out, $this->_type);
 
-                // 
-                // Close file handles:
-                // 
                 if (!fclose($inp)) {
                         throw new Exception(sprintf("Failed close %s for input", $this->_source));
                 }
@@ -504,17 +431,6 @@ class Application
                         printf("[replace]:\t%s -> %s\n", $this->_target, $this->_source);
                         $this->_target = $this->_source;
                 }
-        }
-
-        /**
-         * Get class name.
-         * @return string
-         */
-        private function getName()
-        {
-                $parts = explode('-', basename($this->_source));
-                $parts = array_map('ucfirst', $parts);
-                return str_replace(".php", "Page", implode('', $parts));
         }
 
 }
