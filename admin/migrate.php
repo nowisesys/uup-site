@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2016-2018 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -441,6 +441,7 @@ class Application
                         throw new Exception(sprintf("Failed replace source file %s", $this->_source));
                 } else {
                         printf("[replace]:\t%s -> %s\n", $this->_target, $this->_source);
+                        $this->_target = $this->_source;
                 }
         }
 
