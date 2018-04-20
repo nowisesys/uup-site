@@ -229,7 +229,7 @@ $show = new Runtime($this);
                         console.log(err);
                     }
                 }
-            }
+            };
 
             xhr.open("GET", source, true);
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -254,14 +254,24 @@ $show = new Runtime($this);
                         var target = document.getElementById(id);
                         var shadow = target.cloneNode();
                         var insert = this.response.getElementsByTagName('body')[0].children;
-                        var script = [];
+                        var script = [];        // Scripts to eval.
 
+                        // 
+                        // Loop thru all DOM nodes to insert. Filter script elements based on
+                        // AJAX load attribute value.
+                        // 
                         for (var i = 0; i < insert.length; ++i) {
                             var child = insert[i].cloneNode(true);
-                            if (child.nodeName === "SCRIPT") {
+                            var attrs = child.attributes;
+
+                            if (child.nodeName !== "SCRIPT") {
+                                shadow.appendChild(child);
+                            } else if (attrs['onajax'] && attrs['onajax'].value === "add") {
+                                shadow.appendChild(child);
+                            } else if (attrs['onajax'] && attrs['onajax'].value === "run") {
+                                shadow.appendChild(child);
                                 script.push(child);
                             }
-                            shadow.appendChild(child);
                         }
 
                         target.parentNode.replaceChild(shadow, target);
@@ -278,7 +288,7 @@ $show = new Runtime($this);
                         console.log(err);
                     }
                 }
-            }
+            };
 
             xhr.open("GET", source, true);
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");

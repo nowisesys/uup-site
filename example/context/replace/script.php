@@ -26,10 +26,26 @@
     <b>Date: <?= strftime("%x %X") ?></b>
 </div>
 
-<script>
-        function sayhello() {
-            alert("Hello World!");
+<script onajax="run">
+        function func1() {
+            alert("Script fragment run by AJAX");
         }
 
-        sayhello();
+        func1();
+</script>
+
+<script onajax="add">
+        function func2() {
+            alert("Script fragment added by AJAX");
+        }
+
+        func2();
+</script>
+
+<script>
+        function func3() {
+            alert("Script fragment ignored by AJAX");
+        }
+
+        func3();
 </script>

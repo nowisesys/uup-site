@@ -36,6 +36,10 @@ class IndexPage extends StandardPage
                 echo "content using AJAX requests and replaces the target-id content. If target-id ";
                 echo "is missing, then 'page-content' is used as default target ID.</p>\n";
 
+                echo "<p>If requested content contains script-tags, then they are added if onajax=\"add\"";
+                echo "attribute is set and run if onajax=\"run\" is set (see script.php). Any script ";
+                echo "fragment without onajax attribute is missing.</p>\n";
+
                 echo "<p>Pages can programatically use the Link class to render links:</p>\n";
 
                 echo "<ul>\n";
