@@ -15,9 +15,9 @@ $output = new format($this);
         <title><?= $output->title() ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="<?= $config->css('w3.css') ?>">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="<?= $config->css('fonts/lato.css') ?>">
         <link rel="stylesheet" href="<?= $config->css('fonts/montserrat.css') ?>">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <?php $output->headers(); ?>
     </head>
 
@@ -40,7 +40,7 @@ $output = new format($this);
         </style>
 
         <?php include('header.inc') ?>
-        
+
         <!-- Side bar navigation -->
         <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-card-2" style="display: none; z-index: 2">
             <?php $output->navmenu() ?>
@@ -120,7 +120,7 @@ $output = new format($this);
                 <a href="http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/" target="_blank">uup-site</a>
             </p>
         </footer>
-        
+
         <?php include('footer.inc') ?>
 
     </body>
