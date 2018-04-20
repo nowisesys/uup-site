@@ -7,6 +7,7 @@ return array(
         _('Content')   => '::view.php',
         _('Custom')    => ':custom-id:view.php',
         _('Decorated') => ':custom-id:page.php',
+        _('Script')    => '::script.php',
         _('Restore')   => 'index.php'
     )
 );

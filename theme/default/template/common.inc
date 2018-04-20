@@ -209,7 +209,10 @@ $show = new Runtime($this);
 
 <script>
 
-        function content_replace(event, id, source, callback) {
+        // 
+        // Fetch content as text and assign to inner html.
+        // 
+        function content_replace_text(event, id, source, callback) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -217,9 +220,13 @@ $show = new Runtime($this);
 
             xhr.onreadystatechange = function (x) {
                 if (this.readyState === 4 && this.status === 200) {
-                    document.getElementById(id).innerHTML = this.responseText;
-                    if (callback !== undefined) {
-                        callback();
+                    try {
+                        document.getElementById(id).innerHTML = this.responseText;
+                        if (callback !== undefined) {
+                            callback();
+                        }
+                    } catch (err) {
+                        console.log(err);
                     }
                 }
             }
@@ -230,6 +237,64 @@ $show = new Runtime($this);
 
             close_overlay();
             return false;
+        }
+
+        // 
+        // Fetch content as DOM document and evaluate all script nodes.
+        // 
+        function content_replace_html(event, id, source, callback) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function (x) {
+                if (this.readyState === 4 && this.status === 200) {
+                    try {
+                        var target = document.getElementById(id);
+                        var shadow = target.cloneNode();
+                        var insert = this.response.getElementsByTagName('body')[0].children;
+                        var script = [];
+
+                        for (var i = 0; i < insert.length; ++i) {
+                            var child = insert[i].cloneNode(true);
+                            if (child.nodeName === "SCRIPT") {
+                                script.push(child);
+                            }
+                            shadow.appendChild(child);
+                        }
+
+                        target.parentNode.replaceChild(shadow, target);
+
+                        if (callback !== undefined) {
+                            callback();
+                        }
+
+                        for (var i = 0; i < script.length; ++i) {
+                            eval(script[i].innerHTML);
+                        }
+
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+
+            xhr.open("GET", source, true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            xhr.responseType = 'document';
+            xhr.send();
+
+            close_overlay();
+            return false;
+        }
+
+        function content_replace(event, id, source, callback) {
+            if (source.match('/http(s)?:\/\/')) {
+                return content_replace_text(event, id, source, callback);
+            } else {
+                return content_replace_html(event, id, source, callback)
+            }
         }
 
         function close_overlay() {
