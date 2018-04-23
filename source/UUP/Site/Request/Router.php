@@ -142,16 +142,14 @@ class Router extends Handler
 
                 if (!file_exists($this->_page)) {
                         throw new RuntimeException(_("Requested page don't exist"));
+                } elseif (!chdir(dirname($this->_page))) {
+                        throw new RuntimeException(_("Failed change to target route directory"));
                 } else {
                         ob_start();
                         require($this->_page);
                         ob_end_clean();
                 }
-
-                if (!chdir(dirname($this->_page))) {
-                        error_log(sprintf("Failed change directory on route %s", $this->config->uri));
-                }
-
+                
                 if (class_exists($this->_name)) {
                         $page = new $this->_name();
                         $this->routed($page);
