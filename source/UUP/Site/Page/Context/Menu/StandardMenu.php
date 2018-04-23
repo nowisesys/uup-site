@@ -41,7 +41,7 @@ class StandardMenu extends \ArrayObject
                                 $menus = array();
 
                                 if (file_exists("standard.menu")) {
-                                        $menus[] = new MenuData(include("standard.menu"));
+                                        $menus[] = new MenuData(include("standard.menu"), ".");
                                 } else {
                                         $menus[] = false;
                                 }
