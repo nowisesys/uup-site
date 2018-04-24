@@ -11,7 +11,7 @@
 
 return array(
         'name'  => 'Short name',
-        'desc'  => 'An longer description text'
+        'desc'  => 'An longer description text',
         'info'  => 'An short introduction',
         'image' => 'URL for an image, video or audio clip'
 );
