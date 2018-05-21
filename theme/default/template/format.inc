@@ -1,5 +1,6 @@
 <?php
 
+use UUP\Site\Page\Context\Menu\MenuData;
 use UUP\Site\Page\Web\Component\Link;
 use UUP\Site\Page\Web\Component\Links;
 use UUP\Site\Page\Web\StandardPage;
@@ -73,11 +74,12 @@ class format
         public function sidebar()
         {
                 foreach ($this->page->sidebar as $sect => $data) {
-                        printf("<h3>%s</h3>\n", $sect);
-                        foreach ($data as $name => $attr) {
-                                $link = new Link($name, $attr);
-                                $link->render($this->page->config->location);
-                        }
+                        $menu = new MenuData(array(
+                                'head' => $sect,
+                                'data' => $data
+                        ));
+                        $links = new Links($menu);
+                        $links->render($this->page->config->location);
                 }
         }
 
