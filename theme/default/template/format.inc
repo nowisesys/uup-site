@@ -114,7 +114,7 @@ class format
                                 printf("<div class=\"updated\"><small>Modified: %s</small></div>\n", strftime("%x %X", $publisher->updated));
                         }
                         if ($publisher->copying) {
-                                printf("<div class=\"copying\"><small>&copy %s</small></div>\n", $publisher->copying);
+                                printf("<div class=\"copying\"><small>&copy; %s</small></div>\n", $publisher->copying);
                         }
                 }
         }
