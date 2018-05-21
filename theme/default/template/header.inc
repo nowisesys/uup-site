@@ -84,6 +84,12 @@ $show = new Runtime($this);
     #navbar-menu a {
         text-decoration: none;
     }
+    .menu-header {
+        margin: 10px 0;
+        font-weight: 400;
+    }
+    .menu-content {
+    }
 </style>
 
 <?php if (!$session->authenticated()) : ?>

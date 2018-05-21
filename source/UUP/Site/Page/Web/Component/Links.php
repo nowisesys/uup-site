@@ -48,13 +48,15 @@ class Links
         public function render($location)
         {
                 if (isset($this->menu->name)) {
-                        printf("<h3><a href=\"%s\">%s</a></h3>\n", $this->menu->parent, $this->menu->name);
+                        printf("<div class=\"w3-xlarge menu-header\"><a href=\"%s\">%s</a></div>\n", $this->menu->parent, $this->menu->name);
                 }
                 if (isset($this->menu->data)) {
+                        printf("<div class=\"menu-content\">\n");
                         foreach ($this->menu->data as $name => $attr) {
                                 $link = new Link($name, $attr);
                                 $link->render($location);
                         }
+                        printf("</div>\n");
                 }
         }
 
