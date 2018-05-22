@@ -47,8 +47,10 @@ class Links
          */
         public function render($location)
         {
-                if (isset($this->menu->name)) {
-                        printf("<div class=\"w3-xlarge menu-header\"><a href=\"%s\">%s</a></div>\n", $this->menu->parent, $this->menu->name);
+                if (isset($this->menu->name) && is_string($this->menu->parent)) {
+                        printf("<div class=\"w3-xlarge menu-header-link\"><a href=\"%s\">%s</a></div>\n", $this->menu->parent, $this->menu->name);
+                } else {
+                        printf("<div class=\"w3-xlarge menu-header-name\">%s</div>\n", $this->menu->name);                        
                 }
                 if (isset($this->menu->data)) {
                         printf("<div class=\"menu-content\">\n");

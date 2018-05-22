@@ -84,9 +84,13 @@ $show = new Runtime($this);
     #navbar-menu a {
         text-decoration: none;
     }
-    .menu-header {
+    .menu-header-link,
+    .menu-header-name {
         margin: 10px 0;
         font-weight: 400;
+    }
+    .menu-header-name {
+        padding: 4px 2px 4px 16px;
     }
     .menu-content {
     }
