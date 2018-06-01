@@ -13,10 +13,10 @@
 
 # set -x
 
+srcdir="$(dirname $(realpath $0))"
+
 function setup_config()
 {
-    srcdir="$1"
-
     mkdir -p config
     for file in apache.conf defaults.site; do
         if ! [ -e config/$file ]; then
@@ -60,8 +60,6 @@ function setup_edit()
 
 function setup_dispatcher()
 {
-    srcdir="$1"
-
     for file in .htaccess dispatch.php; do
         if ! [ -e public/$file ]; then
             cp $srcdir/example/routing/$file public/$file 
