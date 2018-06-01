@@ -21,7 +21,7 @@ namespace UUP\Site\Page\Context;
 /**
  * Support for custom HTTP headers.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */

@@ -151,7 +151,7 @@ function usage()
     echo "  # Setup for web application"
     echo "  $prog --setup --auth"
     echo 
-    echo "Copyright (C) 2015-2018 Uppsala university (Anders Lövgren, BMC-IT) and Nowise Systems"
+    echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
 
 case "$1" in

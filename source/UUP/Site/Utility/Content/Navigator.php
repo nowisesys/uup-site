@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2017 Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ namespace UUP\Site\Utility\Content;
  * @property string $base The base URL.
  * @property-read array $data The prepared menu items.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  */
 class Navigator
 {

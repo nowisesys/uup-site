@@ -23,7 +23,7 @@ use UUP\Site\Page\Web\Security\SecurePage;
 /**
  * Open page editor.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */

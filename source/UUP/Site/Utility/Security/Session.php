@@ -47,7 +47,7 @@ use RuntimeException;
  * 
  * @property-read array $data Get all session data.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */

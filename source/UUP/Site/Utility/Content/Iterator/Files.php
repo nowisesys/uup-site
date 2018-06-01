@@ -25,7 +25,7 @@ use FilterIterator;
 /**
  * Files and directory iterator.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */

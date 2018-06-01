@@ -32,7 +32,7 @@ use UUP\Site\Utility\Content\Template;
  * Each handler defines its own sub API. The path parameter is mandatory and should be 
  * relative to project root.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */

@@ -28,7 +28,7 @@ use UUP\Authentication\Stack\AuthenticatorStack;
  * @property-read string $user The logged on user.
  * @property-read string $name The accepted authenticator.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */

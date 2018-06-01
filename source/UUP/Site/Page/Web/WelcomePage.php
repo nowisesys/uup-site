@@ -21,7 +21,7 @@ namespace UUP\Site\Page\Web;
 /**
  * Start page for this site.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */

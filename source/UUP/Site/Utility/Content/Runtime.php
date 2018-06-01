@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2017 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2017 Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ use UUP\Site\Utility\Config;
  * @property-read bool $topmenu Show topbar menu.
  * @property-read bool $navmenu Show navigation menu.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  */
 class Runtime
 {

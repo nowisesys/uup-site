@@ -50,7 +50,7 @@ namespace UUP\Site\Page\Context;
  * @property-read string $image An optional image (relative or URL).
  * @property-read string $video An optional video (relative or URL).
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
  */
