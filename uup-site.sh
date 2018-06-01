@@ -43,9 +43,13 @@ function setup_themes()
 
 function setup_auth()
 {
+    if ! [ -e public/auth ]; then
+        mkdir -p public/auth
+    fi
     for dir in logon logoff; do
-        if ! [ -e public/$dir ]; then
-            cp -a $srcdir/example/secure/$dir public/$dir
+        if ! [ -e public/auth/$dir ]; then
+            cp -a $srcdir/plugins/auth/$dir public/auth/$dir
+            mv -f public/auth/$dir/index.inc public/auth/$dir/index.php
         fi
     done
 }
