@@ -68,29 +68,11 @@ function setup_dispatcher()
     sed -i s%'/../../vendor/'%'/../vendor/'%1 public/dispatch.php
 }
 
-function setup_package()
-{
-    echo "Setup in package mode"
-    setup_config vendor/bmc/uup-site
-    setup_themes
-    setup_dispatcher vendor/bmc/uup-site
-}
-
-function setup_standalone()
-{
-    echo "Setup in standalone mode"
-    setup_config .
-    setup_themes
-    setup_dispatcher .
-}
-
 function setup()
 {
-    if [ -d vendor/bmc/uup-site ]; then
-        setup_package
-    else
-        setup_standalone
-    fi
+    setup_config
+    setup_themes
+    setup_dispatcher
 }
 
 function migrate_page()
