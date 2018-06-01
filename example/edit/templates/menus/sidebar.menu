@@ -14,14 +14,14 @@
 use UUP\Site\Page\Web\Component\Link;
 
 return array(
-    _('Sect1') => array(
-            _('Link 1') => 'link1',
-            _('Link 2') => 'link2'
-    ),
-    _('Sect2') => array(
-            _('Link 3') => 'link3',
-            _('Link 4') => 'link4',
-            Link::SEPARATOR,
-            _('Link 5') => 'link5'
+        _('Sect1') => array(
+                _('Link 1') => 'link1',
+                _('Link 2') => 'link2'
+        ),
+        _('Sect2') => array(
+                _('Link 3') => 'link3',
+                _('Link 4') => 'link4',
+                Link::SEPARATOR,
+                _('Link 5') => 'link5'
         )
 );

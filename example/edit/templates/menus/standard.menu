@@ -15,11 +15,11 @@
 use UUP\Site\Page\Web\Component\Link;
 
 return array(
-    'head' => _('Header'),
-    'data' => array(
-        _('Page 1') => 'page1',
-        _('Page 2') => 'page2',
-        Link::SEPARATOR,
-        _('Page 2') => 'page2',
-    )
+        'head' => _('Header'),
+        'data' => array(
+                _('Page 1') => 'page1',
+                _('Page 2') => 'page2',
+                Link::SEPARATOR,
+                _('Page 2') => 'page2',
+        )
 );
