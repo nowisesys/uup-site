@@ -1,0 +1,13 @@
+<?php
+
+return array(
+        'head' => _('Guide'),
+        'data' => array(
+                'Simple Views'     => 'views',
+                'Controllers'      => 'controllers',
+                'Markup Code'      => 'markup-code',
+                'Syntax Highlight' => 'syntax-highlight',
+                'Web Components'   => 'web-components',
+                'Version Control'  => 'version-control'
+        )
+);

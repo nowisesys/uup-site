@@ -57,8 +57,15 @@ function setup_auth()
 function setup_edit()
 {
     if ! [ -e public/edit ]; then
-        cp -a $srcdir/example/edit public/edit
+        cp -a $srcdir/plugins/edit public/edit
         echo "Install content editors by running setup.sh in public/edit/view/editor/plugins"
+    fi
+}
+
+function setup_guide() 
+{
+    if ! [ -e public/guide ]; then
+        cp -a $srcdir/plugins/guide public/guide
     fi
 }
 
@@ -138,6 +145,10 @@ case "$1" in
         shift
         setup_edit
         ;;
+    --guide)
+        shift
+        setup_guide
+        ;;
     --develop)
         develop
         ;;
@@ -150,7 +161,7 @@ case "$1" in
         config $*
         ;;
     *)
-        echo "$0 --setup [--auth] [--edit]"
+        echo "$0 --setup [--auth] [--edit] [--guide]"
         echo "$0 --config --help"
         exit 1
         ;;
