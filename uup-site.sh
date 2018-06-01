@@ -1,12 +1,6 @@
 #!/bin/bash
 # 
-# Usage: 
-# 
-#   uup-site.sh --setup [--auth] [--edit]   // setup site, tools and theme(s)
-#   uup-site.sh --config <options>          // run configuration script (batch)
-# 
-#   uup-site.sh --develop                   // setup develop mode
-#   uup-site.sh --migrate <dir>|<file>...   // migrate existing site (expert)
+# Usage: See --help or usage() function.
 # 
 # Author: Anders Lövgren
 # Date:   2015-12-16
@@ -132,7 +126,40 @@ function develop()
       fi )
 }
 
+function usage()
+{
+    prog=$(basename $0)
+
+    echo "$prog - Setup and management tool."
+    echo 
+    echo "Usage: $prog --setup [--auth] [--edit] [--guide]"
+    echo "       $prog --config <options>"
+    echo "       $prog --develop"
+    echo "       $prog --migrate <dir>|<file>..."
+    echo "Options:"
+    echo "  --setup     : Setup site, tools and theme(s)"
+    echo "  --config    : Run configuration script (batch)"
+    echo "  --develop   : Setup develop mode"
+    echo "  --migrate   : Migrate existing site (expert)"
+    echo "  --auth      : Install authentication plugin"
+    echo "  --edit      : Install online edit plugin"
+    echo "  --guide     : Install end-user content publisher guide"
+    echo "Example:"
+    echo "  # Setup web site as CMS with publisher guide"
+    echo "  $prog --setup --auth --edit --guide"
+    echo 
+    echo "  # Setup for web application"
+    echo "  $prog --setup --auth"
+    echo 
+    echo "Copyright (C) 2015-2018 Uppsala university (Anders Lövgren, BMC-IT) and Nowise Systems"
+}
+
 case "$1" in
+    --help)
+        shift
+        usage
+        exit 0
+        ;;
     --setup)
         shift
         setup
@@ -161,8 +188,7 @@ case "$1" in
         config $*
         ;;
     *)
-        echo "$0 --setup [--auth] [--edit] [--guide]"
-        echo "$0 --config --help"
+        usage
         exit 1
         ;;
 esac
