@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2017 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2017-2018 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,104 +17,7 @@
  */
 
 require_once(realpath(__DIR__ . '/../../../vendor/autoload.php'));
-require_once('handler.php');
-
-use UUP\Site\Page\Service\SecureService;
-use UUP\Site\Utility\Content\Template;
-
-/**
- * The site edit AJAX service.
- * 
- * The AJAX method API:
- * ---------------------
- * o) handler={file|menu|context}&path=subdir
- * 
- * Each handler defines its own sub API. The path parameter is mandatory and should be 
- * relative to project root.
- * 
- * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
- * @package UUP
- * @subpackage Site
- */
-class IndexPage extends SecureService
-{
-
-        public function __construct()
-        {
-                parent::__construct();
-
-                if (!in_array($this->session->user, $this->config->edit['user'])) {
-                        throw new RuntimeException('Caller is not an page/site editor');
-                }
-
-                $this->params->setFilter(array(
-                        'handler' => '/^(files|menus|context)$/'
-                ));
-
-                if (!$this->params->hasParam('handler')) {
-                        throw new RuntimeException(_("Required handler parameter is missing"));
-                }
-                if (!$this->params->hasParam('path')) {
-                        throw new RuntimeException(_("Required target directory parameter is missing"));
-                }
-        }
-
-        /**
-         * Exception handler.
-         * @param Exception $exception The exception to report.
-         */
-        public function onException($exception)
-        {
-                echo json_encode(array(
-                        'status'  => 'failure',
-                        'message' => $exception->getMessage(),
-                        'code'    => $exception->getCode()
-                ));
-        }
-
-        public function render()
-        {
-                if (($path = $this->params->getParam('path'))) {
-                        if ($path[0] == '/') {
-                                throw new RuntimeException(_("Absolute pathes is not allowed"));
-                        }
-                        if (strstr($path, '..')) {
-                                throw new RuntimeException(_("Directory navigation is not allowed"));
-                        }
-                }
-
-                switch ($this->params->getParam('handler')) {
-                        case 'files':
-                                $handler = new FilesHandler($this->config->docs, $this->params->getParam('path'));
-                                $handler->setService($this);
-                                $handler->process($this->params);
-                                break;
-                        case 'menus':
-                                $handler = new MenusHandler($this->config->docs, $this->params->getParam('path'));
-                                $handler->setService($this);
-                                $handler->process($this->params);
-                                break;
-                        case 'context':
-                                $handler = new ContextHandler($this->config->docs, $this->params->getParam('path'));
-                                $handler->setService($this);
-                                $handler->process($this->params);
-                                break;
-                }
-        }
-
-        /**
-         * Get template object.
-         * @return Template
-         */
-        public function getTemplate()
-        {
-                $template = new Template($this->config->license);
-                $template->license->path = realpath('../templates/license');
-                $template->author = $this->session->user;
-                return $template;
-        }
-
-}
+require_once('index.inc');
 
 $page = new IndexPage();
 $page->render();

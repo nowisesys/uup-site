@@ -52,6 +52,9 @@ function setup_edit()
 {
     if ! [ -e public/edit ]; then
         cp -a $srcdir/plugins/edit public/edit
+        for dir in ajax view; do
+            mv -f public/edit/$dir/index.inc public/edit/$dir/index.php
+        done
         echo "Install content editors by running setup.sh in public/edit/view/editor/plugins"
     fi
 }
