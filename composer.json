@@ -20,6 +20,10 @@
         {
             "name": "Anders Lövgren",
             "email": "anders.lovgren@bmc.uu.se"
+        },
+        {
+            "name": "Anders Lövgren",
+            "email": "andlov@nowise.se"
         }
     ],
     "require": {
