@@ -19,18 +19,48 @@ unzip everything in proper places.
     Locations are configurable in config/defaults.site that is used when initializing 
     a page class instance. This is the suggested directory structure:
 
-    site/
-      +-- config/                       // Configuration
-      +-- public/                       // Document root
-      |     +-- theme/xyz/assets/       // Theme support files
-      |                     +-- css/
-      |                     +-- js/
-      |                     +-- img/
-      +-- template/                     // Page rendering templates (themes)
-      +-- locale/                       // Support for locale (gettext)
-      +-- vendor/                       // Composer packages, including uup-site
-      +-- composer.json                 // Site project composer file
-      +-- Makefile                      // Compile locales (PO-files).
+        uup-site
+            ├── config                      // Configuration files
+            ├── locale                      // Support for translation (gettext)
+            ├── public                      // Document root (your public documents)
+            │   ├── auth                    // Support for authentication
+            │   │   ├── logoff
+            │   │   └── logon
+            │   ├── edit                    // Online content editor (CMS)
+            │   │   ├── ajax
+            │   │   ├── templates
+            │   │   │   ├── context
+            │   │   │   ├── files
+            │   │   │   │   ├── secure
+            │   │   │   │   └── standard
+            │   │   │   ├── license
+            │   │   │   └── menus
+            │   │   └── view
+            │   │       ├── content
+            │   │       └── editor
+            │   │           └── plugins
+            │   ├── guide                   // Guide for content publisher
+            │   │   └── partials
+            │   └── theme                   // Theme support files
+            │       └── default
+            │           └── assets
+            │               ├── css
+            │               │   └── fonts
+            │               ├── fonts
+            │               └── img
+            ├── template                    // Page rendering templates (themes)
+            │   └── default
+            ├── vendor                      // Composer packages, including uup-site
+            └── composer.json               // Site project composer file
+
+    The above structure is created by running the following command after installing
+    uup-site using composer.
+
+        bash$> ./vendor/bin/uup-site.sh --setup --auth --edit --guide
+
+    Options above is suitable for an web site. When setting up for an web application, 
+    skip the --edit and --guide options. Support for auth and edit is disabled by default
+    and can be enabled in config/defaults.site
 
 ** Site config:
 
@@ -54,11 +84,11 @@ unzip everything in proper places.
             "repositories": [
                 {
                     "type": "composer",
-                    "url": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/"
+                    "url": "https://it.bmc.uu.se/andlov/php/uup-site/"
                 }
             ],
             "require": {
-                "bmc/uup-site": ">=0.9.0"
+                "bmc/uup-site": ">=1.0.22"
             }
 
         Require the package to have it installed:
@@ -172,14 +202,14 @@ unzip everything in proper places.
 
     If the site/application is huge, then its recommended to use multiple text domains:
 
-    site/
-      +-- htdocs/                       // Document root
-      |     +-- dir1/
-      |     +-- dir2/
+    uup-site
+      ├── htdocs/                       // Document root
+      │     +-- dir1/
+      │     +-- dir2/
      ...   ...
-      +-- locale/                       // Support for locale (gettext)
-      |     +-- dir1.pot
-      |     +-- dir2.pot
+      ├── locale/                       // Support for locale (gettext)
+      │     +-- dir1.pot
+      │     +-- dir2.pot
      ...   ...
 
     Each page can initialize its own text domain in the constructor:
