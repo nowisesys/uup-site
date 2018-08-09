@@ -59,8 +59,8 @@ unzip everything in proper places.
         bash$> ./vendor/bin/uup-site.sh --setup --auth --edit --guide
 
     Options above is suitable for an web site. When setting up for an web application, 
-    skip the --edit and --guide options. Support for auth and edit is disabled by default
-    and can be enabled in config/defaults.site
+    skip the --edit and --guide options. Support for auth and edit is disabled by default,
+    enable them in config/defaults.site 
 
 ** Site config:
 
