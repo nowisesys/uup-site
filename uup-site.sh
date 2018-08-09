@@ -174,7 +174,7 @@ function usage()
 
     echo "$prog - Setup and management tool."
     echo 
-    echo "Usage: $prog --setup [--auth] [--edit] [--guide] [--examples]"
+    echo "Usage: $prog --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
     echo "       $prog --config <options>"
     echo "       $prog --develop"
     echo "       $prog --migrate <dir>|<file>..."
