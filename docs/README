@@ -60,7 +60,7 @@ unzip everything in proper places.
 
     Options above is suitable for an web site. When setting up for an web application, 
     skip the --edit and --guide options. Support for auth and edit is disabled by default,
-    enable them in config/defaults.site 
+    enable them in config/defaults.site.
 
 ** Site config:
 
@@ -85,6 +85,10 @@ unzip everything in proper places.
                 {
                     "type": "composer",
                     "url": "https://it.bmc.uu.se/andlov/php/uup-site/"
+                },
+                {
+                    "type": "composer",
+                    "url": "https://it.bmc.uu.se/andlov/php/uup-auth/"
                 }
             ],
             "require": {
@@ -105,7 +109,7 @@ unzip everything in proper places.
         the package:
 
             bash$> cd /var/www/<virtual-host-root>
-            bash$> wget http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site/stable/latest.tar.gz
+            bash$> wget https://it.bmc.uu.se/andlov/php/uup-site/stable/latest.tar.gz
 
         Unpack the source:
 
@@ -124,7 +128,8 @@ unzip everything in proper places.
         fine in most cases.
 
     After running uup-site.php, review content of public and config. Decide upon if page
-    routing (mod_rewrite) should be used or not.
+    routing (mod_rewrite) should be used or not. Complete the setup by defining the public 
+    directory as document root (if developing a web site).
 
 ** Themes:
 
@@ -132,7 +137,7 @@ unzip everything in proper places.
     to define any number of *.ui files as needed. See theme/default for example on
     theme construction. More themes can be downloaded and installed from:
     
-        http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site. 
+        https://it.bmc.uu.se/andlov/php/uup-site. 
 
     Install new themes be either require them using composer or simply download and
     unpack them inside the theme directory.
