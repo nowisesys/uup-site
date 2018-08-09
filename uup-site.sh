@@ -13,7 +13,7 @@ function setup_config()
     for file in apache.conf defaults.site; do
         if ! [ -e config/$file ]; then
             cp -a $srcdir/config/$file.in config/$file
-            echo "(i) File config/$file has been installed. Please modify to match your location."
+            echo "(i) File config/$file has been installed (please modify)."
         fi
     done
 }
@@ -38,6 +38,7 @@ function setup_auth()
     if ! [ -e public/auth ]; then
         mkdir -p public/auth
     fi
+
     for dir in logon logoff; do
         if ! [ -e public/auth/$dir ]; then
             cp -a $srcdir/plugins/auth/$dir public/auth/$dir
@@ -64,6 +65,26 @@ function setup_guide()
     fi
 }
 
+function setup_examples() 
+{
+    if ! [ -e public/example ]; then
+        cp -a $srcdir/example public/example
+        ln -s ../vendor public
+    fi
+
+    for plugin in auth edit; do
+        if ! [ -e public/plugins/$plugin ]; then
+            mkdir -p public/plugins
+            ln -s ../$plugin public/plugins
+        fi
+    done
+
+    if ! [ -h public/example/routing/.htaccess ]; then
+        rm -f public/example/routing/.htaccess
+        ln -s ../../.htaccess public/example/routing
+    fi
+}
+
 function setup_dispatcher()
 {
     for file in .htaccess dispatch.php; do
@@ -72,7 +93,7 @@ function setup_dispatcher()
             sed -i -e s%'/../../vendor/'%'/../vendor/'%1 \
                    -e s%'/uup-site'%''%g \
                    -e s%'/example/routing'%''%g public/$file
-            echo "(i) File public/$file has been installed. Please modify to match your site or application."
+            echo "(i) File public/$file has been installed (please modify)."
         fi
     done
 }
@@ -136,7 +157,7 @@ function usage()
 
     echo "$prog - Setup and management tool."
     echo 
-    echo "Usage: $prog --setup [--auth] [--edit] [--guide]"
+    echo "Usage: $prog --setup [--auth] [--edit] [--guide] [--examples]"
     echo "       $prog --config <options>"
     echo "       $prog --develop"
     echo "       $prog --migrate <dir>|<file>..."
@@ -148,9 +169,10 @@ function usage()
     echo "  --auth      : Install authentication plugin"
     echo "  --edit      : Install online edit plugin"
     echo "  --guide     : Install end-user content publisher guide"
+    echo "  --examples  : Install examples in public"
     echo "  --verbose   : Be verbose about executed commands"
     echo "Example:"
-    echo "  # Setup web site as CMS with publisher guide"
+    echo "  # Setup CMS like web site with publisher guide"
     echo "  $prog --setup --auth --edit --guide"
     echo 
     echo "  # Setup for web application"
@@ -179,6 +201,9 @@ while [ -n "$1" ]; do
             ;;
         --guide)
             setup_guide
+            ;;
+        --examples)
+            setup_examples
             ;;
         --develop)
             develop
