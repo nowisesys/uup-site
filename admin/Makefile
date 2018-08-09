@@ -1,3 +1,21 @@
+# Makefile for gettext locale support.
+# 
+# Targets:
+#   make		-- update, merge and compile *.po and *.pot files
+#   make new-locale	-- generate *.po for new locale
+# 
+# If "make new-locale" fails, try create locale direct from command line:
+# 
+#   bash$> mkdir -p locale/sv_SE.UTF-8/LC_MESSAGES
+#   bash$> msginit --input=locale/messages.pot \
+#		   --output=locale/sv_SE.UTF-8/LC_MESSAGES/messages.po \
+#		   --locale=sv_SE.UTF-8
+# 
+# Enable po-mode in jed/emacs or install the poedit for editing *.po files.
+# 
+# Author: Anders Lövgren
+# Date:   2018-08-09
+
 PACKAGE_NAME    = sitename
 PACKAGE_VERSION = 1.0
 PACKAGE_ADDRESS = contact@example.com
@@ -23,7 +41,16 @@ GETTEXT_MOFILES = $(GETTEXT_POFILES:.po=.mo)
 
 all : gettext
 gettext : gettext-update gettext-merge gettext-compile
-
+	
+new-locale :
+	@( \
+	read -p "Locale: " locale; \
+	mkdir -p locale/$$locale/LC_MESSAGES; \
+	msginit --input=locale/messages.pot \
+		--output=locale/$$locale/LC_MESSAGES/messages.po \
+		--locale=$$locale \
+	)
+	
 gettext-update : $(GETTEXT_POTFILE)
 $(GETTEXT_POTFILE) : $(SOURCES)
 	$(XGETTEXT) $(XGETTEXT_OPTIONS) $(SOURCES)
@@ -34,6 +61,8 @@ gettext-compile : gettext-merge $(GETTEXT_MOFILES)
 
 %.mo : %.po
 	$(MSGFMT) $(MSGFMT_OPTIONS) $+
+
+gettext-format : $(GETTEXT_POFILES)
 	$(MSGCONV) $(MSGCONV_OPTIONS) $+ -o $+
 
 install :

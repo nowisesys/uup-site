@@ -58,6 +58,15 @@ function setup_edit()
     fi
 }
 
+function setup_locale() 
+{
+    if ! [ -d locale ]; then
+        mkdir -p locale
+        cp -a $srcdir/admin/Makefile .
+        echo "(i) Edit settings in makefile, then run 'make new-locale' and 'make' in current directory."
+    fi
+}
+
 function setup_guide() 
 {
     if ! [ -e public/guide ]; then
@@ -176,6 +185,7 @@ function usage()
     echo "  --migrate   : Migrate existing site (expert)"
     echo "  --auth      : Install authentication plugin"
     echo "  --edit      : Install online edit plugin"
+    echo "  --locale    : Install support for gettext translation."
     echo "  --guide     : Install end-user content publisher guide"
     echo "  --examples  : Install examples in public"
     echo "  --verbose   : Be verbose about executed commands"
@@ -206,6 +216,9 @@ while [ -n "$1" ]; do
             ;;
         --edit)
             setup_edit
+            ;;
+        --locale)
+            setup_locale
             ;;
         --guide)
             setup_guide
