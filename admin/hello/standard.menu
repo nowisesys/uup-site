@@ -1,0 +1,14 @@
+<?php
+
+// 
+// This standard menu will appear on left hand side.
+// 
+
+return array(
+        'head' => _('Demo'),
+        'data' => array(
+                _('Welcome Page')  => 'welcome',
+                _('Standard Page') => 'index',
+                _('Simple View')   => 'view'
+        )
+);

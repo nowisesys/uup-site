@@ -98,11 +98,19 @@ function setup_dispatcher()
     done
 }
 
+function setup_pages() 
+{
+    if ! [ -f public/index.php ]; then
+        cp -a $srcdir/admin/hello/* public
+    fi
+}
+
 function setup()
 {
     setup_config
     setup_themes
     setup_dispatcher
+    setup_pages
 }
 
 function migrate_page()
