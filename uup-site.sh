@@ -5,8 +5,6 @@
 # Author: Anders Lövgren
 # Date:   2015-12-16
 
-# set -x
-
 srcdir="$(dirname $(realpath $0))"
 
 function setup_config()
@@ -55,7 +53,7 @@ function setup_edit()
         for dir in ajax view; do
             mv -f public/edit/$dir/index.inc public/edit/$dir/index.php
         done
-        echo "Install content editors by running setup.sh in public/edit/view/editor/plugins"
+        echo "(i) Install content editors by running setup.sh in public/edit/view/editor/plugins"
     fi
 }
 
@@ -71,9 +69,12 @@ function setup_dispatcher()
     for file in .htaccess dispatch.php; do
         if ! [ -e public/$file ]; then
             cp $srcdir/example/routing/$file public/$file 
+            sed -i -e s%'/../../vendor/'%'/../vendor/'%1 \
+                   -e s%'/uup-site'%''%g \
+                   -e s%'/example/routing'%''%g public/$file
+            echo "(i) File public/$file has been installed. Please modify to match your site or application."
         fi
     done
-    sed -i s%'/../../vendor/'%'/../vendor/'%1 public/dispatch.php
 }
 
 function setup()
@@ -147,6 +148,7 @@ function usage()
     echo "  --auth      : Install authentication plugin"
     echo "  --edit      : Install online edit plugin"
     echo "  --guide     : Install end-user content publisher guide"
+    echo "  --verbose   : Be verbose about executed commands"
     echo "Example:"
     echo "  # Setup web site as CMS with publisher guide"
     echo "  $prog --setup --auth --edit --guide"
@@ -157,41 +159,40 @@ function usage()
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
 
-case "$1" in
-    --help)
-        shift
-        usage
-        exit 0
-        ;;
-    --setup)
-        shift
-        setup
-        ;;
-    --auth)
-        shift
-        setup_auth
-        ;;
-    --edit)
-        shift
-        setup_edit
-        ;;
-    --guide)
-        shift
-        setup_guide
-        ;;
-    --develop)
-        develop
-        ;;
-    --migrate)
-        shift
-        migrate $*
-        ;;
-    --config)
-        shift
-        config $*
-        ;;
-    *)
-        usage
-        exit 1
-        ;;
-esac
+while [ -n "$1" ]; do
+    case "$1" in
+        --verbose|-v)
+            set -x
+            ;;
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        --setup)
+            setup
+            ;;
+        --auth)
+            setup_auth
+            ;;
+        --edit)
+            setup_edit
+            ;;
+        --guide)
+            setup_guide
+            ;;
+        --develop)
+            develop
+            ;;
+        --migrate)
+            migrate $*
+            ;;
+        --config)
+            config $*
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done

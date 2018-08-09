@@ -3,8 +3,6 @@
 # Author: Anders Lövgren
 # Date:   2016-10-17
 
-set -x
-
 name=default
 destdir=${destdir:-"public"}
 
