@@ -414,6 +414,9 @@ class Config
                         }
                 }
 
+                if (!$config['tools']) {
+                        $config['tools'] = $tools['tools'];
+                }
                 if ($config['tools']['auth'] || $config['tools']['edit']) {
                         $config['session'] = true;      // requires session support
                 }
