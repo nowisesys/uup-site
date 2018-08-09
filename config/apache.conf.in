@@ -23,8 +23,8 @@ Require ip 192.168.
 # Enable URL rewrite:
 RewriteEngine on
 
-# Exclude theme location:
-RewriteCond %{REQUEST_FILENAME} "^/theme"
+# Exclude these locations from dispatch:
+RewriteCond %{REQUEST_FILENAME} "^/(theme|assets)"
 RewriteRule "(.*)" - [L]
 
 # Handle index page request:
