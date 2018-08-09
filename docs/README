@@ -204,12 +204,12 @@ unzip everything in proper places.
 
     uup-site
       ├── htdocs/                       // Document root
-      │     +-- dir1/
-      │     +-- dir2/
+      │     ├── dir1/
+      │     ├── dir2/
      ...   ...
       ├── locale/                       // Support for locale (gettext)
-      │     +-- dir1.pot
-      │     +-- dir2.pot
+      │     ├── dir1.pot
+      │     ├── dir2.pot
      ...   ...
 
     Each page can initialize its own text domain in the constructor:
