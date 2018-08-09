@@ -57,17 +57,24 @@
  *          [js] => /theme/default/assets/js
  *          [img] => /theme/default/assets/img
  *          [fonts] => /theme/default/assets/fonts
- *          [navmenu] => 1
- *          [sidebar] => 1
- *          [topmenu] => 
- *          [publish] => 
- *          [headers] => 
- *          [content] => 
- *          [session] => 
- *          [fortune] => 
- *          [tools] => 
- *          [auth] => 
- *          [edit] => 
+ *          [navmenu] => true
+ *          [sidebar] => true
+ *          [topmenu] => false
+ *          [publish] => false
+ *          [headers] => false
+ *          [content] => false
+ *          [session] => false
+ *          [fortune] => false
+ *          [tools] => Array
+ *              (
+ *                  [home] => false
+ *                  [auth] => false
+ *                  [edit] => false
+ *                  [search] => false
+ *                  [translate] => false
+ *              )
+ *          [auth] => false
+ *          [edit] => false
  *          [footer] => /var/www/localhost/template/default/footer.inc
  * )
  * 
