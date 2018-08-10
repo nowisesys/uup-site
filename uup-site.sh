@@ -16,6 +16,7 @@ function setup_config()
         if ! [ -e config/$file ]; then
             cp -a $srcdir/config/$file.in config/$file
             sed -i -e s%"@location@"%"${location}"%g \
+                   -e s%"@excluded@"%"theme\|assets\|example"%g \
                    -e s%"//\(.*'location'.*\)"%"\1"%1 config/$file
             echo "(i) File config/$file has been installed (please modify)."
         fi
@@ -96,7 +97,9 @@ function setup_examples()
         done
 
         if [ -f public/example/routing/.htaccess ]; then
-            sed -i s%"@location@"%"${location}"%g public/example/routing/.htaccess
+            sed -i -e s%"@location@"%"${location}"%g \
+                   -e s%"@excluded@"%"theme|assets"%g \
+                         public/example/routing/.htaccess
         fi
     fi
 
@@ -115,6 +118,7 @@ function setup_dispatcher()
             cp -a $srcdir/example/routing/$file public/$file 
             sed -i -e s%'/../../vendor/'%'/../vendor/'%1 \
                    -e s%"@location@"%"${location}"%g \
+                   -e s%"@excluded@"%"theme|assets|example"%g \
                    -e s%'/example/routing'%''%g public/$file
             echo "(i) File public/$file has been installed (please modify)."
         fi
