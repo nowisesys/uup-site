@@ -17,6 +17,7 @@ $output = new format($this);
         <link rel="stylesheet" href="<?= $config->css('w3.css') ?>">
         <link rel="stylesheet" href="<?= $config->css('markup.css') ?>">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
         <link rel="stylesheet" href="<?= $config->css('fonts/lato.css') ?>">
         <link rel="stylesheet" href="<?= $config->css('fonts/montserrat.css') ?>">
         <?php $output->headers(); ?>
@@ -55,7 +56,7 @@ $output = new format($this);
         </div>
 
         <?php include('header.inc') ?>
-        
+
         <!-- Side bar navigation -->
         <nav id="sidenav-menu" class="no-print w3-sidenav w3-container w3-collapse w3-card-2" style="display: none; z-index: 2">
             <?php $output->navmenu() ?>
@@ -86,8 +87,11 @@ $output = new format($this);
             </footer>
 
         </div>
-        
-        <?php include('footer.inc') ?>
 
+        <?php include('footer.inc') ?>
+        
+        <!-- Highlight JS for code syntax highlight -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad()</script>
     </body>
 </html>
