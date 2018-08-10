@@ -48,6 +48,10 @@ function setup_auth()
             mv -f public/auth/$dir/index.inc public/auth/$dir/index.php
         fi
     done
+
+    if ! [ -d vendor/bmc/uup-auth ]; then
+        composer require bmc/uup-auth
+    fi
 }
 
 function setup_edit()
@@ -74,6 +78,10 @@ function setup_guide()
 {
     if ! [ -e public/guide ]; then
         cp -a $srcdir/plugins/guide public/guide
+    fi
+
+    if ! [ -d vendor/bmc/uup-web-components ]; then
+        composer require bmc/uup-web-component
     fi
 }
 

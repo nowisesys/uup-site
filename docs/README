@@ -79,7 +79,8 @@ unzip everything in proper places.
             bash$> cd /var/www/<virtual-host-root>
             bash$> composer init
 
-        Add the repository to composer.json:
+        Only the bmc/uup-site package gets installed by default, the other are installed on 
+        demand i.e. when running "uup-site --auth":
 
             "repositories": [
                 {
@@ -89,6 +90,18 @@ unzip everything in proper places.
                 {
                     "type": "composer",
                     "url": "https://it.bmc.uu.se/andlov/php/uup-auth/"
+                },
+                {
+                    "type": "composer",
+                    "url": "https://it.bmc.uu.se/andlov/php/uup-soap/"
+                },
+                {
+                    "type": "composer",
+                    "url": "https://it.bmc.uu.se/andlov/php/uup-html/"
+                },
+                {
+                    "type": "composer",
+                    "url": "https://it.bmc.uu.se/andlov/php/uup-web-component/"
                 }
             ],
             "require": {
