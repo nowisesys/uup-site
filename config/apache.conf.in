@@ -24,14 +24,14 @@ Require ip 192.168.
 RewriteEngine on
 
 # Exclude these locations from dispatch:
-RewriteCond %{REQUEST_FILENAME} "^/(theme|assets)"
+RewriteCond %{REQUEST_FILENAME} "^@location@/(theme|assets)"
 RewriteRule "(.*)" - [L]
 
 # Handle index page request:
 RewriteCond %{REQUEST_FILENAME} ^.*/$
-RewriteRule ^(.*)$ /dispatch.php?uri=$1index [QSA,L]
+RewriteRule ^(.*)$ @location@/dispatch.php?uri=$1index [QSA,L]
 
 # Route all page request to dispatcher:
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ /dispatch.php?uri=$1 [QSA,L]
+RewriteRule ^(.*)$ @location@/dispatch.php?uri=$1 [QSA,L]

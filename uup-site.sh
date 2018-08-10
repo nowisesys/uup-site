@@ -7,12 +7,15 @@
 
 srcdir="$(dirname $(realpath $0))"
 
+location="/"
+
 function setup_config()
 {
     mkdir -p config
     for file in apache.conf defaults.site; do
         if ! [ -e config/$file ]; then
             cp -a $srcdir/config/$file.in config/$file
+            sed -i s%"@location@"%"${location}"%g config/$file
             echo "(i) File config/$file has been installed (please modify)."
         fi
     done
@@ -76,9 +79,16 @@ function setup_guide()
 
 function setup_examples() 
 {
-    if ! [ -e public/example ]; then
+    if ! [ -d public/example ]; then
         cp -a $srcdir/example public/example
-        ln -s ../vendor public
+
+        find public/example -type f -name *.php | while read file; do
+            sed -i s%'/vendor/'%'/../vendor/'%1 $file
+        done
+
+        if [ -f public/example/routing/.htaccess ]; then
+            sed -i s%"@location@"%"${location}"%g public/example/routing/.htaccess
+        fi
     fi
 
     for plugin in auth edit; do
@@ -87,20 +97,15 @@ function setup_examples()
             ln -s ../$plugin public/plugins
         fi
     done
-
-    if ! [ -h public/example/routing/.htaccess ]; then
-        rm -f public/example/routing/.htaccess
-        ln -s ../../.htaccess public/example/routing
-    fi
 }
 
 function setup_dispatcher()
 {
     for file in .htaccess dispatch.php; do
         if ! [ -e public/$file ]; then
-            cp $srcdir/example/routing/$file public/$file 
+            cp -a $srcdir/example/routing/$file public/$file 
             sed -i -e s%'/../../vendor/'%'/../vendor/'%1 \
-                   -e s%'/uup-site'%''%g \
+                   -e s%"@location@"%"${location}"%g \
                    -e s%'/example/routing'%''%g public/$file
             echo "(i) File public/$file has been installed (please modify)."
         fi
@@ -174,7 +179,7 @@ function usage()
 
     echo "$prog - Setup and management tool."
     echo 
-    echo "Usage: $prog --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
+    echo "Usage: $prog [--location /myapp] --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
     echo "       $prog --config <options>"
     echo "       $prog --develop"
     echo "       $prog --migrate <dir>|<file>..."
@@ -190,11 +195,14 @@ function usage()
     echo "  --examples  : Install examples in public"
     echo "  --verbose   : Be verbose about executed commands"
     echo "Example:"
-    echo "  # Setup CMS like web site with publisher guide"
+    echo "  # Setup for virtual host"
     echo "  $prog --setup --auth --edit --guide"
     echo 
     echo "  # Setup for web application"
     echo "  $prog --setup --auth"
+    echo 
+    echo "  # Setup for location /myapp"
+    echo "  $prog --location /myapp --setup --auth"
     echo 
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
@@ -234,6 +242,14 @@ while [ -n "$1" ]; do
             ;;
         --config)
             config $*
+            ;;
+        --location)
+            shift
+            if [ "$1" == "/" ]; then
+                location=""
+            else
+                location="$1"
+            fi
             ;;
         *)
             usage
