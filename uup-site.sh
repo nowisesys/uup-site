@@ -80,7 +80,7 @@ function setup_guide()
         cp -a $srcdir/plugins/guide public/guide
     fi
 
-    if ! [ -d vendor/bmc/uup-web-components ]; then
+    if ! [ -d vendor/bmc/uup-web-component ]; then
         composer require bmc/uup-web-component
     fi
 }
