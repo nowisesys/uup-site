@@ -14,6 +14,10 @@
         {
             "type": "composer",
             "url": "https://it.bmc.uu.se/andlov/php/uup-html/"            
+        },
+        {
+            "type": "composer",
+            "url": "https://it.bmc.uu.se/andlov/php/uup-web-component/"
         }
     ],
     "authors": [
@@ -28,7 +32,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "bmc/uup-auth": "^2.3"
+        "bmc/uup-auth": "^2.3",
+        "bmc/uup-web-component": ">=1.2.15"
     },
     "suggest": {
         "bmc/uup-html": ">=1.0.5"
