@@ -532,29 +532,55 @@ class Config
         /**
          * Get target URL.
          * 
+         * Call this method to generate URL's relative to site location. If the 
+         * $extern argument is true, then returned URL contains schema, host and
+         * port. Use $prefix to disable scheme, host and port detection.
+         * 
+         * <code>
+         * $config->getUrl();                           // Get location URL (i.e. -> /uup-site)
+         * $config->getUrl("http://www.google.se");     // An extern URL
+         * $config->getUrl("/assets/site.css");         // Relative virtual host
+         * $config->getUrl("path/page");                // Relative site location (i.e. -> /uup-site/path/page)
+         * $config->getUrl("path/page", true);          // For extern use (i.e. -> http://localhost/uup-site/path/page)
+         * </code>
+         * 
          * @param string $dest The target URL (relative, absolute or extern).
+         * @param bool $extern Generate URL with schema, host and port. 
+         * @param string $prefix Define prefix to use (i.e. https://www.example.com).
          * @return string
          * @throws DomainException
          */
-        public function getUrl($dest)
+        public function getUrl($dest, $extern = false, $prefix = "")
         {
+                if ($extern == true && $prefix == "") {
+                        if (filter_input(INPUT_SERVER, 'SERVER_PORT') == 80 ||
+                            filter_input(INPUT_SERVER, 'SERVER_PORT') == 443) {
+                                $prefix = sprintf(
+                                    "%s://%s", filter_input(INPUT_SERVER, 'REQUEST_SCHEME'), filter_input(INPUT_SERVER, 'SERVER_NAME')
+                                );
+                        } else {
+                                $prefix = sprintf(
+                                    "%s://%s:%d", filter_input(INPUT_SERVER, 'REQUEST_SCHEME'), filter_input(INPUT_SERVER, 'SERVER_NAME'), filter_input(INPUT_SERVER, 'SERVER_PORT')
+                                );
+                        }
+                }
 
                 if (empty($dest)) {
-                        return $this->location;
+                        return sprintf("%s%s", $prefix, $this->location);
                 } elseif (!($comp = parse_url($dest))) {
                         throw new DomainException(_("Invalid URL $dest for redirect"));
                 } elseif (isset($comp['scheme'])) {
                         return sprintf("%s", $dest);
                 } elseif (!isset($comp['path'])) {
-                        return sprintf("%s/%s", $this->location, $dest);
-                } elseif ($comp['path'][0] == '/') {
-                        return sprintf("%s", $dest);
+                        return sprintf("%s%s/%s", $prefix, $this->location, $dest);
+                } elseif ($dest[0] == '/') {
+                        return sprintf("%s%s", $prefix, $dest);
                 } elseif ($dest[0] == '@') {
-                        return sprintf("%s/%s", $this->location, substr($dest, 1));
+                        return sprintf("%s%s/%s", $prefix, $this->location, substr($dest, 1));
                 } elseif ($this->location != '/') {
-                        return sprintf("%s/%s", $this->location, $dest);
+                        return sprintf("%s%s/%s", $prefix, $this->location, $dest);
                 } else {
-                        return sprintf("%s", $dest);
+                        return sprintf("%s/%s", $prefix, $dest);
                 }
         }
 
