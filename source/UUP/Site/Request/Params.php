@@ -23,6 +23,7 @@ use InvalidArgumentException;
 /**
  * Request and page dispatch parameters.
  * 
+ * @property-read string $name The file name (without extension).
  * @property-read string $path The file path (relative).
  * @property-read string $page The requested page (location).
  * @property-read string $file The requested file (filename).
@@ -64,6 +65,11 @@ class Params
          */
         private $_file;
         /**
+         * The file name (without extension).
+         * @var string 
+         */
+        private $_name;
+        /**
          * Request parameter filter (regex).
          * @var array 
          */
@@ -78,6 +84,7 @@ class Params
                 $this->_page = filter_input(INPUT_SERVER, 'SCRIPT_NAME');
                 $this->_file = filter_input(INPUT_SERVER, 'SCRIPT_FILENAME');
                 $this->_path = dirname(substr($this->_file, strlen($docs) + 1));
+                $this->_name = basename($this->_file, ".php");
         }
 
         public function __get($name)
@@ -91,6 +98,7 @@ class Params
                                 return $this->_file;
                         case 'data':
                                 return array(
+                                        'name' => $this->_name,
                                         'path' => $this->_path,
                                         'page' => $this->_page,
                                         'file' => $this->_file
@@ -131,7 +139,8 @@ class Params
          */
         public function setPath($file)
         {
-                $this->_path = $this->getPath(basename($file, ".php"));
+                $this->_name = basename($file, ".php");
+                $this->_path = $this->getPath($this->_name);
         }
 
         /**
@@ -142,15 +151,14 @@ class Params
          */
         private function getPath($name)
         {
-                $path = parse_url(
-                    filter_input(INPUT_SERVER, 'REQUEST_URI'), PHP_URL_PATH
-                );
+                $path = filter_input(INPUT_SERVER, 'REQUEST_URI');
+                $path = parse_url($path, PHP_URL_PATH);
                 $part = array_filter(explode("/", $path));
 
                 if (count($part) == 0) {
                         return "";
                 }
-                
+
                 if ($name != "index") {
                         array_pop($part);
                 }
