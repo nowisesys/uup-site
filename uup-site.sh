@@ -188,7 +188,7 @@ function usage()
 
     echo "$prog - Setup and management tool."
     echo 
-    echo "Usage: $prog [--location /myapp] --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
+    echo "Usage: $prog --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
     echo "       $prog --config <options>"
     echo "       $prog --develop"
     echo "       $prog --migrate <dir>|<file>..."
@@ -212,6 +212,9 @@ function usage()
     echo 
     echo "  # Setup for location /myapp"
     echo "  $prog --location /myapp --setup --auth"
+    echo
+    echo "Notice:"
+    echo "  1. The --location or --verbose options must be used before any other option"
     echo 
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
