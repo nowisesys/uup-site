@@ -15,7 +15,8 @@ function setup_config()
     for file in apache.conf defaults.site; do
         if ! [ -e config/$file ]; then
             cp -a $srcdir/config/$file.in config/$file
-            sed -i s%"@location@"%"${location}"%g config/$file
+            sed -i -e s%"@location@"%"${location}"%g \
+                   -e s%"//\(.*'location'.*\)"%"\1"%1 config/$file
             echo "(i) File config/$file has been installed (please modify)."
         fi
     done
