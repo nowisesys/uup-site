@@ -131,24 +131,35 @@ class Params
          */
         public function setPath($file)
         {
-                $this->_path = $this->getPath($file);
-                $this->_path = trim($this->_path, 'index');
-                $this->_path = trim($this->_path, '/');
+                $this->_path = $this->getPath(basename($file, ".php"));
         }
 
         /**
          * Get request URI for file.
          * 
-         * @param string $file The requested script.
+         * @param string $name The script name without extension.
          * @return string
          */
-        private function getPath($file)
+        private function getPath($name)
         {
-                if (basename($file, ".php") == "index") {
-                        return substr(filter_input(INPUT_SERVER, 'REQUEST_URI'), 1);
-                } else {
-                        return dirname(substr(filter_input(INPUT_SERVER, 'REQUEST_URI'), 1));
+                $path = parse_url(
+                    filter_input(INPUT_SERVER, 'REQUEST_URI'), PHP_URL_PATH
+                );
+                $part = array_filter(explode("/", $path));
+
+                if (count($part) == 0) {
+                        return "";
                 }
+                
+                if ($name != "index") {
+                        array_pop($part);
+                }
+                if (end($part) == "index") {
+                        array_pop($part);
+                }
+
+                $path = implode("/", $part);
+                return $path;
         }
 
         /**
