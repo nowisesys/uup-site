@@ -90,6 +90,8 @@ class Params
         public function __get($name)
         {
                 switch ($name) {
+                        case 'name':
+                                return $this->_name;
                         case 'path':
                                 return $this->_path;
                         case 'page':
