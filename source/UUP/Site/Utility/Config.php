@@ -256,8 +256,31 @@ class Config
         private function detect($config)
         {
                 // 
+                // To detect the correct config is crucial for proper functioning, but has 
+                // shown to be a rather complex task due to support of standalone install,
+                // as well as, deploy thru composer. 
+                // 
+                // Theres also possible that bootstraping is used, where multiple virtual hosts 
+                // or web applications are setup by running uup-site.sh from a common installation 
+                // of uup-site in PHP's shared directory (usually /usr/share/php).
+                // 
+                // Add to this that directories can be symlinked or aliased in web server 
+                // config. We try to make intelligent guess for correct location and probe 
+                // for the config directory in these possible locations.
+                // 
+                // The best solution is if all pages uses the dispather that has the config
+                // location hard coded for routing. In this case the detection is rather 
+                // simple and a cheap operation.
+                // 
                 // Set search directories:
                 // 
+                $assume = realpath(self::assume(
+                        filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'), filter_input(INPUT_SERVER, 'SCRIPT_FILENAME')
+                ));
+
+                $this->_subdirs[] = $assume;
+                $this->_subdirs[] = dirname($assume);
+
                 if (strpos(__DIR__, "/vendor/") === false) {
                         $this->_subdirs[] = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
                         $this->_subdirs[] = realpath(__DIR__ . "/../../../..");
@@ -266,16 +289,16 @@ class Config
                         $this->_subdirs[] = realpath(__DIR__ . "/../../../../../../..");
                 }
 
+                if (isset($this->_subdirs[3])) {
+                        $this->_topdir = $this->_subdirs[2];
+                        $this->_prjdir = $this->_subdirs[3];
+                } else {
+                        $this->_topdir = $this->_subdirs[2];
+                        $this->_prjdir = $this->_subdirs[2];
+                }
+
                 $this->_subdirs[] = dirname(getcwd());
                 $this->_subdirs[] = __DIR__;
-
-                if (isset($this->_subdirs[1])) {
-                        $this->_topdir = $this->_subdirs[0];
-                        $this->_prjdir = $this->_subdirs[1];
-                } else {
-                        $this->_topdir = $this->_subdirs[0];
-                        $this->_prjdir = $this->_subdirs[0];
-                }
 
                 $this->_subdirs = array_values(array_unique($this->_subdirs));
 
@@ -467,6 +490,30 @@ class Config
                                 return $dest;
                         }
                 }
+        }
+
+        /**
+         * Assume this is the config root directory.
+         * 
+         * This function uses the htdocs and script path to compute a directory path
+         * likely to contain the config directory.
+         * 
+         * @param string $htdocs The htdocs directory path.
+         * @param string $script The current executed script path.
+         * @return string
+         */
+        private static function assume($htdocs, $script)
+        {
+                $hparts = explode("/", $htdocs);
+                $sparts = explode("/", $script);
+
+                $remove = count($sparts) - count($hparts) - 1;
+
+                for ($i = 0; $i < $remove; ++$i) {
+                        array_pop($sparts);
+                }
+
+                return implode("/", $sparts);
         }
 
         /**
