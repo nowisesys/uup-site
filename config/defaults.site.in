@@ -291,5 +291,8 @@ return array(
 //         * Dump parsed config to error log.
 //         */
 //        'debug' => false,
-
+//        /**
+//         * The absolute path of this config for debug.
+//         */
+//        'self' => __FILE__,
 );
