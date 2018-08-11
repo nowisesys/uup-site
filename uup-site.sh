@@ -5,9 +5,31 @@
 # Author: Anders Lövgren
 # Date:   2015-12-16
 
+# This script name:
+prog=$(basename $0)
+
+# The source directory:
 srcdir="$(dirname $(realpath $0))"
 
+# Default HTTP request location:
 location="/"
+
+function bootstrap() 
+{
+    composer init \
+        --type=project \
+        --require=bmc/uup-site \
+        --stability=stable \
+        --license='Apache-2.0' \
+        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-site/"}' \
+        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-auth/"}' \
+        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-soap/"}' \
+        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-mail/"}' \
+        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-html/"}' \
+        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-web-component/"}' $* && \
+    composer install && \
+    echo "(i) Bootstrap completed. Please run --setup to initialize."
+}
 
 function setup_config()
 {
@@ -188,26 +210,31 @@ function develop()
 
 function usage()
 {
-    prog=$(basename $0)
-
     echo "$prog - Setup and management tool."
     echo 
-    echo "Usage: $prog --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
+    echo "Usage: $prog --bootstrap [composer-options]"
+    echo "       $prog --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
     echo "       $prog --config <options>"
     echo "       $prog --develop"
     echo "       $prog --migrate <dir>|<file>..."
+    echo 
     echo "Options:"
-    echo "  --setup     : Setup site, tools and theme(s)"
-    echo "  --config    : Run configuration script (batch)"
-    echo "  --develop   : Setup develop mode"
-    echo "  --migrate   : Migrate existing site (expert)"
-    echo "  --auth      : Install authentication plugin"
-    echo "  --edit      : Install online edit plugin"
+    echo "  --bootstrap : Bootstrap new instance using composer."
+    echo "  --setup     : Setup site, tools and theme(s)."
+    echo "  --auth      : Install authentication plugin."
+    echo "  --edit      : Install online edit plugin."
     echo "  --locale    : Install support for gettext translation."
-    echo "  --guide     : Install end-user content publisher guide"
-    echo "  --examples  : Install examples in public"
-    echo "  --verbose   : Be verbose about executed commands"
+    echo "  --guide     : Install end-user content publisher guide."
+    echo "  --examples  : Install examples in public."
+    echo "  --config    : Run configuration script (batch)."
+    echo "  --develop   : Setup develop mode."
+    echo "  --migrate   : Migrate existing site (expert)."
+    echo "  --verbose   : Be verbose about executed commands."
+    echo 
     echo "Example:"
+    echo "  # Generate composer.json and install requirements (see --bootstrap --help)"
+    echo "  $prog --bootstrap"
+    echo 
     echo "  # Setup for virtual host"
     echo "  $prog --setup --auth --edit --guide"
     echo 
@@ -218,7 +245,7 @@ function usage()
     echo "  $prog --location /myapp --setup --auth"
     echo
     echo "Notice:"
-    echo "  1. The --location or --verbose options must be used before any other option"
+    echo "  1. The --location or --verbose options must be used before any other option."
     echo 
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
@@ -230,6 +257,11 @@ while [ -n "$1" ]; do
             ;;
         --help|-h)
             usage
+            exit 0
+            ;;
+        --bootstrap)
+            shift
+            bootstrap $*
             exit 0
             ;;
         --setup)

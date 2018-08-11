@@ -69,8 +69,46 @@ unzip everything in proper places.
 
 ** Setup:
 
-    Composer is the de-factor standard for installing PHP packages. There are two ways to
-    use this package: Either as a package or stand-alone.
+    Composer is the de-factor standard for installing PHP packages. There are three ways to
+    use this package: Either bootstrap, package or stand-alone.
+
+    o) Use bootstrap:
+
+        This assumes that the uup-site package has already been deployed somewhere (could
+        i.e. be a shared install under /usr/share/php with uup-site.sh in path). This is 
+        suitable for an web server with multiple virtual hosts.
+
+        Start by creating virtual host directory and run bootstrap inside:
+
+            bash$> mkdir /var/www/<virtual-host-root> && cd /var/www/<virtual-host-root>
+            bash$> uup-site.sh --bootstrap
+
+        At this point the required composer.json should be generated in current directory
+        with uup-site installed under vendor.
+
+        Continue by setting up this site:
+
+            bash$> uup-site.sh --setup
+
+        To centralize package update (i.e. of uup-site or uup-auth), modify the boostrap()
+        function in uup-site.sh to use shared directories:
+
+            function bootstrap() 
+            {
+                composer init \
+                    --type=project \
+                    --require=bmc/uup-site \
+                    --stability=stable \
+                    --license='Apache-2.0' \
+                    --repository='{"type": "path","url": "/usr/share/php/uup-site/"}' \
+                        ...
+                    --repository='{"type": "path","url": "/usr/share/php/uup-auth/""}' $* && \
+                composer install && \
+                echo "(i) Bootstrap completed. Please run --setup to initialize."
+            }
+
+        You can then update composer packages in all virtual hosts at once by updating
+        those installed under /usr/share/php.
 
     o) Use as package:
 
