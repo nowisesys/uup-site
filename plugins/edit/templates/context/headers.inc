@@ -1,7 +1,7 @@
 <?php
 
 // 
-// Custom HTTP headers. Typical used for providing <meta> tags.
+// Custom HTML headers. Typical used for providing <meta> tags.
 // 
 // Author: @author@
 // Date:   @datetime@
