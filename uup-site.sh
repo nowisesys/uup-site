@@ -76,6 +76,14 @@ function setup_auth()
     if ! [ -d vendor/bmc/uup-auth ]; then
         composer require bmc/uup-auth
     fi
+
+    if ! [ -f config/auth.inc.in ]; then
+        cp -a $srcdir/config/auth.inc.in config/auth.inc.in
+    fi
+    if ! [ -f config/auth.inc ]; then
+        mv -f config/auth.inc.in config/auth.inc
+        echo "(i) Open config/auth.inc to configure the authenticate stack."
+    fi
 }
 
 function setup_edit()
