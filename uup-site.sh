@@ -258,6 +258,11 @@ function usage()
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
 
+# Relocate srcdir when running in bootstrap mode:
+if [ -d vendor/bmc/uup-site ]; then
+    srcdir="$srcdir/vendor/bmc/uup-site"
+fi
+
 while [ -n "$1" ]; do
     case "$1" in
         --verbose|-v)
