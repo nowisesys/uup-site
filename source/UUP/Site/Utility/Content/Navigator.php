@@ -21,7 +21,7 @@ namespace UUP\Site\Utility\Content;
 /**
  * The page path navigator.
  * 
- * This class helps generator page navigation. Given an path, it aids in output the
+ * This class helps generate page navigation. Given an path, it aids in output the
  * navigation menu for its parent components. The default output formating gives an
  * simple parent path navigator.
  * 
