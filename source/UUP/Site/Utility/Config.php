@@ -365,7 +365,10 @@ class Config
 
                 if (!isset($config['location'])) {
                         $config['location'] = "/";
+                } elseif ($config['location'] != "/") {
+                        $config['location'] = "/" . trim($config['location'], '/') . "/";
                 }
+
                 if (!isset($config['exception'])) {
                         $config['exception'] = UUP_SITE_EXCEPT_BRIEF;
                 }
@@ -383,9 +386,9 @@ class Config
 
                 foreach (array('css', 'js', 'img', 'fonts') as $asset) {
                         if (!isset($config[$asset])) {
-                                $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $asset);
+                                $config[$asset] = sprintf("%stheme/%s/assets/%s", $config['location'], $config['theme'], $asset);
                         } elseif ($config[$asset][0] != '/') {
-                                $config[$asset] = sprintf("%s/theme/%s/assets/%s", $config['location'], $config['theme'], $config[$asset]);
+                                $config[$asset] = sprintf("%stheme/%s/assets/%s", $config['location'], $config['theme'], $config[$asset]);
                         }
                         if ($config[$asset][1] == '/') {
                                 $config[$asset] = str_replace('//', '/', $config[$asset]);
@@ -619,13 +622,13 @@ class Config
                 } elseif (isset($comp['scheme'])) {
                         return sprintf("%s", $dest);
                 } elseif (!isset($comp['path'])) {
-                        return sprintf("%s%s/%s", $prefix, $this->location, $dest);
+                        return sprintf("%s%s%s", $prefix, $this->location, $dest);
                 } elseif ($dest[0] == '/') {
                         return sprintf("%s%s", $prefix, $dest);
                 } elseif ($dest[0] == '@') {
-                        return sprintf("%s%s/%s", $prefix, $this->location, substr($dest, 1));
-                } elseif ($this->location != '/') {
-                        return sprintf("%s%s/%s", $prefix, $this->location, $dest);
+                        return sprintf("%s%s%s", $prefix, $this->location, substr($dest, 1));
+                } elseif ($this->location != "/") {
+                        return sprintf("%s%s%s", $prefix, $this->location, $dest);
                 } else {
                         return sprintf("%s/%s", $prefix, $dest);
                 }

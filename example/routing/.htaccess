@@ -1,11 +1,11 @@
 RewriteEngine on
 
-RewriteCond %{REQUEST_FILENAME} "@location@/(@excluded@)"
+RewriteCond %{REQUEST_FILENAME} "@location@(@excluded@)"
 RewriteRule "(.*)" - [L]
 
 RewriteCond %{REQUEST_FILENAME} ^.*/$
-RewriteRule ^(.*)$ @location@/example/routing/dispatch.php?uri=$1index [QSA,L]
+RewriteRule ^(.*)$ @location@example/routing/dispatch.php?uri=$1index [QSA,L]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ @location@/example/routing/dispatch.php?uri=$1 [QSA,L]
+RewriteRule ^(.*)$ @location@example/routing/dispatch.php?uri=$1 [QSA,L]

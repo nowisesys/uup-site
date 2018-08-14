@@ -102,7 +102,7 @@ return array(
 //         */
 //        'template' => null,
 //        /**
-//         * The site URI (must start with '/').
+//         * The site URI (example '/myapp/').
 //         */
 //        'location' => '@location@',
 //        /**

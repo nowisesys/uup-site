@@ -258,8 +258,8 @@ function usage()
     echo "  # Setup for web application"
     echo "  $prog --setup --auth"
     echo 
-    echo "  # Setup for location /myapp"
-    echo "  $prog --location /myapp --setup --auth"
+    echo "  # Setup for location /myapp/"
+    echo "  $prog --location /myapp/ --setup --auth"
     echo
     echo "Notice:"
     echo "  1. The --location or --verbose options must be used before any other option."
@@ -318,11 +318,7 @@ while [ -n "$1" ]; do
             ;;
         --location)
             shift
-            if [ "$1" == "/" ]; then
-                location=""
-            else
-                location="$1"
-            fi
+            location="$1"
             ;;
         *)
             usage
