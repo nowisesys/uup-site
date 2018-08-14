@@ -269,7 +269,7 @@ function usage()
 
 # Relocate srcdir when running in bootstrap mode:
 if [ -d vendor/bmc/uup-site ]; then
-    srcdir="$srcdir/vendor/bmc/uup-site"
+    srcdir="$(pwd)/vendor/bmc/uup-site"
 fi
 
 while [ -n "$1" ]; do
