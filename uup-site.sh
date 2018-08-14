@@ -216,11 +216,19 @@ function develop()
       fi )
 }
 
+function cleanup()
+{
+    ( cd public
+      rm -rf fragment
+      rm -f index.php view.php welcome.php
+      rm -f standard.menu )
+}
+
 function usage()
 {
     echo "$prog - Setup and management tool."
     echo 
-    echo "Usage: $prog --bootstrap [composer-options]"
+    echo "Usage: $prog --bootstrap [<composer-options>]"
     echo "       $prog --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
     echo "       $prog --config <options>"
     echo "       $prog --develop"
@@ -234,6 +242,7 @@ function usage()
     echo "  --locale    : Install support for gettext translation."
     echo "  --guide     : Install end-user content publisher guide."
     echo "  --examples  : Install examples in public."
+    echo "  --cleanup   : Remove installation test files."
     echo "  --config    : Run configuration script (batch)."
     echo "  --develop   : Setup develop mode."
     echo "  --migrate   : Migrate existing site (expert)."
@@ -294,6 +303,9 @@ while [ -n "$1" ]; do
             ;;
         --examples)
             setup_examples
+            ;;
+        --cleanup)
+            cleanup
             ;;
         --develop)
             develop
