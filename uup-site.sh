@@ -260,12 +260,11 @@ function usage()
     echo "  # Setup for web application"
     echo "  $prog --setup --auth"
     echo 
-    echo "  # Setup for location /myapp/"
-    echo "  $prog --location /myapp/ --setup --auth"
+    echo "  # Setup for location /myapp"
+    echo "  $prog --location /myapp --setup --auth"
     echo
     echo "Notice:"
     echo "  1. The --location or --verbose options must be used before any other option."
-    echo "  2. All location pathes must have leading and trailing slashes ('/')." 
     echo 
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
@@ -330,7 +329,7 @@ while [ -n "$1" ]; do
             ;;
         --location)
             shift
-            location="$1"
+            location="$(realpath -sm $1)/"
             ;;
         *)
             usage
