@@ -5,8 +5,9 @@
 # Author: Anders Lövgren
 # Date:   2015-12-16
 
-# This script name:
+# This script name and version:
 prog=$(basename $0)
+vers="1.0"
 
 # The source directory:
 srcdir="$(dirname $(realpath $0))"
@@ -247,6 +248,7 @@ function usage()
     echo "  --develop   : Setup develop mode."
     echo "  --migrate   : Migrate existing site (expert)."
     echo "  --verbose   : Be verbose about executed commands."
+    echo "  --version   : Display version of this script."
     echo 
     echo "Example:"
     echo "  # Generate composer.json and install requirements (see --bootstrap --help)"
@@ -267,6 +269,11 @@ function usage()
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
 
+function version()
+{
+    echo "$prog v$vers"
+}
+
 # Relocate srcdir when running in bootstrap mode:
 if [ -d vendor/bmc/uup-site ]; then
     srcdir="$(pwd)/vendor/bmc/uup-site"
@@ -279,6 +286,10 @@ while [ -n "$1" ]; do
             ;;
         --help|-h)
             usage
+            exit 0
+            ;;
+        --version|-V)
+            version
             exit 0
             ;;
         --bootstrap)
