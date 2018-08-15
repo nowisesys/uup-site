@@ -34,22 +34,50 @@ class IndexPage extends SecurePage
          */
         private $_path;
 
+        /**
+         * Constructor.
+         * @throws RuntimeException
+         */
         public function __construct()
         {
                 parent::__construct(_("Site and page editor"));
                 $this->_path = $this->params->getParam('path');
 
-                if (!in_array($this->session->user, $this->config->edit['user'])) {
-                        throw new Exception('Caller is not an page/site editor');
+                if (!$this->isEditor($this->session->user)) {
+                        throw new RuntimeException('Caller is not an page/site editor');
                 }
                 if (!$this->_path) {
-                        throw new Exception('Missing required parameter path');
+                        throw new RuntimeException('Missing required parameter path');
                 }
         }
 
         public function printContent()
         {
                 require_once('index.phtml');
+        }
+
+        /**
+         * Check if user is editor.
+         * 
+         * @param string $user The username.
+         * @return bool
+         * @throws RuntimeException
+         */
+        private function isEditor($user)
+        {
+                $source = $this->config->edit['user'];
+
+                if (is_array($source)) {
+                        return in_array($user, $source);
+                }
+                if (is_callable($source)) {
+                        return $source($user);
+                }
+                if (is_bool($source)) {
+                        return $source === true;
+                }
+
+                throw new RuntimeException('Unsupported source for editor validation');
         }
 
 }

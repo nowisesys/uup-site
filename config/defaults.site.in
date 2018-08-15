@@ -145,7 +145,7 @@ return array(
 //        'edit' => array(
 //                'view' => '@location@edit/view',      // The editor frontend
 //                'ajax' => '@location@edit/ajax',      // The editor backend
-//                'user' => array('webmaster'),         // Allowed editors
+//                'user' => array('webmaster'),         // Allowed editors (array or callable).
 //                'host' => 'localhost'                 // The edit host
 //        ),
 //        /**

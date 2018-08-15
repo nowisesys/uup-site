@@ -38,11 +38,15 @@ use UUP\Site\Utility\Content\Template;
 class IndexPage extends SecureService
 {
 
+        /**
+         * Constructor.
+         * @throws RuntimeException
+         */
         public function __construct()
         {
                 parent::__construct();
 
-                if (!in_array($this->session->user, $this->config->edit['user'])) {
+                if (!$this->isEditor($this->session->user)) {
                         throw new RuntimeException('Caller is not an page/site editor');
                 }
 
@@ -56,6 +60,30 @@ class IndexPage extends SecureService
                 if (!$this->params->hasParam('path')) {
                         throw new RuntimeException(_("Required target directory parameter is missing"));
                 }
+        }
+
+        /**
+         * Check if user is editor.
+         * 
+         * @param string $user The username.
+         * @return bool
+         * @throws RuntimeException
+         */
+        private function isEditor($user)
+        {
+                $source = $this->config->edit['user'];
+
+                if (is_array($source)) {
+                        return in_array($user, $source);
+                }
+                if (is_callable($source)) {
+                        return $source($user);
+                }
+                if (is_bool($source)) {
+                        return $source === true;
+                }
+
+                throw new RuntimeException('Unsupported source for editor validation');
         }
 
         /**
