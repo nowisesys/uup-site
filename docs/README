@@ -69,118 +69,26 @@ unzip everything in proper places.
 
 ** Setup:
 
-    Composer is the de-factor standard for installing PHP packages. There are three ways to
-    use this package: Either bootstrap, package or stand-alone.
+    The recommended solution is to use the uup-site.sh for setting up instances using
+    uup-site. For installation thru composer its located under vendor/bin. When installing
+    a virtual host, make sure that public is the only directory exposed to outside
+    world.
 
-    o) Use bootstrap:
+        bash$> cd /usr/local/bin
+        bash$> wget https://it.bmc.uu.se/andlov/php/uup-site/files/uup-site.sh
 
-        This assumes that the uup-site package has already been deployed somewhere (could
-        i.e. be a shared install under /usr/share/php with uup-site.sh in path). This is 
-        suitable for an web server with multiple virtual hosts.
+    To bootstrap and initialize a new virtual host:
 
-        Start by creating virtual host directory and run bootstrap inside:
+        bash$> mkdir -p /var/www/example.com && cd mkdir -p /var/www/example.com
+        bash$> uup-site.sh --bootstrap
+        bash$> uup-site.sh --setup
 
-            bash$> mkdir /var/www/<virtual-host-root> && cd /var/www/<virtual-host-root>
-            bash$> uup-site.sh --bootstrap
-
-        At this point the required composer.json should be generated in current directory
-        with uup-site installed under vendor.
-
-        Continue by setting up this site:
-
-            bash$> uup-site.sh --setup
-
-        To centralize package update (i.e. of uup-site or uup-auth), modify the boostrap()
-        function in uup-site.sh to use shared directories:
-
-            function bootstrap() 
-            {
-                composer init \
-                    --type=project \
-                    --require=bmc/uup-site \
-                    --stability=stable \
-                    --license='Apache-2.0' \
-                    --repository='{"type": "path","url": "/usr/share/php/uup-site/"}' \
-                        ...
-                    --repository='{"type": "path","url": "/usr/share/php/uup-auth/""}' $* && \
-                composer install && \
-                echo "(i) Bootstrap completed. Please run --setup to initialize."
-            }
-
-        You can then update composer packages in all virtual hosts at once by updating
-        those installed under /usr/share/php.
-
-    o) Use as package:
-
-        Start by initialize the composer.json file:
-
-            bash$> cd /var/www/<virtual-host-root>
-            bash$> composer init
-
-        Only the bmc/uup-site package gets installed by default, the other are installed on 
-        demand i.e. when running "uup-site --auth":
-
-            "repositories": [
-                {
-                    "type": "composer",
-                    "url": "https://it.bmc.uu.se/andlov/php/uup-site/"
-                },
-                {
-                    "type": "composer",
-                    "url": "https://it.bmc.uu.se/andlov/php/uup-auth/"
-                },
-                {
-                    "type": "composer",
-                    "url": "https://it.bmc.uu.se/andlov/php/uup-soap/"
-                },
-                {
-                    "type": "composer",
-                    "url": "https://it.bmc.uu.se/andlov/php/uup-html/"
-                },
-                {
-                    "type": "composer",
-                    "url": "https://it.bmc.uu.se/andlov/php/uup-web-component/"
-                }
-            ],
-            "require": {
-                "bmc/uup-site": ">=1.0.22"
-            }
-
-        Require the package to have it installed:
-
-            bash$> composer require bmc/uup-site
-
-        Run the uup-site.php script to finish setup:
-
-            bash$> ./vendor/bin/uup-site.sh --setup
-
-    o) Use in standalone mode:
-
-        This mode is suitable for small sites or web applications. Begin by downloading
-        the package:
-
-            bash$> cd /var/www/<virtual-host-root>
-            bash$> wget https://it.bmc.uu.se/andlov/php/uup-site/stable/latest.tar.gz
-
-        Unpack the source:
-
-            bash$> tar xfvp latest.tar.gz
-
-        You should now have an almost functional directory structure. Start by generating
-        the composer autoloader:
-
-            bash$> composer dump-autoload
-
-        Run uup-site.php to initialize the site or application:
-
-            bash$> ./uup-site.sh --setup
-
-        Open config/defaults.site to tweak options. The default options (none) should be
-        fine in most cases.
-
-    After running uup-site.php, review content of public and config. Decide upon if page
-    routing (mod_rewrite) should be used or not. Complete the setup by defining the public 
+    Review content of the public and config directories once setup has finished. Decide upon if 
+    page routing (mod_rewrite) should be used or not. Complete the setup by defining the public 
     directory as document root (if developing a web site).
+
+    See http://it.bmc.uu.se/andlov/php/uup-site/usage/setup/ for more setup alternatives,
+    including bootstrap, composer, archive or manual.
 
 ** Themes:
 
@@ -253,10 +161,13 @@ unzip everything in proper places.
 
 ** Locales and translation:
 
-    See comments in UUP\Site\Utility\Locale on how to create POT-files, add new locales
-    and translations (PO-files) and compiling PO -> MO. 
+    Enable locale (gettext) support using uup-site.sh:
 
-    If the site/application is huge, then its recommended to use multiple text domains:
+        bash$> uup-site.sh --locale
+        (i) Edit settings in makefile, then run 'make new-locale' and 'make' in current directory.
+
+    This will create a locale directory and install a makefile in current directory. If the 
+    site/application is huge, then its recommended to use multiple text domains:
 
     uup-site
       ├── htdocs/                       // Document root
@@ -275,16 +186,40 @@ unzip everything in proper places.
 
                 public function __construct()
                 {
-                        parent::__construct("My page");
+                        parent::__construct(_("My page"));
                         $this->locale->setTextDomain("dir2");
                 }
      
         }
 
-    An example makefile is distributed in the admin directory that can serve as 
-    an inspiration for keeping translation files (POT/PO-files) up to date. Notice
-    that it only supports a single message.pot:
+** Authentication:
 
-        bash$> make -f admin/Makefile
+    Enable authetication by running uup-site.sh. The config/auth.inc file needs to be 
+    tweaked with supported authenticators.
+
+        bash$> uup-site.sh --auth
+
+    You will need to enabled authentication settings inside config/defaults.site.
+
+** Online content editor:
+
+    Enable CMS by running uup-site.sh. You need to install javascript libraries and
+    tweak the edit settings inside config/defaults.site
+
+        bash$> uup-site.sh --edit
+
+    For small installations, it's sufficient to define allowed content editors using
+    an array (done inside config/defaults.site). To support i.e. LDAP this can be done
+    by configure an callable (class or function):
+
+        // 
+        // Naive example support for LDAP using hypotetical object:
+        // 
+        'edit' => array(
+              'user' => function($user) use($ldap) {
+                    return $ldap->exist(array('uid' => $user));
+              },
+        )
+        
         
 // Anders Lövgren, 2015-12-07
