@@ -17,18 +17,22 @@ location="/"
 
 function bootstrap() 
 {
+    if [ "$1" == "--help" -o "$1" == "-h" ]; then
+        composer init --help
+        exit 0
+    fi
+
     composer init \
         --type=project \
-        --require=bmc/uup-site \
         --stability=stable \
-        --license='Apache-2.0' \
-        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-site/"}' \
-        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-auth/"}' \
-        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-soap/"}' \
-        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-mail/"}' \
-        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-html/"}' \
-        --repository='{"type": "composer","url": "https://it.bmc.uu.se/andlov/php/uup-web-component/"}' $* && \
-    composer install && \
+        --license="Apache-2.0" \
+        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-site/\"}" \
+        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-auth/\"}" \
+        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-soap/\"}" \
+        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-mail/\"}" \
+        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-html/\"}" \
+        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-web-component/\"}" "$@" && \
+    composer require bmc/uup-site && \
     echo "(i) Bootstrap completed. Please run --setup to initialize."
 }
 
@@ -294,7 +298,7 @@ while [ -n "$1" ]; do
             ;;
         --bootstrap)
             shift
-            bootstrap $*
+            bootstrap "$@"
             exit 0
             ;;
         --setup)
