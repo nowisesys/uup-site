@@ -204,7 +204,7 @@ function migrate()
 
 function config()
 {
-    php admin/config.php $*
+    php $srcdir/admin/config.php $*
 }
 
 function develop()
