@@ -133,9 +133,9 @@ return array(
 //         * The authentication options. Enables session and suggests config->tools->auth.
 //         */
 //        'auth'      => array(
-//                'start'  => '@location@/',             // Start page after successful logon
-//                'logon'  => '@location@/logon',       // The logon page
-//                'logoff' => '@location@/logoff',      // The logoff page
+//                'start'  => '@location@',             // Start page after successful logon
+//                'logon'  => '@location@logon',       // The logon page
+//                'logoff' => '@location@logoff',      // The logoff page
 //                'config' => __DIR__ . '/auth.inc',    // Config file for authenticators
 //                'sso'    => true                      // Enable SSO login
 //        ),
@@ -143,8 +143,8 @@ return array(
 //         * The page/site edit options. Enables session and suggests config->tools->auth.
 //         */
 //        'edit' => array(
-//                'view' => '@location@/edit/view',     // The editor frontend
-//                'ajax' => '@location@/edit/ajax',     // The editor backend
+//                'view' => '@location@edit/view',     // The editor frontend
+//                'ajax' => '@location@edit/ajax',     // The editor backend
 //                'user' => array('webmaster'),         // Allowed editors
 //                'host' => 'localhost'                 // The edit host
 //        ),
