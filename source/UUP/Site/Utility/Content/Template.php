@@ -152,8 +152,6 @@ class Template
                         '@company@'  => $this->_license->company
                 );
 
-                error_log(print_r($this->_license, true));
-
                 $license = file_get_contents($this->_license->location);
 
                 $content = file_get_contents($this->_source);
