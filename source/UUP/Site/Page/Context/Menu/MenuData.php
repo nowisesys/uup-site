@@ -59,10 +59,12 @@ class MenuData
         {
                 if (isset($data['data'])) {
                         foreach ($data['data'] as $name => $link) {
-                                if (is_array($link)) {
-                                        $href = $link['href'];
-                                } else {
+                                if (!is_array($link)) {
                                         $href = $link;
+                                } elseif (!isset($link['href'])) {
+                                        $href = "#";
+                                } else {
+                                        $href = $link['href'];
                                 }
 
                                 if (!is_string($href)) {
