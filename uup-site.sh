@@ -137,13 +137,6 @@ function setup_examples()
                          public/example/routing/.htaccess
         fi
     fi
-
-    for plugin in auth edit; do
-        if ! [ -e public/plugins/$plugin ]; then
-            mkdir -p public/plugins
-            ln -s ../$plugin public/plugins
-        fi
-    done
 }
 
 function setup_dispatcher()
