@@ -199,6 +199,9 @@ abstract class HandlerBase
          */
         protected function create($source, $target)
         {
+                if (!is_writable(dirname($target))) {
+                        throw new RuntimeException(_("The target directory is read-only"));
+                }
                 if (!$source) {
                         throw new RuntimeException(_("The target file is unset"));
                 }
@@ -515,6 +518,9 @@ class FilesHandler extends HandlerBase
          */
         private function mkdir($target)
         {
+                if (!is_writable(dirname($target))) {
+                        throw new RuntimeException(_("The target directory is read-only"));
+                }
                 if (file_exists($target)) {
                         throw new RuntimeException(_("The target directory exists"));
                 }
@@ -531,6 +537,9 @@ class FilesHandler extends HandlerBase
          */
         private function touch($target)
         {
+                if (!is_writable(dirname($target))) {
+                        throw new RuntimeException(_("The target directory is read-only"));
+                }
                 if (file_exists($target)) {
                         throw new RuntimeException(_("The target file already exists"));
                 } elseif (!touch($target)) {
