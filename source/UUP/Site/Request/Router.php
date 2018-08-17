@@ -138,27 +138,59 @@ class Router extends Handler
          */
         public function handle()
         {
+                $this->profile->push("dispatch::handle");
+                $this->profile->start();
+
                 set_include_path(get_include_path() . PATH_SEPARATOR . sprintf("%s/admin", $this->config->proj));
 
-                if (!file_exists($this->_page)) {
+                $this->routeLoadHandler($this->_page);
+                $this->routeNextHandler($this->_page, $this->_name);
+
+                $this->profile->stop();
+        }
+
+        /**
+         * Load handler class.
+         * 
+         * Require requested page to get associated class defined. If $page is a 
+         * simple view, then the class will be undefined.
+         * 
+         * @param string $page The script name.
+         * @throws RuntimeException
+         */
+        private function routeLoadHandler($page)
+        {
+                if (!file_exists($page)) {
                         throw new RuntimeException(_("Requested page don't exist"));
-                } elseif (!chdir(dirname($this->_page))) {
+                } elseif (!chdir(dirname($page))) {
                         throw new RuntimeException(_("Failed change to target route directory"));
                 } else {
                         ob_start();
-                        require($this->_page);
+                        require($page);
                         ob_end_clean();
                 }
-                
-                if (class_exists($this->_name)) {
-                        $page = new $this->_name();
-                        $this->routed($page);
+        }
+
+        /**
+         * Use next handler class.
+         * 
+         * If requested class is defined, then instantiate it. Otherwise create a
+         * wrapped object (handler).
+         * 
+         * @param string $page The script name.
+         * @param string $name The class name.
+         */
+        private function routeNextHandler($page, $name)
+        {
+                if (class_exists($name)) {
+                        $dest = new $name();
+                        $this->routeNextRender($dest);
                 } elseif (function_exists('print_body')) {
-                        $page = new TransitionalPage($this->_page);
-                        $this->routed($page);
+                        $dest = new TransitionalPage($page);
+                        $this->routeNextRender($dest);
                 } else {
-                        $page = new StandardView($this->getTitle(), $this->_page);
-                        $this->routed($page);
+                        $dest = new StandardView($this->getTitle(), $page);
+                        $this->routeNextRender($dest);
                 }
         }
 
@@ -246,20 +278,26 @@ class Router extends Handler
 
         public function render()
         {
+                trigger_error("Don't call render() on router, use handler() instead.");
                 $this->handle();
         }
 
         /**
-         * Route page request to page.
+         * Render routed page handler.
          * @param Handler $page The target request handler.
          */
-        private function routed($page)
+        private function routeNextRender($page)
         {
+                $this->profile->push("dispatch::render");
+                $this->profile->start();
+
                 $page->params = new Params($this->config->docs);
                 $page->params->setFile($this->_page);
                 $page->params->setPath($this->_page);
 
                 $page->render();
+
+                $this->profile->stop();
         }
 
 }
