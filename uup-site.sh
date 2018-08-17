@@ -7,7 +7,7 @@
 
 # This script name and version:
 prog=$(basename $0)
-vers="1.0"
+vers="1.1"
 
 # The source directory:
 srcdir="$(dirname $(realpath $0))"
