@@ -72,18 +72,36 @@ abstract class Handler
         {
                 set_exception_handler(array($this, 'onException'));
 
-                $this->profile = new Profile();
+                $this->profile = new Profile('lifetime::handler');
                 $this->profile->start();
 
+                $this->profile->push('handler::init');
+                $this->profile->start();
+                
+                $this->profile->push('load::config');
+                $this->profile->start();
                 $this->config = new Config($config);
+                $this->profile->stop();
+                
+                $this->profile->push('load::locale');
+                $this->profile->start();
                 $this->locale = new Locale($this->config);
+                $this->profile->stop();
+                
+                $this->profile->push('load::params');
+                $this->profile->start();
                 $this->params = new Params($this->config->docs);
+                $this->profile->stop();
 
+                $this->profile->push('session::start');
+                $this->profile->start();
                 if ($this->config->session) {
                         if (!$this->session->started()) {
                                 $this->session->start();
                         }
                 }
+                $this->profile->stop(); // session
+                $this->profile->stop(); // handler
         }
 
         public function __destruct()
