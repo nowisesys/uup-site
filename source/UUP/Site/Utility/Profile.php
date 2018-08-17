@@ -105,10 +105,11 @@ class Profile
 
         /**
          * Constructor.
+         * @param string $name The profiler name.
          */
-        public function __construct()
+        public function __construct($name = 'global')
         {
-                $this->push('global');
+                $this->push($name);
         }
 
         public function __get($name)
