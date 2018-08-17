@@ -6,11 +6,11 @@
         i.e. API documentation.
     </p>
 
-    <?php if (file_exists("guide")): ?>
-            <a class="w3-btn w3-deep-orange" href="guide">Guide</a>
+    <?php if (file_exists("../guide")): ?>
+            <a class="w3-btn w3-deep-orange" href="../guide">Guide</a>
     <?php endif; ?>
-    <?php if (file_exists("example")): ?>
-            <a class="w3-btn w3-deep-orange" href="example">Examples</a>
+    <?php if (file_exists("../example")): ?>
+            <a class="w3-btn w3-deep-orange" href="../example">Examples</a>
     <?php endif; ?>
 
     <a class="w3-btn w3-deep-orange" href="http://it.bmc.uu.se/andlov/php/uup-site/">Project</a>

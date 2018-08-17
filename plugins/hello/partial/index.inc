@@ -10,5 +10,5 @@
         In addition to standard controller and views, there's also classes for secure 
         pages (enforcing authentication) and web services (no template rendering).
     </p>
-    <?php include("details.inc") ?>
+    <?php include(__DIR__ . "/../details.inc") ?>
 </div>

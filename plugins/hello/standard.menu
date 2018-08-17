@@ -9,6 +9,6 @@ return array(
         'data' => array(
                 _('Welcome Page')  => 'welcome',
                 _('Standard Page') => 'index',
-                _('Simple View')   => 'view'
+                _('Simple View')   => 'simple'
         )
 );

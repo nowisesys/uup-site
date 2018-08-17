@@ -116,6 +116,9 @@ function setup_guide()
     if ! [ -e public/guide ]; then
         cp -a $srcdir/plugins/guide public/guide
     fi
+    if ! [ -d public/assets ]; then
+        cp -a public/guide/assets public
+    fi
 
     if ! [ -d vendor/bmc/uup-web-component ]; then
         composer require bmc/uup-web-component
@@ -156,7 +159,8 @@ function setup_dispatcher()
 function setup_pages() 
 {
     if ! [ -f public/index.php ]; then
-        cp -a $srcdir/admin/hello/* public
+        cp -a $srcdir/plugins/hello public
+        mv public/hello/redirect.php public/index.php
     fi
 }
 

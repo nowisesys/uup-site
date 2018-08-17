@@ -1,3 +1,5 @@
+<?php include("partial/header.inc") ?>
+
 <div class="w3-panel w3-light-gray">
     <h3>Simple View</h3>
     <p>
@@ -9,5 +11,7 @@
         Views are not intended for web applications, but because of the dispatch routing you 
         can access injected services thru the $this pointer from your view page.
     </p>
-    <?php include("details.inc") ?>
+    <?php include("partial/details.inc") ?>
 </div>
+
+<?php include("partial/bottom.inc") ?>

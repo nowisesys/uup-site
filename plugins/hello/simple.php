@@ -5,6 +5,4 @@
 // inside a view.
 // 
 
-include("fragment/index.inc");
-include("fragment/view.inc");
-include("fragment/common.inc");
+include("simple.inc");

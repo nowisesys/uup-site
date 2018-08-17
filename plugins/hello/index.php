@@ -16,9 +16,7 @@ class IndexPage extends StandardPage
 
         public function printContent()
         {
-                include("fragment/index.inc");
-                include("fragment/standard.inc");
-                include("fragment/common.inc");
+                include("index.inc");
         }
 
 }

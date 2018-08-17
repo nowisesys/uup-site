@@ -1,8 +1,8 @@
 <?php
 
-use UUP\Site\Page\Web\WelcomePage as StartPage;
+use UUP\Site\Page\Web\WelcomePage as ParentClass;
 
-class WelcomePage extends StartPage
+class WelcomePage extends ParentClass
 {
 
         public $sections;
@@ -38,7 +38,7 @@ class WelcomePage extends StartPage
                 printf("Start pages usually has centered content and provides on or more sub sections that might be oriented in columns at bottom or in rows higher up on the page.</p>\n");
                 printf("<p>An site or application typical has a single page (index) using the welcome page template.</p>\n");
 
-                include("fragment/details.inc");
+                include("partial/details.inc");
         }
 
 }
