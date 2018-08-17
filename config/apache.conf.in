@@ -23,9 +23,9 @@ Require ip 192.168.
 # Enable URL rewrite:
 RewriteEngine on
 
-# Exclude these locations from dispatch:
-RewriteCond %{REQUEST_FILENAME} "^@location@(@excluded@)"
-RewriteRule "(.*)" - [L]
+# Exclude these locations from dispatching:
+RewriteCond %{REQUEST_FILENAME} ^@location@(@excluded@)
+RewriteRule (.*) - [L]
 
 # Handle index page request:
 RewriteCond %{REQUEST_FILENAME} ^.*/$
