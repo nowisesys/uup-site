@@ -12,7 +12,7 @@ class DownloadPage extends StandardPage
 
         public function printContent()
         {
-                include("partials/download.inc");
+                include("partials/download2.inc");
         }
 
 }

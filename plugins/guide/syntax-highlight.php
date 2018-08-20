@@ -45,9 +45,16 @@ if (!function_exists('format_code')) {
     executing a code block:
 </p>
 <?= format_code(htmlentities("<pre><code class=\"c\"><?= htmlentities(file_get_contents((\"file.c\") ?></code></pre>")) ?>
+
+<h3>CodeBox</h3>
 <p>
-    
+    The CodeBox component provides metods for displaying files or code fragments. For simple
+    cases, its easiest to use the convenience functions. The syntax highlight area containing
+    the code will be wrapped inside a code box:
 </p>
+<?= format_code(htmlentities("<?php UUP\Web\Component\Script\CodeBox::outputFile('file.c', true) ?>")) ?>
+<?= format_code(htmlentities("<?php UUP\Web\Component\Script\CodeBox::outputText('c', 'printf(\"hello world!\")') ?>")) ?>
+<a class="w3-btn w3-deep-orange" href="http://it.bmc.uu.se/andlov/php/uup-web-component/example/?page=container/codebox">Examples</a>
 
 <h3>Missing languages?</h3>
 <p>
