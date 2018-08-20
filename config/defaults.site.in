@@ -25,7 +25,7 @@
  * ----------           -----------
  * theme                default
  * location             /
- * docs                 Using $_SERVER['DOCUMENT_ROOT']
+ * docs                 The public directory for this instance
  * proj                 The directory where uup-site is installed
  * root                 The directory where uup-site.sh installed
  * 
@@ -47,8 +47,8 @@
  *          [site] => localhost
  *          [name] => Default site name
  *          [root] => /var/www/localhost
- *          [proj] => /var/www/localhost
- *          [docs] => /var/www/localhost/htdocs
+ *          [docs] => /var/www/localhost/public
+ *          [proj] => /var/www/localhost/vendor/bmc/uup-site
  *          [template] => /var/www/localhost/template
  *          [location] => /
  *          [exception] => 8

@@ -143,12 +143,17 @@ class Config
          * The top directory.
          * @var string 
          */
-        private $_topdir;
+        private $_root;
         /**
          * The project directory.
          * @var string 
          */
-        private $_prjdir;
+        private $_proj;
+        /**
+         * The documents directory.
+         * @var string 
+         */
+        private $_docs;
         /**
          * Directories to detect files in.
          * @var array 
@@ -179,11 +184,14 @@ class Config
                         $this->verify();
                 }
 
-                if (!isset($this->_topdir)) {
-                        $this->_topdir = $this->_config['root'];
+                if (!isset($this->_root)) {
+                        $this->_root = $this->_config['root'];
                 }
-                if (!isset($this->_prjdir)) {
-                        $this->_prjdir = $this->_config['proj'];
+                if (!isset($this->_docs)) {
+                        $this->_docs = $this->_config['docs'];
+                }
+                if (!isset($this->_proj)) {
+                        $this->_proj = $this->_config['proj'];
                 }
         }
 
@@ -256,9 +264,9 @@ class Config
         private function detect($config)
         {
                 // 
-                // To detect the correct config is crucial for proper functioning, but has 
-                // shown to be a rather complex task due to support of standalone install,
-                // as well as, deploy thru composer. 
+                // Detecting the correct config is crucial for proper functioning, but has 
+                // shown to be a rather complex task due to support for both install using
+                // standalone package and composer deploy.
                 // 
                 // Theres also possible that bootstraping is used, where multiple virtual hosts 
                 // or web applications are setup by running uup-site.sh from a common installation 
@@ -268,37 +276,29 @@ class Config
                 // config. We try to make intelligent guess for correct location and probe 
                 // for the config directory in these possible locations.
                 // 
-                // The best solution is if all pages uses the dispather that has the config
-                // location hard coded for routing. In this case the detection is rather 
+                // The best solution is if all pages uses the dispather with the config
+                // location hard coded in routing. In this case the detection is rather 
                 // simple and a cheap operation.
                 // 
-                // Set search directories:
                 // 
-                $assume = realpath(self::assume(
-                        filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'), filter_input(INPUT_SERVER, 'SCRIPT_FILENAME')
-                ));
-
-                $this->_subdirs[] = $assume;
-                $this->_subdirs[] = dirname($assume);
-
-                if (strpos(__DIR__, "/vendor/") === false) {
-                        $this->_subdirs[] = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
-                        $this->_subdirs[] = realpath(__DIR__ . "/../../../..");
+                // Set root directory:
+                // 
+                if (is_string($config)) {
+                        $this->_root = self::find("config", $config, false);
+                        $this->_docs = self::find("public", $config, true);
+                        $this->_proj = realpath(__DIR__ . "/../../../..");
                 } else {
-                        $this->_subdirs[] = realpath(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . '/..');
-                        $this->_subdirs[] = realpath(__DIR__ . "/../../../../../../..");
+                        $this->_root = self::find("config", realpath(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME')), false);
+                        $this->_docs = self::find("public", realpath(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME')), true);
+                        $this->_proj = realpath(__DIR__ . "/../../../..");
                 }
 
-                if (isset($this->_subdirs[3])) {
-                        $this->_topdir = $this->_subdirs[2];
-                        $this->_prjdir = $this->_subdirs[3];
-                } else {
-                        $this->_topdir = $this->_subdirs[2];
-                        $this->_prjdir = $this->_subdirs[2];
-                }
-
+                // 
+                // Add pathes to search directories:
+                // 
+                $this->_subdirs[] = $this->_root;
+                $this->_subdirs[] = $this->_proj;
                 $this->_subdirs[] = dirname(getcwd());
-                $this->_subdirs[] = __DIR__;
 
                 $this->_subdirs = array_values(array_unique($this->_subdirs));
 
@@ -340,21 +340,21 @@ class Config
                 }
 
                 if (!isset($config['root'])) {
-                        $config['root'] = $this->_topdir;
+                        $config['root'] = $this->_root;
                 } else {
-                        $this->_topdir = $config['root'];
-                }
-
-                if (!isset($config['proj'])) {
-                        $config['proj'] = $this->_prjdir;
-                } else {
-                        $this->_prjdir = $config['proj'];
+                        $this->_root = $config['root'];
                 }
 
                 if (!isset($config['docs'])) {
-                        $config['docs'] = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT');
-                } elseif ($config['docs'][0] != '/') {
-                        $config['docs'] = $this->locate($config['docs']);
+                        $config['docs'] = $this->_docs;
+                } else {
+                        $this->_docs = $config['root'];
+                }
+
+                if (!isset($config['proj'])) {
+                        $config['proj'] = $this->_proj;
+                } else {
+                        $this->_proj = $config['proj'];
                 }
 
                 if (!isset($config['template'])) {
@@ -496,27 +496,29 @@ class Config
         }
 
         /**
-         * Assume this is the config root directory.
+         * Find parent directory.
          * 
-         * This function uses the htdocs and script path to compute a directory path
-         * likely to contain the config directory.
+         * Uses the $script path to find the parent directory containing $subdir. This
+         * method makes the assumption that by moving up in directory tree starting
+         * from $script, we will find the $sibdir.
          * 
-         * @param string $htdocs The htdocs directory path.
-         * @param string $script The current executed script path.
+         * @param string $subdir The subdir name.
+         * @param string $script The script path.
+         * @param bool $included Include subdir in outcome.
          * @return string
          */
-        private static function assume($htdocs, $script)
+        private static function find($subdir, $script, $included = false)
         {
-                $hparts = explode("/", $htdocs);
-                $sparts = explode("/", $script);
+                $pieces = explode("/", $script);
 
-                $remove = count($sparts) - count($hparts) - 1;
+                while (array_pop($pieces)) {
+                        $parent = implode("/", $pieces);
+                        $target = sprintf("%s/%s", $parent, $subdir);
 
-                for ($i = 0; $i < $remove; ++$i) {
-                        array_pop($sparts);
+                        if (file_exists($target)) {
+                                return $included ? $target : $parent;
+                        }
                 }
-
-                return implode("/", $sparts);
         }
 
         /**
