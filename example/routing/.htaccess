@@ -1,6 +1,6 @@
 RewriteEngine on
 
-RewriteCond %{REQUEST_FILENAME} ^@location@(@excluded@)
+RewriteCond %{REQUEST_FILENAME} @location@(@excluded@)
 RewriteRule (.*) - [L]
 
 RewriteCond %{REQUEST_FILENAME} ^.*/$
