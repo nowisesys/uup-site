@@ -38,8 +38,8 @@
         "php": ">=5.4.0"
     },
     "suggest": {
-        "bmc/uup-web-component": ">=1.2.15",
-        "bmc/uup-soap": ">=1.1.5"
+        "bmc/uup-web-component": "^2.0",
+        "bmc/uup-soap": "^1.1"
     },
     "autoload": {
         "psr-0": {
