@@ -88,6 +88,11 @@ class Router extends Handler
 {
 
         /**
+         * The request URI without params.
+         * @var string 
+         */
+        private $_path;
+        /**
          * The requested page (script name).
          * @var string 
          */
@@ -127,7 +132,9 @@ class Router extends Handler
                 parent::__construct($config);
 
                 $this->config->uri = filter_input(INPUT_GET, 'uri');
+
                 $this->_root = getcwd();
+                $this->_path = $this->getPath();
                 $this->_page = $this->getPage();
                 $this->_name = $this->getName();
         }
@@ -235,12 +242,25 @@ class Router extends Handler
         }
 
         /**
+         * Get request URI without params.
+         * @return string
+         */
+        private function getPath()
+        {
+                if (($pos = strpos($this->config->uri, "?")) !== false) {
+                        return substr($this->config->uri, 0, $pos);
+                } else {
+                        return $this->config->uri;
+                }
+        }
+
+        /**
          * Get class name.
          * @return string
          */
         private function getName()
         {
-                $parts = explode('-', basename($this->config->uri));
+                $parts = explode('-', basename($this->_path));
                 $parts = array_map('ucfirst', $parts);
                 return sprintf("%s%s%s", $this->_ns, implode('', $parts), $this->_suffix);
         }
@@ -251,7 +271,7 @@ class Router extends Handler
          */
         private function getPage()
         {
-                return sprintf("%s/%s.%s", $this->_root, $this->config->uri, $this->_ext);
+                return sprintf("%s/%s.%s", $this->_root, $this->_path, $this->_ext);
         }
 
         /**
@@ -260,7 +280,7 @@ class Router extends Handler
          */
         private function getTitle()
         {
-                $dirs = array_reverse(explode('/', $this->config->uri));
+                $dirs = array_reverse(explode('/', $this->_path));
 
                 if (count($dirs) == 1) {
                         $name = $dirs[0];
