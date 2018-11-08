@@ -73,11 +73,9 @@ class Runtime
          */
         private function setupTools($tools)
         {
-                $this->auth = $tools['auth'] !== false;
-                $this->edit = $tools['edit'] !== false;
-                $this->home = $tools['home'] !== false;
-                $this->search = $tools['search'] !== false;
-                $this->translate = $tools['translate'] !== false;
+                foreach (array_keys($tools) as $tool) {
+                        $this->$tool = boolval($tools[$tool]);
+                }
         }
 
         /**
