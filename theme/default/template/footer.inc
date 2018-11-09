@@ -133,6 +133,10 @@
             }
         }
 
+        function content_reload(event) {
+            content_replace(event, 'page-content', location.href);
+        }
+
         function close_overlay() {
             var xm = document.getElementById("sidenav-menu");
             var xo = document.getElementById("page-overlay");
