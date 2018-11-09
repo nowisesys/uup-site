@@ -1,6 +1,6 @@
 {
     "name": "bmc/uup-site",
-    "version": "1.0.37",
+    "version": "1.0.38",
     "description": "OOP theme/template based page rendering with routing capabilities.",
     "type": "library",
     "keywords": ["template", "site", "uup", "bmc"],
