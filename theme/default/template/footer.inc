@@ -149,11 +149,14 @@
 
         // 
         // Replace i.e. HTML content. The id is the target element and source
-        // is the URL to laod. The callback is optional. The history is modified
-        // by this call, unless callback is defined.
+        // is the URL to laod. The callback is optional. 
+        // 
+        // The history is modified by this call if replacestate() is available, 
+        // unless callback is defined. Pass false as callback to disable modfy
+        // of history.
         // 
         function content_replace(event, id, source, callback) {
-            if (history.replaceState !== undefined && typeof (callback) !== "function") {
+            if (history.replaceState !== undefined && callback === undefined) {
                 history.replaceState({}, "", source);
             }
 
@@ -166,8 +169,20 @@
             }
         }
 
+        // 
+        // Reload current location.
+        // 
         function content_reload(event) {
             content_replace(event, 'page-content', location.href);
+        }
+
+        // 
+        // Insert source in main content. Calling this function will replace
+        // the main content with source (URL). The callback is optional. This
+        // is a convenience function for content_replace().
+        // 
+        function content_insert(event, source, callback) {
+            content_replace(event, 'page-content', source, callback);
         }
 
         function close_overlay() {
