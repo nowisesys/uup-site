@@ -47,8 +47,11 @@
         // Fetch content as text and assign to inner html.
         // 
         function content_replace_text(event, id, source, callback) {
-            event.preventDefault();
-            event.stopPropagation();
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function (x) {
                 if (this.readyState === 4 && this.status === 200) {
@@ -62,9 +65,11 @@
                     }
                 }
             };
+
             xhr.open("GET", source, true);
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.send();
+
             close_overlay();
             return false;
         }
@@ -73,8 +78,11 @@
         // Fetch content as DOM document and evaluate all script nodes.
         // 
         function content_replace_html(event, id, source, callback) {
-            event.preventDefault();
-            event.stopPropagation();
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function (x) {
                 if (this.readyState === 4 && this.status === 200) {
@@ -91,6 +99,7 @@
                         for (var i = 0; i < insert.length; ++i) {
                             var child = insert[i].cloneNode(true);
                             var attrs = child.attributes;
+
                             if (child.nodeName !== "SCRIPT") {
                                 shadow.appendChild(child);
                             } else if (attrs['onajax'] && attrs['onajax'].value === "add") {
@@ -107,7 +116,20 @@
                         }
 
                         for (var i = 0; i < script.length; ++i) {
-                            eval(script[i].innerHTML);
+                            var child = script[i];
+                            var attrs = child.attributes;
+
+                            // 
+                            // Handle extern or inline javascript:
+                            // 
+                            if (attrs.src) {
+                                var linked = document.createElement('script');
+                                linked.setAttribute("type", "text/javascript");
+                                linked.setAttribute("src", child.src);
+                                document.body.appendChild(linked);
+                            } else {
+                                eval(script[i].innerHTML);
+                            }
                         }
 
                     } catch (err) {
@@ -115,10 +137,12 @@
                     }
                 }
             };
+
             xhr.open("GET", source, true);
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.responseType = 'document';
             xhr.send();
+
             close_overlay();
             return false;
         }
