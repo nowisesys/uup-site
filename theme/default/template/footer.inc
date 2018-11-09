@@ -147,7 +147,16 @@
             return false;
         }
 
+        // 
+        // Replace i.e. HTML content. The id is the target element and source
+        // is the URL to laod. The callback is optional. The history is modified
+        // by this call, unless callback is defined.
+        // 
         function content_replace(event, id, source, callback) {
+            if (history.replaceState !== undefined && typeof (callback) !== "function") {
+                history.replaceState({}, "", source);
+            }
+
             if (typeof content_replace_extern === 'function') {
                 return content_replace_extern(event, id, source, callback);
             } else if (source.match('/http(s)?:\/\/')) {
