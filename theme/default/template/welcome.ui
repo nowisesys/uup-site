@@ -22,7 +22,7 @@ $output = new format($this);
         <?php $output->headers(); ?>
     </head>
 
-    <body>
+    <body class="w3-white">
         <style>
             .header-container {
                 background-image: url('<?= $config->img("sunset-04.jpeg") ?>');
