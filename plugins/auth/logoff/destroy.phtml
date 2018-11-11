@@ -17,12 +17,12 @@
 
 ?>
 
-<span><i class="fa fa-check" style="color: #33cc33; min-width: 20px"></i></span> 
+<span><i class="fas fa-check" style="color: #33cc33; min-width: 20px"></i></span> 
 <?= ("Your logon session has been destroyed.") ?>
 
 <?php if ($auth) : ?>
         <br>
-        <span><i class="fa fa-info-circle" style="color: #3366ff; min-width: 20px"></i></span> <?= sprintf(_("You are still logged on to %s:"), $desc) ?>
+        <span><i class="fas fas-info-circle" style="color: #3366ff; min-width: 20px"></i></span> <?= sprintf(_("You are still logged on to %s:"), $desc) ?>
         <p>
             <span style="margin: 20px">
                 <input type="button" class="w3-btn w3-blue" onclick="window.location = '?auth=<?= $name ?>'" value="<?= sprintf(_("Logout from %s"), $auth->name) ?>">

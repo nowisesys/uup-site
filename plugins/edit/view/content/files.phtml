@@ -26,27 +26,27 @@
 
 <div id="content-files w3-right">
     <div id="files-menu" class="w3-dropdown-hover">
-        <button class="w3-button w3-light-grey"><i class="fa fa-plus-square-o" aria-hidden="true" ></i> Create </button>
+        <button class="w3-button w3-light-grey"><i class="far fa-plus-square" aria-hidden="true" ></i> Create </button>
         <div class="w3-dropdown-content w3-bar-block w3-card-4">
             <a href="#" class="w3-bar-item w3-button" onclick="create_directory()"><?= _("Directory") ?></a>
             <a href="#" class="w3-bar-item w3-button" onclick="create_file()"><?= _("Empty File") ?></a>
 
             <div class="w3-bar-item w3-button" onclick="toggle_accordion('view-files')">
-                <i class="fa fa-caret-down"></i> View </div>
+                <i class="fas fa-caret-down"></i> View </div>
             <div id="view-files" class="w3-hide w3-white w3-card-4">
                 <a href="#" class="w3-bar-item w3-button" onclick="create_template('standard-view')"><?= _("Standard") ?></a>
                 <a href="#" class="w3-bar-item w3-button" onclick="create_template('secure-view')"><?= _("Secure") ?></a>
             </div>
 
             <div class="w3-bar-item w3-button" onclick="toggle_accordion('page-files')">
-                <i class="fa fa-caret-down"></i> Page </div>
+                <i class="fas fa-caret-down"></i> Page </div>
             <div id="page-files" class="w3-hide w3-white w3-card-4">
                 <a href="#" class="w3-bar-item w3-button" onclick="create_template('standard-page')"><?= _("Standard") ?></a>
                 <a href="#" class="w3-bar-item w3-button" onclick="create_template('secure-page')"><?= _("Secure") ?></a>
             </div>
 
             <div class="w3-bar-item w3-button" onclick="toggle_accordion('service-files')">
-                <i class="fa fa-caret-down"></i> Service </div>
+                <i class="fas fa-caret-down"></i> Service </div>
             <div id="service-files" class="w3-hide w3-white w3-card-4">
                 <a href="#" class="w3-bar-item w3-button" onclick="create_template('standard-service')"><?= _("Standard") ?></a>
                 <a href="#" class="w3-bar-item w3-button" onclick="create_template('secure-service')"><?= _("Secure") ?></a>

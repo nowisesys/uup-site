@@ -18,7 +18,7 @@
 ?>
 
 <p>
-    <span><i class="fa fa-check" style="color: #33cc33"></i></span> 
+    <span><i class="fas fa-check" style="color: #33cc33"></i></span> 
     <?= sprintf(_("Logged on using %s"), $desc) ?>
 </p>
 <p>
@@ -28,7 +28,7 @@
     </span>
 </p>
 
-<span><i class="fa fa-info-circle" style="color: #3366ff"></i></span>
+<span><i class="fas fa-info-circle" style="color: #3366ff"></i></span>
 <?= _("Session details:") ?>
 <div style="margin: 20px">
     <?= sprintf(_("Logged on as %s from %s (%s)"), $this->session->user, gethostbyaddr($this->session->peer), $this->session->peer) ?>
