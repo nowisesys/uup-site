@@ -57,7 +57,8 @@
                 if (this.readyState === 4 && this.status === 200) {
                     try {
                         document.getElementById(id).innerHTML = this.responseText;
-                        if (callback !== undefined) {
+                        if (callback !== undefined &&
+                            callback !== false) {
                             callback();
                         }
                     } catch (err) {
@@ -111,7 +112,8 @@
                         }
 
                         target.parentNode.replaceChild(shadow, target);
-                        if (callback !== undefined) {
+                        if (callback !== undefined &&
+                            callback !== false) {
                             callback();
                         }
 
