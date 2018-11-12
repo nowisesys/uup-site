@@ -372,6 +372,9 @@ class Config
                 if (!isset($config['exception'])) {
                         $config['exception'] = UUP_SITE_EXCEPT_BRIEF;
                 }
+                if (!isset($config['polyfill'])) {
+                        $config['polyfill'] = true;
+                }
 
                 if (filter_input(INPUT_COOKIE, 'theme')) {
                         $config['theme'] = filter_input(INPUT_COOKIE, 'theme');
