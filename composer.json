@@ -35,7 +35,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "bmc/uup-auth": "^2.3"
     },
     "suggest": {
         "bmc/uup-web-component": "^2.0",
