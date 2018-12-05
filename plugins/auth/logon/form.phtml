@@ -22,11 +22,11 @@
 <form class="w3-form" action="?auth=<?= $form ?>" method="POST">
     <p>
         <label for="fuser"><?= _("Username:") ?></label>
-        <input class="w3-input" type="text" id="user" name="<?= $auth->fuser ?>">
+        <input class="w3-input" style="max-width: 400px" type="text" id="user" name="<?= $auth->fuser ?>">
     </p>
     <p>
         <label for="fpass"><?= _("Password:") ?></label>
-        <input class="w3-input" type="password" id="pass" name="<?= $auth->fpass ?>">
+        <input class="w3-input" style="max-width: 400px" type="password" id="pass" name="<?= $auth->fpass ?>">
     </p>
     <p>
         <input class="w3-check" type="checkbox" id="toggle-pass" onclick="toggle_show_password('pass')"> <?= _("Show password") ?>
