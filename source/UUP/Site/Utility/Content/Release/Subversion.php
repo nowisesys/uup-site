@@ -60,7 +60,7 @@ class Subversion
          */
         public function __construct($host = "", $name = "")
         {
-                if (isset($_SERVER['SERVER_ADDR'])) {
+                if (PHP_SAPI != 'cli') {
                         die("This script should be runned in CLI mode.\n");
                 }
 
