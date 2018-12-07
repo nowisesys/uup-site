@@ -197,6 +197,10 @@
         // Display content in modal dialog.
         // 
         function show_modal_dialog(event, url) {
+            if (event.target.classList.contains("action-disabled")) {
+                return false;
+            }
+
             const dialog = document.getElementById('modal-dialog');
             const target = dialog.querySelector("#modal-content");
 
