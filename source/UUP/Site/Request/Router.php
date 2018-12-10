@@ -131,7 +131,7 @@ class Router extends Handler
         {
                 parent::__construct($config);
 
-                $this->config->uri = filter_input(INPUT_GET, 'uri');
+                $this->config->uri = filter_input(INPUT_GET, 'uri', FILTER_SANITIZE_STRING);
 
                 $this->_root = getcwd();
                 $this->_path = $this->getPath();

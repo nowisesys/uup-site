@@ -112,11 +112,11 @@ class Locale
          */
         public function detect()
         {
-                if (($code = filter_input(INPUT_GET, 'lang'))) {
+                if (($code = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_STRING))) {
                         if ($this->setLanguage($code)) {
                                 return true;
                         }
-                } elseif (($code = filter_input(INPUT_COOKIE, 'lang'))) {
+                } elseif (($code = filter_input(INPUT_COOKIE, 'lang', FILTER_SANITIZE_STRING))) {
                         if ($this->setLanguage($code)) {
                                 return true;
                         }

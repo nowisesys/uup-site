@@ -104,9 +104,9 @@ class LogonPage extends StandardPage
         {
                 parent::__construct(_("Logon"));
 
-                $form = filter_input(INPUT_GET, 'form');
-                $name = filter_input(INPUT_GET, 'auth');
-                $type = filter_input(INPUT_GET, 'type');
+                $form = filter_input(INPUT_GET, 'form', FILTER_SANITIZE_STRING);
+                $name = filter_input(INPUT_GET, 'auth', FILTER_SANITIZE_STRING);
+                $type = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_STRING);
                 $json = filter_input(INPUT_GET, 'json', FILTER_VALIDATE_BOOLEAN);
                 $user = filter_input(INPUT_GET, 'user', FILTER_VALIDATE_BOOLEAN);
 

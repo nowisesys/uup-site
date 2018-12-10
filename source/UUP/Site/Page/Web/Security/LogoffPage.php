@@ -83,7 +83,7 @@ class LogoffPage extends StandardPage
         {
                 parent::__construct(_("Logoff"));
 
-                $name = filter_input(INPUT_GET, 'auth');
+                $name = filter_input(INPUT_GET, 'auth', FILTER_SANITIZE_STRING);
 
                 $this->setPages($pages);
                 $this->setState($name);

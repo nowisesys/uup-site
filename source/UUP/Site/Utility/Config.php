@@ -376,11 +376,11 @@ class Config
                         $config['polyfill'] = true;
                 }
 
-                if (filter_input(INPUT_COOKIE, 'theme')) {
-                        $config['theme'] = filter_input(INPUT_COOKIE, 'theme');
+                if (filter_has_var(INPUT_COOKIE, 'theme')) {
+                        $config['theme'] = filter_input(INPUT_COOKIE, 'theme', FILTER_SANITIZE_STRING);
                 }
-                if (filter_input(INPUT_GET, 'theme')) {
-                        $config['theme'] = filter_input(INPUT_GET, 'theme');
+                if (filter_has_var(INPUT_GET, 'theme')) {
+                        $config['theme'] = filter_input(INPUT_GET, 'theme', FILTER_SANITIZE_STRING);
                         setcookie("theme", $config['theme'], 0, $config['location']);
                 }
                 if (!isset($config['theme'])) {
