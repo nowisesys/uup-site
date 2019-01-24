@@ -1,29 +1,11 @@
 {
-    "name": "bmc/uup-site",
-    "version": "1.1.6",
+    "name": "nowise/uup-site",
+    "version": "1.2.0",
     "description": "OOP theme/template based page rendering with routing capabilities.",
     "type": "library",
     "keywords": ["template", "site", "uup", "bmc"],
-    "homepage": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-site",
+    "homepage": "https://nowise.se/oss/uup-site",
     "license": "Apache-2.0",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://it.bmc.uu.se/andlov/php/uup-auth/"
-        },
-        {
-            "type": "composer",
-            "url": "https://it.bmc.uu.se/andlov/php/uup-soap/"
-        },
-        {
-            "type": "composer",
-            "url": "https://it.bmc.uu.se/andlov/php/uup-html/"            
-        },
-        {
-            "type": "composer",
-            "url": "https://it.bmc.uu.se/andlov/php/uup-web-component/"
-        }
-    ],
     "authors": [
         {
             "name": "Anders Lövgren",
@@ -35,12 +17,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "bmc/uup-auth": "^2.3"
+        "php": ">=7.1.0",
+        "nowise/uup-auth": "^2.3"
     },
     "suggest": {
-        "bmc/uup-web-component": "^2.0",
-        "bmc/uup-soap": "^1.1"
+        "nowise/uup-web-component": "^2.0",
+        "nowise/uup-soap": "^1.1"
     },
     "autoload": {
         "psr-0": {

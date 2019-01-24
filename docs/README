@@ -64,7 +64,7 @@ unzip everything in proper places.
 
 ** Site config:
 
-    The config/defaults.site file is looked for in the package directory (vendor/bmc/uup-site)
+    The config/defaults.site file is looked for in the package directory (vendor/nowise/uup-site)
     or in the site directory (the virtual host directory). All directory and 
 
 ** Setup:
@@ -75,7 +75,7 @@ unzip everything in proper places.
     world.
 
         bash$> cd /usr/local/bin
-        bash$> wget https://it.bmc.uu.se/andlov/php/uup-site/files/uup-site.sh
+        bash$> wget https://nowise.se/oss/uup-site/files/uup-site.sh
 
     To bootstrap and initialize a new virtual host:
 
@@ -87,7 +87,7 @@ unzip everything in proper places.
     page routing (mod_rewrite) should be used or not. Complete the setup by defining the public 
     directory as document root (if developing a web site).
 
-    See http://it.bmc.uu.se/andlov/php/uup-site/usage/setup/ for more setup alternatives,
+    See https://nowise.se/oss/uup-site/usage/setup/ for more setup alternatives,
     including bootstrap, composer, archive or manual.
 
 ** Themes:
@@ -96,7 +96,7 @@ unzip everything in proper places.
     to define any number of *.ui files as needed. See theme/default for example on
     theme construction. More themes can be downloaded and installed from:
     
-        https://it.bmc.uu.se/andlov/php/uup-site. 
+        https://nowise.se/oss/uup-site. 
 
     Install new themes be either require them using composer or simply download and
     unpack them inside the theme directory.

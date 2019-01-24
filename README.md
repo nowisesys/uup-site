@@ -70,7 +70,7 @@ enable them in config/defaults.site.
 
 ### Site config:
 
-The config/defaults.site file is looked for in the package directory (vendor/bmc/uup-site)
+The config/defaults.site file is looked for in the package directory (vendor/nowise/uup-site)
 or in the site directory (the virtual host directory). All directory and 
 
 ### Setup:
@@ -82,7 +82,7 @@ world.
 
 ```bash
 cd /usr/local/bin
-wget https://it.bmc.uu.se/andlov/php/uup-site/files/uup-site.sh
+wget https://nowise.se/oss/uup-site/files/uup-site.sh
 ```
 
 To bootstrap and initialize a new virtual host:
@@ -97,7 +97,7 @@ Review content of the public and config directories once setup has finished. Dec
 page routing (mod_rewrite) should be used or not. Complete the setup by defining the public 
 directory as document root (if developing a web site).
 
-See http://it.bmc.uu.se/andlov/php/uup-site/usage/setup/ for more setup alternatives,
+See https://nowise.se/oss/uup-site/usage/setup/ for more setup alternatives,
 including bootstrap, composer, archive or manual.
 
 ### Themes:
@@ -106,7 +106,7 @@ All themes should at least provide the standard.ui template, but it's up to user
 to define any number of *.ui files as needed. See theme/default for example on
 theme construction. More themes can be downloaded and installed from:
     
-  https://it.bmc.uu.se/andlov/php/uup-site. 
+  https://nowise.se/oss/uup-site. 
 
 Install new themes be either require them using composer or simply download and
 unpack them inside the theme directory.

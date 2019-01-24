@@ -25,14 +25,8 @@ function bootstrap()
     composer init \
         --type=project \
         --stability=stable \
-        --license="Apache-2.0" \
-        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-site/\"}" \
-        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-auth/\"}" \
-        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-soap/\"}" \
-        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-mail/\"}" \
-        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-html/\"}" \
-        --repository="{\"type\":\"composer\",\"url\":\"https://it.bmc.uu.se/andlov/php/uup-web-component/\"}" "$@" && \
-    composer require bmc/uup-site && \
+        --license="Apache-2.0" "$@" && \
+    composer require nowise/uup-site && \
     echo "(i) Bootstrap completed. Please run --setup to initialize."
 }
 
@@ -78,8 +72,8 @@ function setup_auth()
         fi
     done
 
-    if ! [ -d vendor/bmc/uup-auth ]; then
-        composer require bmc/uup-auth
+    if ! [ -d vendor/nowise/uup-auth ]; then
+        composer require nowise/uup-auth
     fi
 
     if ! [ -f config/auth.inc.in ]; then
@@ -120,8 +114,8 @@ function setup_guide()
         cp -a public/guide/assets public
     fi
 
-    if ! [ -d vendor/bmc/uup-web-component ]; then
-        composer require bmc/uup-web-component
+    if ! [ -d vendor/nowise/uup-web-component ]; then
+        composer require nowise/uup-web-component
     fi
 }
 
@@ -276,8 +270,8 @@ function version()
 }
 
 # Relocate srcdir when running in bootstrap mode:
-if [ -d vendor/bmc/uup-site ]; then
-    srcdir="$(pwd)/vendor/bmc/uup-site"
+if [ -d vendor/nowise/uup-site ]; then
+    srcdir="$(pwd)/vendor/nowise/uup-site"
 fi
 
 while [ -n "$1" ]; do

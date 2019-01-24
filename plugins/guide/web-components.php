@@ -18,7 +18,7 @@
 
 <h3>Composer package</h3>
 <p>
-    The package bmc/uup-web-components defines additional web components, for example cards:
+    The package nowise/uup-web-components defines additional web components, for example cards:
 </p>
 <pre><code class="php"><?= htmlentities(file_get_contents('partials/cards.inc')) ?></code></pre>
 <p>
@@ -31,7 +31,7 @@
 <div class="w3-panel w3-indigo w3-padding w3-half">
     <h4>Try out</h4>
     <p>For more examples, visit the online demo setup of uup-web-component</p>
-    <button class="w3-btn" onclick="location.href = 'https://it.bmc.uu.se/andlov/php/proj/bmc/uup-web-component/example/'">Open Examples</button>
+    <button class="w3-btn" onclick="location.href = 'https://nowise.se/oss/uup-web-component/example/'">Open Examples</button>
 </div>
 <div class="w3-panel w3-deep-purple w3-padding w3-half">
     <h4>Try out</h4>

@@ -31,7 +31,7 @@ class IndexPage extends StandardPage
         public function printContent()
         {
                 echo "<h1>Examples</h1>\n";
-                echo "<p>The example directory contains demonstration of some features of the bmc/uup-site package.</p>\n";
+                echo "<p>The example directory contains demonstration of some features of the nowise/uup-site package.</p>\n";
 
                 $menu = array(
                         _("Context") => array(
