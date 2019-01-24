@@ -1,0 +1,259 @@
+## UUP-SITE - Web application and site framework
+
+This library takes a object oriented approach at building web sites by separating 
+page layout from content. It supports multiple theme, rendering page direct or
+using a dispatcher (routing) script and was designed with these goals:
+
+* Suitable for web interfaces or services (i.e. JSON API or SOAP)
+* Responsive design with multiple themes
+* Small memory footprint (~500kB per request)
+* Fast request handling (less than 0.01 ms per request) 
+* Support for internationalization (I18N) and localization (L10N)
+
+Despite its name, this package can be used as the rendering engine in any web
+application. In the following though we will outline the process for using it
+to render an ordinary web site, but the same approach can equally well be used
+for an web application.
+
+This package and optional theme can either be installed using composer or by
+unzip everything in proper places.
+
+### Directory structure:
+
+Locations are configurable in config/defaults.site that is used when initializing 
+a page class instance. This is the suggested directory structure:
+
+        uup-site
+            ├── config                      // Configuration files
+            ├── locale                      // Support for translation (gettext)
+            ├── public                      // Document root (your public documents)
+            │   ├── auth                    // Support for authentication
+            │   │   ├── logoff
+            │   │   └── logon
+            │   ├── edit                    // Online content editor (CMS)
+            │   │   ├── ajax
+            │   │   ├── templates
+            │   │   │   ├── context
+            │   │   │   ├── files
+            │   │   │   │   ├── secure
+            │   │   │   │   └── standard
+            │   │   │   ├── license
+            │   │   │   └── menus
+            │   │   └── view
+            │   │       ├── content
+            │   │       └── editor
+            │   │           └── plugins
+            │   ├── guide                   // Guide for content publisher
+            │   │   └── partials
+            │   └── theme                   // Theme support files
+            │       └── default
+            │           └── assets
+            │               ├── css
+            │               │   └── fonts
+            │               ├── fonts
+            │               └── img
+            ├── template                    // Page rendering templates (themes)
+            │   └── default
+            ├── vendor                      // Composer packages, including uup-site
+            └── composer.json               // Site project composer file
+
+The above structure is created by running the following command after installing
+uup-site using composer.
+
+```bash
+./vendor/bin/uup-site.sh --setup --auth --edit --guide
+```
+
+Options above is suitable for an web site. When setting up for an web application, 
+skip the --edit and --guide options. Support for auth and edit is disabled by default,
+enable them in config/defaults.site.
+
+### Site config:
+
+The config/defaults.site file is looked for in the package directory (vendor/bmc/uup-site)
+or in the site directory (the virtual host directory). All directory and 
+
+### Setup:
+
+The recommended solution is to use the uup-site.sh for setting up instances using
+uup-site. For installation thru composer its located under vendor/bin. When installing
+a virtual host, make sure that public is the only directory exposed to outside
+world.
+
+```bash
+cd /usr/local/bin
+wget https://it.bmc.uu.se/andlov/php/uup-site/files/uup-site.sh
+```
+
+To bootstrap and initialize a new virtual host:
+
+```bash
+mkdir -p /var/www/example.com && cd mkdir -p /var/www/example.com
+uup-site.sh --bootstrap
+uup-site.sh --setup
+```
+
+Review content of the public and config directories once setup has finished. Decide upon if 
+page routing (mod_rewrite) should be used or not. Complete the setup by defining the public 
+directory as document root (if developing a web site).
+
+See http://it.bmc.uu.se/andlov/php/uup-site/usage/setup/ for more setup alternatives,
+including bootstrap, composer, archive or manual.
+
+### Themes:
+
+All themes should at least provide the standard.ui template, but it's up to user 
+to define any number of *.ui files as needed. See theme/default for example on
+theme construction. More themes can be downloaded and installed from:
+    
+  https://it.bmc.uu.se/andlov/php/uup-site. 
+
+Install new themes be either require them using composer or simply download and
+unpack them inside the theme directory.
+
+### Infrastructure:
+
+Menus and publish information can either be defined by having custom files in
+the page directory or programmatically by redefining menu content in the page 
+constructor.
+
+See example/context for infrastructure example. See example/multi for example
+on programatically defined menus. The site config file has some influence on menu 
+handling too.
+
+See example/context/menus for more advanced menus, like dynamic update page content
+or defining menus relative current site root.
+
+### Pages:
+
+A page class can be rendered either direct or using routing. Using routing
+is the recommended method that in addition supports views.
+
+##### Using direct rendering:
+
+```php
+// 
+// Assume virtual host defines include path to root directory:
+// 
+require_once('vendor/autoload.php');
+
+use UUP\Site\Page\Web\StandardPage;
+
+class IndexPage extends StandardPage
+{
+    // Define the printContent() member function at least.
+};
+
+$page = new IndexPage();
+$page->render();
+```
+
+##### Using page routing (pretty URL's):
+
+```php
+// 
+// The dispatcher.php (router) has already setup autoloading, no need
+// to explicit call render() either.
+// 
+class IndexPage extends StandardPage
+{
+    // Define the printContent() member function at least.
+};
+```
+
+More examples is included in example directory in the source package.
+
+### Views:
+
+While pages are complete classes, views are simple files that contains just
+the main section content (HTML/PHP fragments). Using routing is the recommended 
+method for render views.
+
+Using standard page class for rendering views makes the context (i.e. menus) 
+available for decoration. Views are intended for web sites, while pages are 
+more targeted at web application (more control).
+
+### Locales and translation:
+
+Enable locale (gettext) support using uup-site.sh:
+
+```bash
+uup-site.sh --locale
+(i) Edit settings in makefile, then run 'make new-locale' and 'make' in current directory.
+```
+
+This will create a locale directory and install a makefile in current directory. If the 
+site/application is huge, then its recommended to use multiple text domains:
+
+    uup-site
+      ├── htdocs/                       // Document root
+      │     ├── dir1/
+      │     ├── dir2/
+     ...   ...
+      ├── locale/                       // Support for locale (gettext)
+      │     ├── dir1.pot
+      │     ├── dir2.pot
+     ...   ...
+
+Each page can initialize its own text domain in the constructor:
+
+```php
+class MyPage extends StandardPage
+{
+
+    public function __construct()
+    {
+        parent::__construct(_("My page"));
+        $this->locale->setTextDomain("dir2");
+    }
+     
+}
+```
+
+### Authentication:
+
+Enable authetication by running uup-site.sh. The config/auth.inc file needs to be 
+tweaked with supported authenticators.
+
+```bash 
+uup-site.sh --auth
+```
+You will need to enabled authentication settings inside config/defaults.site.
+
+### Online content editor:
+
+Enable CMS by running uup-site.sh. You need to install javascript libraries and
+tweak the edit settings inside config/defaults.site
+
+```bash 
+uup-site.sh --edit
+```
+
+For small installations, it's sufficient to define allowed content editors using
+an array (done inside config/defaults.site). To support i.e. LDAP this can be done
+by configure an callable (class or function):
+
+```php
+// 
+// Naive example support for LDAP using hypotetical object:
+// 
+'edit' => array(
+    'user' => function($user) use($ldap) {
+        return $ldap->exist(array('uid' => $user));
+    },
+)
+```
+
+### Examples:
+
+These sites and web applications has been built using uup-site:
+
+* http://www.bmcmediatek.uu.se/
+* http://openexam.io/
+* http://it.bmc.uu.se/
+* http://chemgps.bmc.uu.se/
+* http://nowise.se/
+
+### Further information:
+
+For more information, please visit the [project page](https://nowise.se/oss/uup-site)
