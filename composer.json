@@ -22,7 +22,7 @@
     },
     "suggest": {
         "nowise/uup-web-component": "^2.0",
-        "nowise/uup-soap": "^1.1"
+        "nowise/uup-soap": "^1.2"
     },
     "autoload": {
         "psr-0": {
