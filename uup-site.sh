@@ -260,6 +260,7 @@ function usage()
     echo
     echo "Notice:"
     echo "  1. The --location or --verbose options must be used before any other option."
+    echo "  2. Use --bootstrap options for unattended install (see --bootstrap --help)."
     echo 
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
