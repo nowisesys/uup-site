@@ -130,9 +130,15 @@
                             // Handle extern or inline javascript:
                             // 
                             if (attrs.src) {
+                                if (!attrs.type) {
+                                    attrs.type = "text/javascript";
+                                }
+
                                 var linked = document.createElement('script');
-                                linked.setAttribute("type", "text/javascript");
-                                linked.setAttribute("src", child.src);
+
+                                linked.setAttribute("type", attrs.type.nodeValue);
+                                linked.setAttribute("src", attrs.src.nodeValue);
+
                                 document.body.appendChild(linked);
                             } else {
                                 eval(script[i].innerHTML);
