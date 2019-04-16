@@ -220,7 +220,7 @@
             }
 
             const dialog = document.getElementById('modal-dialog');
-            const target = dialog.querySelector("#modal-content");
+            const target = dialog.querySelector(".modal-content");
 
             content_replace(event, target, url, false);
 
@@ -232,7 +232,7 @@
         // 
         function show_error_dialog(error) {
             const dialog = document.getElementById('error-dialog');
-            const target = dialog.querySelector("#modal-content");
+            const target = dialog.querySelector(".modal-content");
 
             if (error instanceof Element) {
                 target.innerHTML = "";
@@ -497,6 +497,25 @@
                 content_insert(event, document.location.href);
             }
         };
+
+        // 
+        // Setup modal dialog event listeners.
+        // 
+        document.querySelector("#modal-dialog a").addEventListener('click', (event) => {
+            const dialog = event.target.closest("#modal-dialog");
+            const target = dialog.querySelector(".modal-content");
+
+            dialog.style.display = "none";
+            target.innerHTML = "";
+        });
+
+        document.querySelector("#error-dialog").addEventListener('click', (event) => {
+            const dialog = event.target.closest("#error-dialog");
+            const target = dialog.querySelector(".modal-content");
+
+            dialog.style.display = "none";
+            target.innerHTML = "";
+        });
 
 </script>
 
