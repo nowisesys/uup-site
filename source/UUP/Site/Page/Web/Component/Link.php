@@ -172,7 +172,7 @@ class Link
                         }
                         return array(
                                 'href'    => $match[2],
-                                'onclick' => sprintf("content_replace(event, '%s', '%s')", $match[1], $match[2])
+                                'onclick' => sprintf("content_replace(event, '%s', '%s', false)", $match[1], $match[2])
                         );
                 }
         }
