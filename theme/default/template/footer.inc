@@ -483,12 +483,14 @@
 
             if (scrolling.ontop) {
                 tm.classList.add("w3-top");
+                tm.style = "opacity: 0.75";
                 tt.style.display = "none";
                 ts.style.display = "inline-block";
                 sm.style.top = "43px";
                 mc.style = "margin-top: 43px";
             } else {
                 tm.classList.remove("w3-top");
+                tm.style = "opacity: 1";
                 tt.style.display = "";
                 ts.style.display = "none";
                 sm.style.top = (86 - window.scrollY + 43) + "px";
