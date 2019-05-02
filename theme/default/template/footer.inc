@@ -179,7 +179,7 @@
             } else if (source.match('/http(s)?:\/\/')) {
                 return content_replace_text(event, target, source, callback);
             } else {
-                return content_replace_html(event, target, source, callback)
+                return content_replace_html(event, target, source, callback);
             }
         }
 
@@ -360,7 +360,7 @@
                         alert(json.message);
                     }
                 }
-            }
+            };
 
             xhr.open("POST", target);
             xhr.send(form);
@@ -454,40 +454,48 @@
         // 
         // Set navigation menu always on top when scrolling.
         // 
-        var scrolling = false;
+        var scrolling = {
+            ontop: false,
+            previous: 0,
+            downward: false
+        };
+
         window.addEventListener('scroll', function (e) {
 
-            if (window.scrollY > 86) {
-                if (scrolling) {
-                    return;
-                } else {
-                    scrolling = true;
-                }
-            } else {
-                if (!scrolling) {
-                    return;
-                } else {
-                    scrolling = false;
-                }
+            if (window.scrollY === scrolling.previous) {
+                return;
             }
+
+            if (window.scrollY > 86) {
+                scrolling.ontop = true;
+            } else {
+                scrolling.ontop = false;
+            }
+
+            scrolling.downward = window.scrollY > scrolling.previous;
+            scrolling.previous = window.scrollY;
 
             var tm = document.getElementById("topbar-menu");
             var tt = document.getElementById("topbar-tools");
             var ts = document.getElementById("topbar-sitehome");
             var sm = document.getElementById("sidenav-menu");
+            var mc = document.getElementsByClassName("main-content")[0];
 
-            if (scrolling) {
-                tm.className += " w3-top";
+            if (scrolling.ontop) {
+                tm.classList.add("w3-top");
                 tt.style.display = "none";
                 ts.style.display = "inline-block";
                 sm.style.top = "43px";
+                mc.style = "margin-top: 43px";
             } else {
-                tm.className = tm.className.replace(" w3-top", "");
+                tm.classList.remove("w3-top");
                 tt.style.display = "";
                 ts.style.display = "none";
-                sm.style.top = "auto"; // restore default pos
+                sm.style.top = (86 - window.scrollY + 43) + "px";
+                mc.style = "margin-top: 0";
             }
-        });
+
+        }, false);
 
         // 
         // Called on history navigation. The href is the page to load.
