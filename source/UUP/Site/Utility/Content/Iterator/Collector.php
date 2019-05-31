@@ -58,7 +58,7 @@ class Collector
 
         /**
          * Check if MIME type is supported.
-         * @return boolean
+         * @return bool
          */
         public function hasFileType()
         {
@@ -67,7 +67,7 @@ class Collector
 
         /**
          * Set MIME type support.
-         * @param boolean $enable Enable or disable MIME type support.
+         * @param bool $enable Enable or disable MIME type support.
          */
         public function useFileType($enable = true)
         {
@@ -83,7 +83,7 @@ class Collector
         /**
          * Get file info.
          * 
-         * @param boolean $sorted Sort files and directories by name.
+         * @param bool $sorted Sort files and directories by name.
          * @return array
          */
         public function getContent($sorted = true)

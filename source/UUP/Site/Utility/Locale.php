@@ -19,29 +19,29 @@
 namespace UUP\Site\Utility;
 
 /**
- * GNU gettext and locale support. 
- * 
+ * GNU gettext and locale support.
+ *
  * You need to create a POT file for each text domain. Use xgettext to initialize
- * a POT-file in the locale directory (requires at least one of the input file 
+ * a POT-file in the locale directory (requires at least one of the input file
  * having strings tagged for translation):
- * 
+ *
  *   bash$> find public/proj -name *.php | xgettext -o locale/proj.pot -f-
- * 
+ *
  * Review the generated POT-file. Create new translation files (PO) using msginit:
- * 
+ *
  *   bash$> mkdir -p locale/sv_SE/LC_MESSAGES
- *   bash$> msginit -i locale/proj.pot -o locale/sv_SE/LC_MESSAGES/proj.po -l sv_SE 
- * 
+ *   bash$> msginit -i locale/proj.pot -o locale/sv_SE/LC_MESSAGES/proj.po -l sv_SE
+ *
  * Compile the translation files using msgfmt:
- * 
+ *
  *   bash$> msgfmt sv_SE/LC_MESSAGES/proj.po -o sv_SE/LC_MESSAGES/proj.mo
- * 
+ *
  * @property-read string $detected The detected locale entry.
- * 
+ *
  * @property-read string $locale The active locale.
  * @property-read string $language The active language (for display).
  * @property-read string $country The active country (for display).
- * 
+ *
  * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
@@ -51,17 +51,17 @@ class Locale
 
         /**
          * The system config.
-         * @var Config 
+         * @var Config
          */
         private $_config;
         /**
          * The locale settings.
-         * @var array 
+         * @var array
          */
         private $_locale;
         /**
          * The locale code.
-         * @var string 
+         * @var string
          */
         private $_code;
 
@@ -100,8 +100,8 @@ class Locale
 
         /**
          * Detect and apply locale settings.
-         * 
-         * Only locales defined by the configuration (map or alias) are applied. The order of 
+         *
+         * Only locales defined by the configuration (map or alias) are applied. The order of
          * precedence for detection are:
          * <ol>
          * <li>Request parameter (lang).</li>
@@ -136,7 +136,7 @@ class Locale
         /**
          * Select and apply locale.
          * @param string $code The locale code.
-         * @return boolean
+         * @return bool
          */
         public function select($code)
         {
@@ -146,7 +146,7 @@ class Locale
         /**
          * Check if map or alias entry exist.
          * @param string $code The locale code.
-         * @return boolean
+         * @return bool
          */
         private function hasLanguage($code)
         {
@@ -161,7 +161,7 @@ class Locale
         }
 
         /**
-         * Get locale code. 
+         * Get locale code.
          * @param string $code The locale code.
          * @return The entry key or false.
          */
@@ -179,10 +179,10 @@ class Locale
         }
 
         /**
-         * Set locale, translation and cookie. 
-         * 
+         * Set locale, translation and cookie.
+         *
          * @param string $code The locale code.
-         * @return boolean
+         * @return bool
          */
         private function setLanguage($code)
         {
@@ -210,7 +210,7 @@ class Locale
 
         /**
          * Check if locale is used.
-         * @return boolean
+         * @return bool
          */
         public function useLocale()
         {
@@ -220,7 +220,7 @@ class Locale
         /**
          * Set locale.
          * @param string $locale The locale string (e.g. sv_SE).
-         * @return boolean
+         * @return bool
          */
         private function setLocale($locale)
         {
@@ -236,17 +236,17 @@ class Locale
 
         /**
          * Set translation text domain.
-         * 
+         *
          * Call this function to use a custom text domain for page translation. Useful for a
          * big site where a single PO-file may becode really large. This can also be useful
          * for partitioning different locations in their own text domain.
-         * 
+         *
          * Usually, all translation files are keept in the same directory so using the path
          * argument is never needed. One use could be when sharing home directories.
-         * 
+         *
          * @param string $name The text domain name.
          * @param string $path The path of translation files.
-         * @return boolean
+         * @return bool
          */
         public function setTextDomain($name = null, $path = null)
         {
@@ -296,9 +296,9 @@ class Locale
 
 }
 
-// 
+//
 // Add workaround for missing gettext functions:
-// 
+//
 if (!extension_loaded('gettext')) {
 
         function _($text)

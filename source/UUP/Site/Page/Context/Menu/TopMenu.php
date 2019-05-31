@@ -30,7 +30,7 @@ class TopMenu extends \ArrayObject
 
         /**
          * Constructor.
-         * @param array|boolean $topmeny The top menu.
+         * @param array|bool $topmeny The top menu.
          */
         public function __construct($topmeny = false)
         {

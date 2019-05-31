@@ -20,12 +20,12 @@ namespace UUP\Site\Page\Context;
 
 /**
  * Page publisher information.
- * 
+ *
  * @property-read array $contact The contact info for page responsible (href/name).
  * @property-read array $editor  The webmaster/editor info (href/name).
  * @property-read string $copying The creation/copyright year.
  * @property-read string $updated The last modification time.
- * 
+ *
  * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
@@ -36,8 +36,7 @@ class Publisher extends \ArrayObject
         /**
          * Constructor.
          * @param string $template The template directory.
-         * @param array|boolean $publish Publish information.
-         * @return type
+         * @param array|bool $publish Publish information.
          */
         public function __construct($template, $publish = false)
         {

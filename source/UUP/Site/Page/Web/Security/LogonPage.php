@@ -67,7 +67,7 @@ class LogonPage extends StandardPage
         protected $_desc;
         /**
          * Show authenticator form.
-         * @var string|boolean 
+         * @var string|bool 
          */
         protected $_form = false;
         /**
@@ -77,7 +77,7 @@ class LogonPage extends StandardPage
         protected $_type = 'normal';
         /**
          * Send JSON response.
-         * @var boolean 
+         * @var bool 
          */
         protected $_json;
         /**
@@ -92,7 +92,7 @@ class LogonPage extends StandardPage
         );
         /**
          * The logon is interactive (initiated by user).
-         * @var boolean 
+         * @var bool 
          */
         private $_user = false;
 

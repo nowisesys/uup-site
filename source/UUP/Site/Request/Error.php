@@ -140,7 +140,7 @@ class Error
          * @param mixed $handler The exception handler.
          * @param string $request The request URI.
          * @param Exception $exception The exception to handle.
-         * @return boolean
+         * @return bool
          */
         private function process($handler, $request, $exception)
         {

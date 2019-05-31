@@ -30,7 +30,7 @@ class Headers extends \ArrayObject
 
         /**
          * Constructor.
-         * @param array|boolean $headers Optional headers.
+         * @param array|bool $headers Optional headers.
          */
         public function __construct($headers = false)
         {

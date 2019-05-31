@@ -20,15 +20,15 @@ namespace UUP\Site\Page\Context;
 
 /**
  * Support for content specification.
- * 
+ *
  * Content specification is usually utilized by placing a file named content.spec
  * in the same directory as the page returning an array having the mandatory name
  * and desc keys.
- * 
+ *
  * Either one of the image or video key should be used (if at all). Links are an
  * complete URL or a path relative to the content spec file. The possible array
  * keys are:
- * 
+ *
  * <code>
  * array(
  *      'name'  => string       // mandatory
@@ -39,17 +39,17 @@ namespace UUP\Site\Page\Context;
  *      'video' => string       // optional
  * )
  * </code>
- * 
+ *
  * Content specification can be enabled at top level by either define the array
  * content in defaults.site or supplying an file inside the templates directory.
- * 
+ *
  * @property-read string $name The content name.
  * @property-read string $desc The content description text.
  * @property-read string $info Short text used as introduction.
  * @property-read array $tags Meta data tags.
  * @property-read string $image An optional image (relative or URL).
  * @property-read string $video An optional video (relative or URL).
- * 
+ *
  * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
@@ -60,7 +60,7 @@ class Content extends \ArrayObject
         /**
          * Constructor.
          * @param string $template The template directory.
-         * @param array|boolean $content Optional content specification.
+         * @param array|bool $content Optional content specification.
          * @return type
          */
         public function __construct($template, $content = false)

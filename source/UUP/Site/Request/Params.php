@@ -219,7 +219,7 @@ class Params
          * @param string $name The input parameter name.
          * @param mixed $default The default value.
          * @param int $method The request method (GET and POST).
-         * @return boolean 
+         * @return bool 
          */
         public function hasParam($name, $method = self::INPUT_ANY)
         {
@@ -306,7 +306,7 @@ class Params
          * 
          * @param string $name The input parameter name.
          * @param int $method The request method (GET and POST).
-         * @return boolean
+         * @return bool
          */
         private function getValue($name, $method)
         {

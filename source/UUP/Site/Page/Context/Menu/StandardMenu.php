@@ -30,7 +30,7 @@ class StandardMenu extends \ArrayObject
 
         /**
          * Constructor.
-         * @param array|boolean $navmenu The top menu.
+         * @param array|bool $navmenu The top menu.
          */
         public function __construct($navmenu = false)
         {

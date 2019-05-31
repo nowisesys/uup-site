@@ -57,7 +57,7 @@ class Application
         private $_object;
         /**
          * Write config to stdout or file.
-         * @var boolean|string
+         * @var bool|string
          */
         private $_output = false;
         /**

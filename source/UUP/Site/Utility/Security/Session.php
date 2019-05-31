@@ -79,13 +79,13 @@ class Session
         private $_data = array('expires' => 0);
         /**
          * The session data is dirty and need to be saved.
-         * @var boolean 
+         * @var bool 
          */
         private $_dirty = false;
 
         /**
          * Constructor.
-         * @param string|boolean $start The session name.
+         * @param string|bool $start The session name.
          * @throws \LogicException
          */
         public function __construct($start = false)
@@ -131,7 +131,7 @@ class Session
 
         /**
          * Check if session is authenticated.
-         * @return boolean
+         * @return bool
          */
         public function authenticated()
         {
@@ -163,7 +163,7 @@ class Session
 
         /**
          * Is session about to expire?
-         * @return boolean
+         * @return bool
          */
         public function expiring()
         {
@@ -172,7 +172,7 @@ class Session
 
         /**
          * Has session expired?
-         * @return boolean
+         * @return bool
          */
         public function expired()
         {
@@ -244,7 +244,7 @@ class Session
 
         /**
          * Check if session has been started.
-         * @return boolean
+         * @return bool
          */
         public function started()
         {
@@ -277,7 +277,7 @@ class Session
 
         /**
          * Setup session.
-         * @param string|boolean $start Either true or session name.
+         * @param string|bool $start Either true or session name.
          * @throws LogicException
          */
         private function setup($start)

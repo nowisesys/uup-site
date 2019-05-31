@@ -43,7 +43,7 @@ class Explore
          * Constructor. 
          * 
          * @param string $dir The start directory.
-         * @param boolean $sort Sort array on names (from content spec).
+         * @param bool $sort Sort array on names (from content spec).
          * @throws RuntimeException
          */
         public function __construct($dir = ".", $sort = 'name')
@@ -91,7 +91,7 @@ class Explore
          * constructor.
          * 
          * @param string $dir The start directory.
-         * @param boolean $sort Sort array on names (from content spec).
+         * @param bool $sort Sort array on names (from content spec).
          * @throws RuntimeException
          */
         public function scanContent($dir = ".", $sort = 'name')

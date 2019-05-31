@@ -28,7 +28,7 @@ use UUP\Site\Page\Context\Menu\TopMenu;
  * @property-read StandardMenu $nav The navigation menu.
  * @property-read TopMenu $top The top menu
  * @property-read SideMenu $side The sidebar menu.
- * 
+ *
  * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
@@ -37,23 +37,23 @@ class Menus
 {
 
         /**
-         * @var array|boolean $topmeny The top menu. 
+         * @var array|bool $topmeny The top menu.
          */
         private $_topmenu;
         /**
-         * @var array|boolean $topmeny The navigation menu. 
+         * @var array|bool $topmeny The navigation menu.
          */
         private $_navmenu;
         /**
-         * @var array|boolean $topmeny The sidebar menu. 
+         * @var array|bool $topmeny The sidebar menu.
          */
         private $_sidebar;
 
         /**
          * Constructor.
-         * @param array|boolean $topmenu The top menu. 
-         * @param array|boolean $navmenu The navigation menu. 
-         * @param array|boolean $sidebar The sidebar menu. 
+         * @param array|bool $topmenu The top menu.
+         * @param array|bool $navmenu The navigation menu.
+         * @param array|bool $sidebar The sidebar menu.
          */
         public function __construct($topmenu, $navmenu, $sidebar)
         {
@@ -79,8 +79,8 @@ class Menus
 
         /**
          * Get navigation menu.
-         * 
-         * Return content of menu files (standard.menu) in current directory and two levels up. 
+         *
+         * Return content of menu files (standard.menu) in current directory and two levels up.
          * @return StandardMenu
          */
         public function getNavMenu()
@@ -90,10 +90,10 @@ class Menus
 
         /**
          * Get sidebar menu.
-         * 
+         *
          * The sidebar is typical a menu used to decorate the current page with links
          * to related pages, e.g. related projects. Sidebar menu files are named sidebar.menu.
-         * 
+         *
          * @return SideMenu
          */
         public function getSideMenu()
@@ -103,11 +103,11 @@ class Menus
 
         /**
          * Get topbar menu.
-         * 
-         * The topbar menu is usually output at top of page and contains context 
+         *
+         * The topbar menu is usually output at top of page and contains context
          * independent links. Returns content from site config if defined, otherwise
          * from a topmenu.menu in current directory.
-         * 
+         *
          * @return TopMenu
          */
         public function getTopMenu()

@@ -231,7 +231,7 @@ abstract class Handler
          * 
          * Returns true if the server magic array contains HTTP_X_REQUESTED_WITH
          * with value XMLHttpRequest.
-         * @return boolean
+         * @return bool
          */
         public function isAjax()
         {
@@ -247,7 +247,7 @@ abstract class Handler
 
         /**
          * Content is editable.
-         * @return boolean
+         * @return bool
          */
         public function isEditable()
         {
@@ -311,7 +311,7 @@ abstract class Handler
 
         /**
          * Validate request is secured (authenticated).
-         * @return boolean
+         * @return bool
          * @throws DomainException
          */
         protected function validate()

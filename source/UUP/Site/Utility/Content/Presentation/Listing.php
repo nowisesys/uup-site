@@ -42,7 +42,7 @@ use UUP\Web\Component\Container\Gallery\Scanner\ContentSpecScanner;
  * $listing->render("docs");
  * </code>
  * 
- * Multiple pathes can be combined in the same presentation by calling
+ * Multiple paths can be combined in the same presentation by calling
  * scan on multiple locations. In this case, the boolean true must be
  * passed to the render() method:
  * <code>
@@ -70,7 +70,7 @@ class Listing
         public $type = 'cell';
         /**
          * Use flat layout.
-         * @var boolean 
+         * @var bool 
          */
         public $flat = false;
 

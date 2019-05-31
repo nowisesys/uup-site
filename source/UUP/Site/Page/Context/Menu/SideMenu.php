@@ -30,7 +30,7 @@ class SideMenu extends \ArrayObject
 
         /**
          * Constructor.
-         * @param array|boolean $sidebar The sidebar menu.
+         * @param array|bool $sidebar The sidebar menu.
          */
         public function __construct($sidebar = true)
         {

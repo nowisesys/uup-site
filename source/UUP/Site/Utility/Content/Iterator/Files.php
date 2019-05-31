@@ -43,7 +43,7 @@ class Files extends FilterIterator
 
         /**
          * Check if current element is acceptable.
-         * @return boolean
+         * @return bool
          */
         public function accept()
         {
@@ -53,7 +53,7 @@ class Files extends FilterIterator
         /**
          * Check if current file is acceptable.
          * @param DirectoryIterator $file The current item.
-         * @return boolean
+         * @return bool
          */
         private function matched($file)
         {

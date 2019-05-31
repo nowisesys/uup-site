@@ -102,7 +102,7 @@ class Application
         private $_capture;
         /**
          * Save files.
-         * @var boolean 
+         * @var bool 
          */
         private $_mode = self::MODE_READ;
         /**
@@ -112,7 +112,7 @@ class Application
         private $_pathes = array();
         /**
          * Force overwrite existing files.
-         * @var boolean 
+         * @var bool 
          */
         private $_force = false;
 

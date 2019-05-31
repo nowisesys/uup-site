@@ -1,7 +1,7 @@
 #!/bin/bash
-# 
+#
 # Usage: See --help or usage() function.
-# 
+#
 # Author: Anders Lövgren
 # Date:   2015-12-16
 
@@ -15,7 +15,7 @@ srcdir="$(dirname $(realpath $0))"
 # Default HTTP request location:
 location="/"
 
-function bootstrap() 
+function bootstrap()
 {
     if [ "$1" == "--help" -o "$1" == "-h" ]; then
         composer init --help
@@ -47,13 +47,13 @@ function setup_config()
 function setup_themes()
 {
     if [ -d $srcdir/theme ]; then
-        for t in $srcdir/theme/*; do 
+        for t in $srcdir/theme/*; do
             sh $t/setup.sh
         done
     fi
 
     if [ -d vendor/uup-theme-* ]; then
-        for t in vendor/uup-theme-*; do 
+        for t in vendor/uup-theme-*; do
             sh $t/setup.sh
         done
     fi
@@ -96,7 +96,7 @@ function setup_edit()
     fi
 }
 
-function setup_locale() 
+function setup_locale()
 {
     if ! [ -d locale ]; then
         mkdir -p locale
@@ -105,7 +105,7 @@ function setup_locale()
     fi
 }
 
-function setup_guide() 
+function setup_guide()
 {
     if ! [ -e public/guide ]; then
         cp -a $srcdir/plugins/guide public/guide
@@ -119,7 +119,7 @@ function setup_guide()
     fi
 }
 
-function setup_examples() 
+function setup_examples()
 {
     if ! [ -d public/example ]; then
         cp -a $srcdir/example public/example
@@ -140,7 +140,7 @@ function setup_dispatcher()
 {
     for file in .htaccess dispatch.php; do
         if ! [ -e public/$file ]; then
-            cp -a $srcdir/example/routing/$file public/$file 
+            cp -a $srcdir/example/routing/$file public/$file
             sed -i -e s%'/../../vendor/'%'/../vendor/'%1 \
                    -e s%"@location@"%"${location}"%g \
                    -e s%"@excluded@"%"theme|assets|example"%g \
@@ -150,7 +150,7 @@ function setup_dispatcher()
     done
 }
 
-function setup_pages() 
+function setup_pages()
 {
     if ! [ -f public/index.php ]; then
         cp -a $srcdir/plugins/hello public
@@ -201,7 +201,7 @@ function config()
 function develop()
 {
     ( cd theme/default
-      if ! [ -h assets ]; then 
+      if ! [ -h assets ]; then
             ln -s public assets
       fi )
 
@@ -223,13 +223,13 @@ function cleanup()
 function usage()
 {
     echo "$prog - Setup and management tool."
-    echo 
+    echo
     echo "Usage: $prog --bootstrap [<composer-options>]"
     echo "       $prog --setup [--auth] [--edit] [--locale] [--guide] [--examples]"
     echo "       $prog --config <options>"
     echo "       $prog --develop"
     echo "       $prog --migrate <dir>|<file>..."
-    echo 
+    echo
     echo "Options:"
     echo "  --bootstrap : Bootstrap new instance using composer."
     echo "  --setup     : Setup site, tools and theme(s)."
@@ -244,24 +244,24 @@ function usage()
     echo "  --migrate   : Migrate existing site (expert)."
     echo "  --verbose   : Be verbose about executed commands."
     echo "  --version   : Display version of this script."
-    echo 
+    echo
     echo "Example:"
     echo "  # Generate composer.json and install requirements (see --bootstrap --help)"
     echo "  $prog --bootstrap"
-    echo 
+    echo
     echo "  # Setup for virtual host"
     echo "  $prog --setup --auth --edit --guide"
-    echo 
+    echo
     echo "  # Setup for web application"
     echo "  $prog --setup --auth"
-    echo 
+    echo
     echo "  # Setup for location /myapp"
     echo "  $prog --location /myapp --setup --auth"
     echo
     echo "Notice:"
     echo "  1. The --location or --verbose options must be used before any other option."
     echo "  2. Use --bootstrap options for unattended install (see --bootstrap --help)."
-    echo 
+    echo
     echo "Copyright (C) 2015-2018 Nowise Systems and Uppsala University (Anders Lövgren, BMC-IT)"
 }
 

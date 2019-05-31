@@ -75,58 +75,58 @@ if (!defined('UUP_SITE_EXCEPT_ALL')) {
 
 /**
  * Site configuration class.
- * 
+ *
  * @property-read array $data The config data.
- * 
+ *
  * @property-read string $request The request URL.
- * @property-read boolean $session Session is enabled.
- * @property-read boolean $debug Request debug is enabled.
- * 
+ * @property-read bool $session Session is enabled.
+ * @property-read bool $debug Request debug is enabled.
+ *
  * @property string $site The site address.
  * @property string $name The site name.
- * 
+ *
  * @property string $root The top directory (virtual host).
  * @property string $docs The document root directory.
  * @property string $proj The project directory.
  * @property string $template The template directory.
  * @property string $location The URI location.
- * 
+ *
  * @property string $css The CSS location.
  * @property string $js The JS location.
  * @property string $img The image location.
  * @property string $font The font location.
- * 
+ *
  * @property-read array $edit The edit options.
  * @property-read array $auth The auth options.
- * 
+ *
  * @property array $tools The toolbox options.
  * @property array $locale Options for locale and gettext.
  * @property string $theme The default theme.
- * 
- * @property boolean|array $topmenu Optional top bar menu.
- * @property boolean|array $navmenu Optional navigation menu.
- * @property boolean|array $sidebar Optional sidebar menu.
- * @property boolean|array $publish Optional publisher information.
- * @property boolean|array $headers Optional HTTP headers.
- * @property boolean|array $content Optional content specification.
- * @property boolean|string $footer Optional footer file.
- * @property boolean|string $fortune Optional fortune cookie.
- * 
+ *
+ * @property bool|array $topmenu Optional top bar menu.
+ * @property bool|array $navmenu Optional navigation menu.
+ * @property bool|array $sidebar Optional sidebar menu.
+ * @property bool|array $publish Optional publisher information.
+ * @property bool|array $headers Optional HTTP headers.
+ * @property bool|array $content Optional content specification.
+ * @property bool|string $footer Optional footer file.
+ * @property bool|string $fortune Optional fortune cookie.
+ *
  * @property int $exception The exception reporting mode.
- * 
+ *
  * @method string css(string $filepath) Get CSS file location.
  * @method string stylesheet(string $filepath) Get CSS file location.
- * 
+ *
  * @method string font(string $filepath) Get font file location.
- * 
+ *
  * @method string image(string $filepath) Get image file location.
  * @method string img(string $filepath) Get image file location.
- * 
+ *
  * @method string js(string $filepath) Get javascript file location.
  * @method string javascript(string $filepath) Get javascript file location.
- * 
+ *
  * @method string url(string $dest) Get target URL.
- * 
+ *
  * @author Anders Lövgren (Nowise Systems/BMC-IT, Uppsala University)
  * @package UUP
  * @subpackage Site
@@ -136,41 +136,41 @@ class Config
 
         /**
          * Configuration options.
-         * @var array 
+         * @var array
          */
         private $_config;
         /**
          * The top directory.
-         * @var string 
+         * @var string
          */
         private $_root;
         /**
          * The project directory.
-         * @var string 
+         * @var string
          */
         private $_proj;
         /**
          * The documents directory.
-         * @var string 
+         * @var string
          */
         private $_docs;
         /**
          * Directories to detect files in.
-         * @var array 
+         * @var array
          */
         private $_subdirs = array();
         /**
          * Cached configuration options.
-         * @var array 
+         * @var array
          */
         private static $_cached = null;
 
         /**
          * Constructor.
-         * 
+         *
          * @param array|string $config Configuration options array or path to file.
-         * @param boolean $verify Check required options.
-         * @param boolean $cached Use cached config if present.
+         * @param bool $verify Check required options.
+         * @param bool $cached Use cached config if present.
          */
         public function __construct($config = null, $verify = true, $cached = true)
         {
@@ -243,7 +243,7 @@ class Config
 
         /**
          * Use cached config if present.
-         * @return boolean 
+         * @return bool
          */
         private function cached()
         {
@@ -257,32 +257,32 @@ class Config
 
         /**
          * Detect configuration.
-         * 
+         *
          * @param array|string $config Configuration options array or path to file.
          * @throws Exception
          */
         private function detect($config)
         {
-                // 
-                // Detecting the correct config is crucial for proper functioning, but has 
+                //
+                // Detecting the correct config is crucial for proper functioning, but has
                 // shown to be a rather complex task due to support for both install using
                 // standalone package and composer deploy.
-                // 
-                // Theres also possible that bootstraping is used, where multiple virtual hosts 
-                // or web applications are setup by running uup-site.sh from a common installation 
+                //
+                // Theres also possible that bootstraping is used, where multiple virtual hosts
+                // or web applications are setup by running uup-site.sh from a common installation
                 // of uup-site in PHP's shared directory (usually /usr/share/php).
-                // 
-                // Add to this that directories can be symlinked or aliased in web server 
-                // config. We try to make intelligent guess for correct location and probe 
+                //
+                // Add to this that directories can be symlinked or aliased in web server
+                // config. We try to make intelligent guess for correct location and probe
                 // for the config directory in these possible locations.
-                // 
+                //
                 // The best solution is if all pages uses the dispather with the config
-                // location hard coded in routing. In this case the detection is rather 
+                // location hard coded in routing. In this case the detection is rather
                 // simple and a cheap operation.
-                // 
-                // 
+                //
+                //
                 // Set root directory:
-                // 
+                //
                 if (is_string($config)) {
                         $this->_root = self::find("config", $config, false);
                         $this->_docs = self::find("public", $config, true);
@@ -293,18 +293,18 @@ class Config
                         $this->_proj = realpath(__DIR__ . "/../../../..");
                 }
 
-                // 
+                //
                 // Add pathes to search directories:
-                // 
+                //
                 $this->_subdirs[] = $this->_root;
                 $this->_subdirs[] = $this->_proj;
                 $this->_subdirs[] = dirname(getcwd());
 
                 $this->_subdirs = array_values(array_unique($this->_subdirs));
 
-                // 
+                //
                 // Get config settings:
-                // 
+                //
                 if (is_array($config)) {
                         // ignore
                 } elseif (is_string($config)) {
@@ -485,7 +485,7 @@ class Config
 
         /**
          * Locate file in some standard locations.
-         * 
+         *
          * @param string $path The file name.
          * @return string
          */
@@ -500,11 +500,11 @@ class Config
 
         /**
          * Find parent directory.
-         * 
+         *
          * Uses the $script path to find the parent directory containing $subdir. This
          * method makes the assumption that by moving up in directory tree starting
          * from $script, we will find the $sibdir.
-         * 
+         *
          * @param string $subdir The subdir name.
          * @param string $script The script path.
          * @param bool $included Include subdir in outcome.
@@ -586,11 +586,11 @@ class Config
 
         /**
          * Get target URL.
-         * 
-         * Call this method to generate URL's relative to site location. If the 
+         *
+         * Call this method to generate URL's relative to site location. If the
          * $extern argument is true, then returned URL contains schema, host and
          * port. Use $prefix to disable scheme, host and port detection.
-         * 
+         *
          * <code>
          * $config->getUrl();                           // Get location URL (i.e. -> /uup-site)
          * $config->getUrl("http://www.google.se");     // An extern URL
@@ -598,9 +598,9 @@ class Config
          * $config->getUrl("path/page");                // Relative site location (i.e. -> /uup-site/path/page)
          * $config->getUrl("path/page", true);          // For extern use (i.e. -> http://localhost/uup-site/path/page)
          * </code>
-         * 
+         *
          * @param string $dest The target URL (relative, absolute or extern).
-         * @param bool $extern Generate URL with schema, host and port. 
+         * @param bool $extern Generate URL with schema, host and port.
          * @param string $prefix Define prefix to use (i.e. https://www.example.com).
          * @return string
          * @throws DomainException
