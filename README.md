@@ -1,79 +1,50 @@
 ## UUP-SITE - Web application and site framework
 
-This library takes a object oriented approach at building web sites by separating 
-page layout from content. It supports multiple theme, rendering page direct or
-using a dispatcher (routing) script and was designed with these goals:
+This package is a micro framework that takes a object oriented approach at building 
+large scale web sites and web applications in PHP. Designed with small memory footprint, easy of use and fast execution in mind.
 
-* Suitable for web interfaces or services (i.e. JSON API or SOAP)
+Controllers are placed direct under public and derives from suitable base classes to 
+define their behavior (i.e. being a public web page or a secured JSON service) and is
+also responsible for loading their views. The dispatcher takes care of natural routing
+from request path to controller.
+
+If a public page don't contains a class, then its treated as a simple view by the 
+dispatcher that takes care of wrapping it up inside a view controller before rendering
+it with decorations.
+
+### Quick start:
+
+For those impatient to try this out without any further reading:
+
+```bash
+composer require nowise/uup-site
+./vendor/bin/uup-site.sh --bootstrap
+./vendor/bin/uup-site.sh --location /myapp --setup --auth --edit --locale --guide --examples
+```
+
+Create a symbolic link to public under your htdocs and point your favorite browser
+at /myapp should get you started:
+
+![Screenshot of getting started page](images/20190613_221103.png?raw=true)
+
+Pretty simple, right?
+
+### Features:
+
+Supports for multiple theme, rendering page content direct or using a dispatcher (routing) script and designed with these goals:
+
+* Suitable for web interfaces, AJAX or services (i.e. API in JSON or SOAP)
 * Responsive design with multiple themes
 * Small memory footprint (~500kB per request)
 * Fast request handling (less than 0.01 ms per request) 
 * Support for internationalization (I18N) and localization (L10N)
 
-Despite its name, this package can be used as the rendering engine in any web
-application. In the following though we will outline the process for using it
-to render an ordinary web site, but the same approach can equally well be used
-for an web application.
-
-This package and optional theme can either be installed using composer or by
-unzip everything in proper places.
-
-### Directory structure:
-
-Locations are configurable in config/defaults.site that is used when initializing 
-a page class instance. This is the suggested directory structure:
-
-        uup-site
-            ├── config                      // Configuration files
-            ├── locale                      // Support for translation (gettext)
-            ├── public                      // Document root (your public documents)
-            │   ├── auth                    // Support for authentication
-            │   │   ├── logoff
-            │   │   └── logon
-            │   ├── edit                    // Online content editor (CMS)
-            │   │   ├── ajax
-            │   │   ├── templates
-            │   │   │   ├── context
-            │   │   │   ├── files
-            │   │   │   │   ├── secure
-            │   │   │   │   └── standard
-            │   │   │   ├── license
-            │   │   │   └── menus
-            │   │   └── view
-            │   │       ├── content
-            │   │       └── editor
-            │   │           └── plugins
-            │   ├── guide                   // Guide for content publisher
-            │   │   └── partials
-            │   └── theme                   // Theme support files
-            │       └── default
-            │           └── assets
-            │               ├── css
-            │               │   └── fonts
-            │               ├── fonts
-            │               └── img
-            ├── template                    // Page rendering templates (themes)
-            │   └── default
-            ├── vendor                      // Composer packages, including uup-site
-            └── composer.json               // Site project composer file
-
-The above structure is created by running the following command after installing
-uup-site using composer.
-
-```bash
-./vendor/bin/uup-site.sh --setup --auth --edit --guide
-```
-
-Options above is suitable for an web site. When setting up for an web application, 
-skip the --edit and --guide options. Support for auth and edit is disabled by default,
-enable them in config/defaults.site.
-
 ### Site config:
 
 The config/defaults.site file is looked for in the package directory (vendor/nowise/uup-site)
-or in the site directory (the virtual host directory). All directory and 
+or in the site directory (the virtual host directory). Support for auth and edit is disabled by default, enable them in config/defaults.site.
 
-### Setup:
+### Setup (web sites):
 
 The recommended solution is to use the uup-site.sh for setting up instances using
 uup-site. For installation thru composer its located under vendor/bin. When installing
@@ -102,14 +73,9 @@ including bootstrap, composer, archive or manual.
 
 ### Themes:
 
-All themes should at least provide the standard.ui template, but it's up to user 
-to define any number of *.ui files as needed. See theme/default for example on
-theme construction. More themes can be downloaded and installed from:
-    
-  https://nowise.se/oss/uup-site. 
-
-Install new themes be either require them using composer or simply download and
-unpack them inside the theme directory.
+Themes are bundled under the theme directory and consists of public content 
+and template files. During render phase, a matching theme and template (*.ui)
+file is looked for under the template directory.
 
 ### Infrastructure:
 
@@ -124,12 +90,13 @@ handling too.
 See example/context/menus for more advanced menus, like dynamic update page content
 or defining menus relative current site root.
 
-### Pages:
+### Controllers, dispatch and rendering:
 
-A page class can be rendered either direct or using routing. Using routing
-is the recommended method that in addition supports views.
+A page class can be rendered either direct or using routing. Using dispatch routing
+is the recommended method that in addition supports views and provides pretty
+URL's.
 
-##### Using direct rendering:
+##### Rendering (direct):
 
 ```php
 // 
@@ -148,7 +115,7 @@ $page = new IndexPage();
 $page->render();
 ```
 
-##### Using page routing (pretty URL's):
+##### Rendering (dispatch):
 
 ```php
 // 
@@ -161,7 +128,9 @@ class IndexPage extends StandardPage
 };
 ```
 
-More examples is included in example directory in the source package.
+More examples is included in example directory in the source package. It's recommended
+that your application derives your own controllers from the provided base classes to
+support JSON or file API.
 
 ### Views:
 
@@ -172,6 +141,40 @@ method for render views.
 Using standard page class for rendering views makes the context (i.e. menus) 
 available for decoration. Views are intended for web sites, while pages are 
 more targeted at web application (more control).
+
+### Authentication:
+
+Enable authetication by running uup-site.sh. The config/auth.inc file needs to be 
+tweaked with supported authenticators.
+
+```bash 
+uup-site.sh --auth
+```
+You will need to enabled authentication settings inside config/defaults.site. An 
+controller can enforce authentication by deriving from a secure base class. It's also
+possible to programmatically enforce authentication from within a public controller
+i.e. based on requested view.
+
+### Namespace:
+
+The default dispatcher setup will not support namespaces in controllers. If you like
+to use namespace in them, the modify public/dispatch.php:
+
+```php
+$router = new Router();
+$router->setNamespace("\\");                        // Use global namespace
+$router->handle();
+```
+
+If your controller is i.e. located inside public/api/customer, then use the namespace
+API\Customer inside that controller. If you like to use application prefix in your namespace
+names, i.e MyApp\Controllers\API\Customer, then define your namespace as:
+
+```php
+$router = new Router();
+$router->setNamespace("\\MyApp\\Controllers\\");    // Harmonize with application namespace
+$router->handle();
+```
 
 ### Locales and translation:
 
@@ -210,16 +213,6 @@ class MyPage extends StandardPage
 }
 ```
 
-### Authentication:
-
-Enable authetication by running uup-site.sh. The config/auth.inc file needs to be 
-tweaked with supported authenticators.
-
-```bash 
-uup-site.sh --auth
-```
-You will need to enabled authentication settings inside config/defaults.site.
-
 ### Online content editor:
 
 Enable CMS by running uup-site.sh. You need to install javascript libraries and
@@ -244,15 +237,16 @@ by configure an callable (class or function):
 )
 ```
 
-### Examples:
+### Enterprise (ISP):
 
-These sites and web applications has been built using uup-site:
+It's possible to use uup-site to bootstrap multiple virtual hosts for your customers
+if you're hosting an ISP. The full details can be read on https://nowise.se/oss/uup/uup-site/usage/setup/enterprise
 
-* http://www.bmcmediatek.uu.se/
-* http://openexam.io/
-* http://it.bmc.uu.se/
-* http://chemgps.bmc.uu.se/
-* http://nowise.se/
+The benefits are:
+
+* Approximate 200kB if disk space used per virtual host.
+* Define a central bank of themes that can be used.
+* Single place for update (just the shared directory for uup-site)
 
 ### Further information:
 
