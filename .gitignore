@@ -1,3 +1,9 @@
 nbproject/private
 composer.lock
 vendor
+config/*.conf
+config/*.inc
+config/defaults.site
+public
+template
+theme/default/assets
