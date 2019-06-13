@@ -1,0 +1,26 @@
+Short note on setting up uup-site for development (developing this package itself).
+
+1. Checkout the GIT-repository somewhere:
+
+    bash$> cd /var/www/localhost/apps
+    bash$> git clone https://github.com/nowisesys/uup-site.git
+
+2. Setup project in developer mode (for location /uup-site-dev):
+
+    bash$> cd uup-site
+    bash$> ./uup-site.sh --location /uup-site-dev --setup --develop
+
+3. Create symbolic link to public directory under your document root:
+
+    bash$> cd /var/www/localhost/htdocs
+    bash$> ln -s /var/www/localhost/apps/uup-site/public uup-site-dev
+
+4. Point your browser to http://localhost/uup-site-dev and you should see the demo
+   page. Continue by install additional components (i.e. auth edit).
+   
+Notice: 
+-------------
+Remember to edit config/defaults.site after installing i.e. auth to enable logon/logoff 
+endpoints and icons in toolbox.
+
+// Anders Lövgren, 2019-06-13
