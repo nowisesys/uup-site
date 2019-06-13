@@ -25,7 +25,7 @@ composer require nowise/uup-site
 Create a symbolic link to public under your htdocs and point your favorite browser
 at /myapp should get you started:
 
-![Screenshot of getting started page](images/20190613_221103.png?raw=true)
+![Screenshot of getting started page](https://nowise.se/oss/uup/images/uup-site-5.png)
 
 Pretty simple, right?
 
