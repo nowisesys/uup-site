@@ -88,6 +88,15 @@ class Router extends Handler
 {
 
         /**
+         * The global namespace.
+         */
+        const NAMESPACE_GLOBAL = "\\";
+        /**
+         * The default namespace (omit use).
+         */
+        const NAMESPACE_DEFAULT = false;
+
+        /**
          * The request URI without params.
          * @var string 
          */
@@ -121,7 +130,7 @@ class Router extends Handler
          * The class namespace.
          * @var string 
          */
-        private $_ns = "\\";
+        private $_ns = self::NAMESPACE_DEFAULT;
 
         /**
          * Constructor.
@@ -260,9 +269,68 @@ class Router extends Handler
          */
         private function getName()
         {
-                $parts = explode('-', basename($this->_path));
+                if ($this->useNamespace()) {
+                        $camelized = $this->getQualified($this->_path);
+                } else {
+                        $camelized = $this->getCamelized(basename($this->_path));
+                }
+
+                return sprintf(
+                        "%s%s%s",
+                        $this->_ns,
+                        $camelized,
+                        $this->_suffix
+                );
+        }
+
+        /**
+         * Should namespace be used?
+         * 
+         * Returns true if namespace is set to an string not equal to global 
+         * namespace. If namespace is anything thats empty (i.e. null or false), 
+         * then this method will return false.
+         *
+         * @return bool
+         */
+        private function useNamespace(): bool
+        {
+                return empty($this->_ns) == false;
+        }
+
+        /**
+         * Get semi-qualified class name.
+         * 
+         * Derive an partial qualified class name from script path components by
+         * applying camel case transformation.
+         *
+         * @param string $path The script path.
+         * @return string
+         */
+        private function getQualified(string $path): string
+        {
+                $parts = explode('/', $path);
+
+                foreach ($parts as $index => $name) {
+                        $parts[$index] = $this->getCamelized($name);
+                }
+
+                return implode('\\', $parts);
+        }
+
+        /**
+         * Transform to camel case.
+         * 
+         * Split input string on '-' and apply upper case string on each part.
+         * 
+         * @param string $name The input string.
+         * @return string
+         */
+        private function getCamelized(string $name): string
+        {
+                $parts = explode('-', $name);
                 $parts = array_map('ucfirst', $parts);
-                return sprintf("%s%s%s", $this->_ns, implode('', $parts), $this->_suffix);
+
+                return implode('', $parts);
         }
 
         /**
@@ -319,5 +387,4 @@ class Router extends Handler
 
                 $this->profile->stop();
         }
-
 }
