@@ -240,7 +240,7 @@ by configure an callable (class or function):
 ### Enterprise (ISP):
 
 It's possible to use uup-site to bootstrap multiple virtual hosts for your customers
-if you're hosting an ISP. The full details can be read on https://nowise.se/oss/uup/site/usage/setup/enterprise
+if you're hosting an ISP. The full details can be read on [enterprise setup](https://nowise.se/oss/uup/site/usage/setup/enterprise) page.
 
 The benefits are:
 
