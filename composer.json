@@ -3,13 +3,12 @@
     "version": "1.2.7",
     "description": "OOP theme/template based page rendering with routing capabilities.",
     "type": "library",
-    "keywords": [
-        "template",
+    "keywords": [ 
+	"template", 
         "webapp",
         "mvc",
         "site",
-        "uup",
-        "bmc"
+        "uup"
     ],
     "homepage": "https://nowise.se/oss/uup/site",
     "license": "Apache-2.0",
