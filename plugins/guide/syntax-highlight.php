@@ -54,7 +54,7 @@ if (!function_exists('format_code')) {
 </p>
 <?= format_code(htmlentities("<?php UUP\Web\Component\Script\CodeBox::outputFile('file.c', true) ?>")) ?>
 <?= format_code(htmlentities("<?php UUP\Web\Component\Script\CodeBox::outputText('c', 'printf(\"hello world!\")') ?>")) ?>
-<a class="w3-btn w3-deep-orange" href="https://nowise.se/oss/uup-web-component/example/?page=container/codebox">Examples</a>
+<a class="w3-btn w3-deep-orange" href="https://nowise.se/oss/uup/web-component/example/?page=container/codebox">Examples</a>
 
 <h3>Missing languages?</h3>
 <p>

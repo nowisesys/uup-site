@@ -13,5 +13,5 @@
             <a class="w3-btn w3-deep-orange" href="../example">Examples</a>
     <?php endif; ?>
 
-    <a class="w3-btn w3-deep-orange" href="https://nowise.se/oss/uup-site/">Project</a>
+    <a class="w3-btn w3-deep-orange" href="https://nowise.se/oss/uup/site/">Project</a>
 </div>

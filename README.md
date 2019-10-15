@@ -53,7 +53,7 @@ world.
 
 ```bash
 cd /usr/local/bin
-wget https://nowise.se/oss/uup-site/files/uup-site.sh
+wget https://nowise.se/oss/uup/site/files/uup-site.sh
 ```
 
 To bootstrap and initialize a new virtual host:
@@ -68,7 +68,7 @@ Review content of the public and config directories once setup has finished. Dec
 page routing (mod_rewrite) should be used or not. Complete the setup by defining the public 
 directory as document root (if developing a web site).
 
-See https://nowise.se/oss/uup-site/usage/setup/ for more setup alternatives,
+See https://nowise.se/oss/uup/site/usage/setup/ for more setup alternatives,
 including bootstrap, composer, archive or manual.
 
 ### Themes:
@@ -250,4 +250,4 @@ The benefits are:
 
 ### Further information:
 
-For more information, please visit the [project page](https://nowise.se/oss/uup-site)
+For more information, please visit the [project page](https://nowise.se/oss/uup/site)
